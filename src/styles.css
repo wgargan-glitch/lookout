@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "react-day-picker/style.css";
+
+@theme {
+  --font-display: "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --color-background: #f4efe4;
+  --color-foreground: #1a1915;
+  --color-card: #faf7f0;
+  --color-card-foreground: #1a1915;
+  --color-popover: #faf7f0;
+  --color-popover-foreground: #1a1915;
+  --color-primary: #2f4a38;
+  --color-primary-foreground: #f4efe4;
+  --color-secondary: #ebe4d6;
+  --color-secondary-foreground: #1a1915;
+  --color-muted: #e7e0d2;
+  --color-muted-foreground: #6b6458;
+  --color-accent: #3d5c48;
+  --color-accent-foreground: #f4efe4;
+  --color-destructive: #8f3d32;
+  --color-destructive-foreground: #faf7f0;
+  --color-border: #d4cbb8;
+  --color-input: #d4cbb8;
+  --color-ring: #2f4a38;
+  --color-pine: #2f4a38;
+  --color-paper: #f4efe4;
+  --color-ink: #1a1915;
+  --color-sage: #6b7f6e;
+  --color-stone: #c4b8a5;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-device: 2.25rem;
+  --radius-device-android: 1.35rem;
+  --radius-device-inner: 1.65rem;
+  --radius: 10px;
+  --shadow-soft: 0 1px 2px color-mix(in oklab, var(--color-ink) 8%, transparent),
+    0 12px 32px color-mix(in oklab, var(--color-ink) 6%, transparent);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: url("/topo.svg");
+    background-size: 520px 520px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  p {
+    text-wrap: pretty;
+    line-height: 1.55;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-primary) 22%, transparent);
+  }
+}
+
+.rdp-root {
+  --rdp-accent-color: var(--color-primary);
+  --rdp-accent-background-color: color-mix(in oklab, var(--color-primary) 16%, var(--color-background));
+  --rdp-today-color: var(--color-primary);
+  --rdp-range_start-color: var(--color-primary-foreground);
+  --rdp-range_end-color: var(--color-primary-foreground);
+  --rdp-day-height: 40px;
+  --rdp-day-width: 40px;
+  --rdp-day_button-height: 38px;
+  --rdp-day_button-width: 38px;
+  font-family: var(--font-sans);
+}
+
+.pb-tab {
+  padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
+}
+
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.aspect-phone {
+  aspect-ratio: 9 / 16;
+}
+
+@media (min-width: 768px) {
+  .pb-tab {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

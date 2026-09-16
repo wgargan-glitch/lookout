@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Lookout</string>
+    <string name="title_activity_main">Lookout</string>
+    <string name="package_name">app.lookout.parks</string>
+    <string name="custom_url_scheme">app.lookout.parks</string>
+</resources>

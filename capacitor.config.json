@@ -1,0 +1,35 @@
+{
+  "appId": "app.lookout.parks",
+  "appName": "Lookout",
+  "webDir": "native/www",
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "https",
+    "hostname": "lookout.app"
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "preferredContentMode": "mobile",
+    "scheme": "Lookout",
+    "backgroundColor": "#2f4a38"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#2f4a38"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1400,
+      "launchAutoHide": true,
+      "backgroundColor": "#2f4a38",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#2f4a38"
+    },
+    "Keyboard": {
+      "resize": "body"
+    }
+  }
+}

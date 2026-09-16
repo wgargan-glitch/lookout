@@ -1,0 +1,128 @@
+# Cloud store wrap — no Mac required.
+# iOS compiles on GitHub's macOS runners (Xcode 26 / iOS 26 SDK).
+# Android compiles on Ubuntu.
+#
+# After you enroll:
+#   GitHub → Settings → Secrets and variables → Actions
+#   Variable  LOOKOUT_SERVER_URL     public HTTPS origin of Lookout (after Publish)
+#   Secret    APPLE_TEAM_ID
+#   Secret    APPLE_BUILD_CERTIFICATE_BASE64
+#   Secret    APPLE_BUILD_CERTIFICATE_PASSWORD
+#   Secret    APPLE_PROVISION_PROFILE_BASE64
+#   Secret    ANDROID_KEYSTORE_BASE64
+#   Secret    ANDROID_KEYSTORE_PASSWORD
+#   Secret    ANDROID_KEY_ALIAS
+#   Secret    ANDROID_KEY_PASSWORD
+#
+# Unsigned / unsigned-skip artifacts still upload so you can see the wrap built.
+
+name: Store wrap
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "capacitor.config.json"
+      - "native/**"
+      - "ios/**"
+      - "android/**"
+      - ".github/workflows/store-build.yml"
+      - "package.json"
+
+jobs:
+  android:
+    name: Android AAB
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install
+        run: npm ci
+      - name: Point wrap at live Lookout
+        run: |
+          URL="${{ vars.LOOKOUT_SERVER_URL }}"
+          if [ -n "$URL" ]; then
+            node -e '
+              const fs = require("fs");
+              const c = JSON.parse(fs.readFileSync("capacitor.config.json", "utf8"));
+              c.server = { ...(c.server || {}), url: process.env.URL, androidScheme: "https", iosScheme: "https" };
+              fs.writeFileSync("capacitor.config.json", JSON.stringify(c, null, 2));
+            '
+          fi
+        env:
+          URL: ${{ vars.LOOKOUT_SERVER_URL }}
+      - name: Add Android platform
+        run: |
+          if [ ! -d android ]; then npx cap add android; fi
+          LOOKOUT_SERVER_URL="${{ vars.LOOKOUT_SERVER_URL }}" npx cap sync android
+      - name: Bundle release
+        working-directory: android
+        run: |
+          chmod +x gradlew || true
+          ./gradlew bundleRelease --no-daemon
+      - name: Sign AAB
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > /tmp/lookout.keystore
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+            -keystore /tmp/lookout.keystore \
+            -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+            -keypass "${{ secrets.ANDROID_KEY_PASSWORD }}" \
+            android/app/build/outputs/bundle/release/app-release.aab \
+            "${{ secrets.ANDROID_KEY_ALIAS }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lookout-android
+          path: android/app/build/outputs/bundle/release/*.aab
+
+  ios:
+    name: iPhone (cloud Xcode)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Point wrap at live Lookout
+        run: |
+          URL="${{ vars.LOOKOUT_SERVER_URL }}"
+          if [ -n "$URL" ]; then
+            node -e '
+              const fs = require("fs");
+              const c = JSON.parse(fs.readFileSync("capacitor.config.json", "utf8"));
+              c.server = { ...(c.server || {}), url: process.env.URL, androidScheme: "https", iosScheme: "https" };
+              fs.writeFileSync("capacitor.config.json", JSON.stringify(c, null, 2));
+            '
+          fi
+        env:
+          URL: ${{ vars.LOOKOUT_SERVER_URL }}
+      - name: Add iOS platform
+        run: |
+          if [ ! -d ios ]; then npx cap add ios; fi
+          LOOKOUT_SERVER_URL="${{ vars.LOOKOUT_SERVER_URL }}" npx cap sync ios
+      - name: Archive
+        run: |
+          xcodebuild -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/Lookout.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            archive
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lookout-ios-archive
+          path: ${{ runner.temp }}/Lookout.xcarchive
+          if-no-files-found: ignore

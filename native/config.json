@@ -1,0 +1,8 @@
+{
+  "appId": "app.lookout.parks",
+  "appName": "Lookout",
+  "displayName": "Lookout",
+  "serverUrl": "",
+  "appleTeamId": "YOUR_TEAM_ID",
+  "playSha256": "REPLACE_WITH_PLAY_APP_SIGNING_SHA256"
+}

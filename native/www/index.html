@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Lookout</title>
+    <style>
+      :root { color-scheme: light; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: #2f4a38;
+        color: #f4efe4;
+        padding: 24px;
+      }
+      main { max-width: 22rem; text-align: center; }
+      svg { width: 72px; height: 72px; }
+      h1 { font-family: Georgia, "Iowan Old Style", serif; font-weight: 500; font-size: 2.4rem; margin: 16px 0 8px; letter-spacing: -0.03em; }
+      p { margin: 0; line-height: 1.5; color: rgba(244, 239, 228, 0.8); font-size: 0.95rem; }
+      button {
+        margin-top: 24px;
+        height: 44px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 10px;
+        background: #f4efe4;
+        color: #2f4a38;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="6" fill="#f4efe4" />
+        <polygon points="16,4 8,13 24,13" fill="#2f4a38" />
+        <rect x="10" y="13" width="12" height="7" fill="#2f4a38" />
+        <rect x="14" y="15" width="4" height="3.2" fill="#f4efe4" />
+        <rect x="7.5" y="20" width="17" height="1.6" fill="#c4b8a5" />
+        <rect x="11" y="21.6" width="2.2" height="6.8" fill="#2f4a38" />
+        <rect x="18.8" y="21.6" width="2.2" height="6.8" fill="#2f4a38" />
+        <rect x="12.4" y="24.2" width="7.2" height="1.2" fill="#c4b8a5" />
+      </svg>
+      <h1>Lookout</h1>
+      <p>Connecting to the park gate. If this stays up, the live Lookout address is not in the app yet.</p>
+      <button type="button" onclick="location.reload()">Try again</button>
+    </main>
+  </body>
+</html>
