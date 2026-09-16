@@ -50,6 +50,7 @@ export type Car = {
   electric: boolean;
   ratingAvg: number;
   tripCount: number;
+  pickupNotes?: string;
 };
 
 export type Review = {

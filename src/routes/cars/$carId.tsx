@@ -105,10 +105,10 @@ function CarDetail() {
         <div className="overflow-hidden rounded-xl">
           <img src={car.images[photo] ?? car.images[0]} alt="" className="aspect-[16/10] w-full object-cover" />
         </div>
-        <div className="grid grid-cols-3 gap-3 lg:grid-cols-1">
-          {car.images.slice(0, 3).map((src, i) => (
+        <div className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:max-h-[28rem] lg:overflow-y-auto">
+          {car.images.map((src, i) => (
             <button
-              key={src + i}
+              key={src.slice(0, 48) + i}
               type="button"
               onClick={() => setPhoto(i)}
               className={cn("overflow-hidden rounded-xl", photo === i && "ring-2 ring-primary")}
@@ -159,6 +159,13 @@ function CarDetail() {
           </div>
 
           <p className="mt-8 text-sm leading-relaxed text-foreground/90">{car.description}</p>
+
+          {car.pickupNotes ? (
+            <Card className="mt-6 p-5">
+              <p className="text-sm font-medium">Pickup</p>
+              <p className="mt-1 text-sm text-muted-foreground">{car.pickupNotes}</p>
+            </Card>
+          ) : null}
 
           <h2 className="mt-10 font-display text-2xl">On board</h2>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">

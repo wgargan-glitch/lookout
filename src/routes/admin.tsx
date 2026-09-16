@@ -87,7 +87,8 @@ function AdminPage() {
             <div className="min-w-0 flex-1">
               <p className="font-medium">{carTitle(item.car)}</p>
               <p className="text-sm text-muted-foreground">
-                {item.hostName} · {item.status} · {formatMoney(item.car.dailyCents)}/day
+                {item.hostName} · {item.status} · {formatMoney(item.car.dailyCents)}/day · {item.photoCount} photos
+                {item.gaps.length ? ` · missing ${item.gaps.join(", ")}` : ""}
               </p>
             </div>
             <div className="flex gap-2">

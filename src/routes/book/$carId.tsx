@@ -38,7 +38,7 @@ function BookPage() {
   const { extraCars, extraHosts } = useFleet();
   const bundle = carBundle(carId, extraCars, extraHosts);
   const [pending, setPending] = useState(false);
-  const [done, setDone] = useState<{ confirmation: string; totalCents: number } | null>(null);
+  const [done, setDone] = useState<{ id: string; confirmation: string; totalCents: number } | null>(null);
 
   if (isPending) {
     return <main className="mx-auto max-w-xl px-4 py-16 text-sm text-muted-foreground">Checking your account…</main>;
@@ -70,7 +70,7 @@ function BookPage() {
       const result = await createBooking({
         data: { carId: car.id, startDate: from, endDate: to, protection },
       });
-      setDone({ confirmation: result.confirmation, totalCents: result.totalCents });
+      setDone({ id: result.id, confirmation: result.confirmation, totalCents: result.totalCents });
     } catch (err) {
       toast(err instanceof Error ? err.message : "Could not complete the booking.");
     } finally {
@@ -96,9 +96,9 @@ function BookPage() {
     return (
       <main className="mx-auto max-w-xl px-4 py-16 text-center">
         <p className="text-sm font-medium tracking-wide text-sage uppercase">Confirmed</p>
-        <h1 className="mt-2 font-display text-4xl">You have the keys.</h1>
+        <h1 className="mt-2 font-display text-4xl">Trip is booked.</h1>
         <p className="mt-3 text-muted-foreground">
-          {carTitle(car)} in {park?.pickupTown}. {formatDateRange(from, to)}.
+          {carTitle(car)} in {park?.pickupTown}. {formatDateRange(from, to)}. Check in on your phone when you pick up the keys.
         </p>
         <Card className="mt-8 p-6 text-left">
           <p className="text-sm text-muted-foreground">Confirmation</p>
@@ -107,15 +107,17 @@ function BookPage() {
             Total <span className="tabular-nums font-medium">{formatMoney(done.totalCents)}</span>
           </p>
           <p className="mt-2 text-xs text-muted-foreground">
-            {plan?.name} protection is on this trip. File incidents from Claims.
+            {plan?.name} protection is on this trip. Walk the car and photograph it at pickup before you drive.
           </p>
         </Card>
         <div className="mt-8 flex justify-center gap-3">
           <Button asChild>
-            <Link to="/trips">View trips</Link>
+            <Link to="/trips/$tripId" params={{ tripId: done.id }}>
+              Check in at pickup
+            </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link to="/protection">Coverage</Link>
+            <Link to="/trips">All trips</Link>
           </Button>
         </div>
       </main>

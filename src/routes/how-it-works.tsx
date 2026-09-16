@@ -26,12 +26,16 @@ function HowItWorks() {
             d: "Sign in, pick dates, then Trail, Ridge, or Summit protection. Instant book listings confirm immediately. Lookout adds a 10% service fee. Pickup is in the gateway town on the listing.",
           },
           {
+            t: "Check in on your phone",
+            d: "At the car, open the trip and walk it: six photos, odometer, fuel or charge, cleanliness, and any existing damage. Submit before you drive. Check out the same way when you return the keys.",
+          },
+          {
             t: "Drive it like a local",
             d: "Unlimited miles on every car in the catalog. Return it on time, with a reasonably full tank or charge, and without a new dent you do not mention. The host lives there. They will know.",
           },
           {
             t: "List your own",
-            d: "Create an account, attest you carry auto insurance, and list a car in a gateway town. You choose the daily rate. Listings and trips live on your account, and the ranger desk can pause a car or review a claim.",
+            d: "Create an account, add six required photos of the actual car, name your insurance carrier, and list it in a gateway town. You choose the daily rate. Drafts stay on your account until the gallery is complete. The ranger desk can pause a car or review a claim.",
           },
         ].map((block, i) => (
           <Card key={block.t} className="p-6">

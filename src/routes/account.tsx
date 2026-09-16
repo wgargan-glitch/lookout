@@ -3,7 +3,7 @@ import { type FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getMyProfile, listMyListings, setMyListingStatus, updateMyProfile, deleteMyAccount, type Profile } from "@/lib/api";
+import { getMyProfile, listMyListings, setMyListingStatus, updateMyProfile, deleteMyAccount, type HostListing, type Profile } from "@/lib/api";
 import { signOut } from "@/lib/auth/client";
 import { carTitle } from "@/lib/catalog";
 import { formatMoney } from "@/lib/format";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/account")({ component: AccountPage });
 function AccountPage() {
   const { user, isPending } = useCurrentUserState();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [listings, setListings] = useState<Awaited<ReturnType<typeof listMyListings>>>([]);
+  const [listings, setListings] = useState<HostListing[]>([]);
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -89,7 +89,7 @@ function AccountPage() {
             <Input id="displayName" name="displayName" defaultValue={profile?.displayName ?? ""} required />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="phone">Phone</Label>
+            <Label htmlFor="phone">Phone {listings.length ? "(required for hosts)" : ""}</Label>
             <Input id="phone" name="phone" defaultValue={profile?.phone ?? ""} />
           </div>
           <div className="space-y-1.5">
@@ -125,21 +125,35 @@ function AccountPage() {
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{carTitle(item.car)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {formatMoney(item.car.dailyCents)} / day · {item.status}
-                    {item.insuranceAttested ? " · insurance attested" : ""}
+                    {formatMoney(item.car.dailyCents)} / day · {item.status} · {item.shots.length}/12 photos
+                    {item.insuranceAttested ? " · insurance on file" : ""}
                   </p>
+                  {item.gaps.length ? (
+                    <p className="mt-1 text-xs text-destructive">Still needed: {item.gaps.join(", ")}</p>
+                  ) : null}
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    const next = item.status === "live" ? "paused" : "live";
-                    await setMyListingStatus({ data: { id: item.car.id, status: next } });
-                    setListings(await listMyListings());
-                  }}
-                >
-                  {item.status === "live" ? "Pause" : "Go live"}
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/host" search={{ edit: item.car.id }}>
+                      Photos & details
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      try {
+                        const next = item.status === "live" ? "paused" : "live";
+                        await setMyListingStatus({ data: { id: item.car.id, status: next } });
+                        setListings(await listMyListings());
+                      } catch (err) {
+                        toast(err instanceof Error ? err.message : "Could not update the listing.");
+                      }
+                    }}
+                  >
+                    {item.status === "live" ? "Pause" : "Go live"}
+                  </Button>
+                </div>
               </Card>
             ))}
           </div>

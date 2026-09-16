@@ -22,7 +22,6 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProtectionRouteImport } from './routes/protection'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as TripsRouteImport } from './routes/trips'
 import { Route as BookCarIdRouteImport } from './routes/book/$carId'
 import { Route as CarsIndexRouteImport } from './routes/cars/index'
 import { Route as CarsCarIdRouteImport } from './routes/cars/$carId'
@@ -30,6 +29,8 @@ import { Route as HelpIndexRouteImport } from './routes/help/index'
 import { Route as HelpSlugRouteImport } from './routes/help/$slug'
 import { Route as ParksIndexRouteImport } from './routes/parks/index'
 import { Route as ParksParkSlugRouteImport } from './routes/parks/$parkSlug'
+import { Route as TripsIndexRouteImport } from './routes/trips/index'
+import { Route as TripsTripIdRouteImport } from './routes/trips/$tripId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -97,11 +98,6 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TripsRoute = TripsRouteImport.update({
-  id: '/trips',
-  path: '/trips',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BookCarIdRoute = BookCarIdRouteImport.update({
   id: '/book/$carId',
   path: '/book/$carId',
@@ -137,6 +133,16 @@ const ParksParkSlugRoute = ParksParkSlugRouteImport.update({
   path: '/parks/$parkSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TripsIndexRoute = TripsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TripsRoute,
+} as any)
+const TripsTripIdRoute = TripsTripIdRouteImport.update({
+  id: '/$tripId',
+  path: '/$tripId',
+  getParentRoute: () => TripsRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -157,14 +163,15 @@ export interface FileRoutesByFullPath {
   '/protection': typeof ProtectionRoute
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
-  '/trips': typeof TripsRoute
   '/book/$carId': typeof BookCarIdRoute
   '/cars/$carId': typeof CarsCarIdRoute
   '/help/$slug': typeof HelpSlugRoute
   '/parks/$parkSlug': typeof ParksParkSlugRoute
+  '/trips/$tripId': typeof TripsTripIdRoute
   '/cars/': typeof CarsIndexRoute
   '/help/': typeof HelpIndexRoute
   '/parks/': typeof ParksIndexRoute
+  '/trips/': typeof TripsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -181,14 +188,15 @@ export interface FileRoutesByTo {
   '/protection': typeof ProtectionRoute
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
-  '/trips': typeof TripsRoute
   '/book/$carId': typeof BookCarIdRoute
   '/cars/$carId': typeof CarsCarIdRoute
   '/help/$slug': typeof HelpSlugRoute
   '/parks/$parkSlug': typeof ParksParkSlugRoute
+  '/trips/$tripId': typeof TripsTripIdRoute
   '/cars': typeof CarsIndexRoute
   '/help': typeof HelpIndexRoute
   '/parks': typeof ParksIndexRoute
+  '/trips': typeof TripsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -206,14 +214,15 @@ export interface FileRoutesById {
   '/protection': typeof ProtectionRoute
   '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
-  '/trips': typeof TripsRoute
   '/book/$carId': typeof BookCarIdRoute
   '/cars/$carId': typeof CarsCarIdRoute
   '/help/$slug': typeof HelpSlugRoute
   '/parks/$parkSlug': typeof ParksParkSlugRoute
+  '/trips/$tripId': typeof TripsTripIdRoute
   '/cars/': typeof CarsIndexRoute
   '/help/': typeof HelpIndexRoute
   '/parks/': typeof ParksIndexRoute
+  '/trips/': typeof TripsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -232,14 +241,15 @@ export interface FileRouteTypes {
     | '/protection'
     | '/support'
     | '/terms'
-    | '/trips'
     | '/book/$carId'
     | '/cars/$carId'
     | '/help/$slug'
     | '/parks/$parkSlug'
+    | '/trips/$tripId'
     | '/cars/'
     | '/help/'
     | '/parks/'
+    | '/trips/'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -256,14 +266,15 @@ export interface FileRouteTypes {
     | '/protection'
     | '/support'
     | '/terms'
-    | '/trips'
     | '/book/$carId'
     | '/cars/$carId'
     | '/help/$slug'
     | '/parks/$parkSlug'
+    | '/trips/$tripId'
     | '/cars'
     | '/help'
     | '/parks'
+    | '/trips'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -280,14 +291,15 @@ export interface FileRouteTypes {
     | '/protection'
     | '/support'
     | '/terms'
-    | '/trips'
     | '/book/$carId'
     | '/cars/$carId'
     | '/help/$slug'
     | '/parks/$parkSlug'
+    | '/trips/$tripId'
     | '/cars/'
     | '/help/'
     | '/parks/'
+    | '/trips/'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -305,7 +317,6 @@ export interface RootRouteChildren {
   ProtectionRoute: typeof ProtectionRoute
   SupportRoute: typeof SupportRoute
   TermsRoute: typeof TermsRoute
-  TripsRoute: typeof TripsRoute
   BookCarIdRoute: typeof BookCarIdRoute
   CarsCarIdRoute: typeof CarsCarIdRoute
   HelpSlugRoute: typeof HelpSlugRoute
@@ -409,13 +420,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/trips': {
-      id: '/trips'
-      path: '/trips'
-      fullPath: '/trips'
-      preLoaderRoute: typeof TripsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/book/$carId': {
       id: '/book/$carId'
       path: '/book/$carId'
@@ -465,6 +469,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParksParkSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trips/': {
+      id: '/trips/'
+      path: '/'
+      fullPath: '/trips/'
+      preLoaderRoute: typeof TripsIndexRouteImport
+      parentRoute: typeof TripsRoute
+    }
+    '/trips/$tripId': {
+      id: '/trips/$tripId'
+      path: '/$tripId'
+      fullPath: '/trips/$tripId'
+      preLoaderRoute: typeof TripsTripIdRouteImport
+      parentRoute: typeof TripsRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -489,7 +507,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProtectionRoute: ProtectionRoute,
   SupportRoute: SupportRoute,
   TermsRoute: TermsRoute,
-  TripsRoute: TripsRoute,
   BookCarIdRoute: BookCarIdRoute,
   CarsCarIdRoute: CarsCarIdRoute,
   HelpSlugRoute: HelpSlugRoute,
