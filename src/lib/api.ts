@@ -11,7 +11,8 @@ import {
   type CleanlinessId,
   type DamageItem,
 } from "@/lib/inspection";
-import { parseProtection, quoteTrip, rangesOverlap, type ProtectionId } from "@/lib/pricing";
+import { quoteTrip, rangesOverlap, parseProtection, type ProtectionId } from "@/lib/pricing";
+import { FUELS, isListedVehicle, parseFuel, type FuelId } from "@/lib/us-vehicles";
 
 export type Profile = {
   userId: string;
@@ -89,6 +90,7 @@ type ListingRow = {
   instant_book: boolean;
   electric: boolean;
   insurance_attested: boolean;
+  fuel?: string | null;
   status: string;
   host_name: string | null;
   host_hometown: string | null;
@@ -142,7 +144,7 @@ function listingToCar(row: ListingRow): Car {
     petFriendly: Boolean(row.pet_friendly),
     camping: Boolean(row.camping),
     instantBook: Boolean(row.instant_book),
-    electric: Boolean(row.electric),
+    electric: parseFuel({ fuel: row.fuel, electric: Boolean(row.electric) }) === "Electric",
     ratingAvg: 5,
     tripCount: 0,
     pickupNotes: row.pickup_notes || undefined,
@@ -698,14 +700,15 @@ export type HostListing = {
   pickupNotes: string;
   insurer: string;
   policyNumber: string;
+  fuel: FuelId;
   shots: GalleryShot[];
   gaps: string[];
 };
 
 const listingFields = z.object({
-  make: z.string().min(1).max(40),
-  model: z.string().min(1).max(40),
-  year: z.number().int().min(1990).max(2027),
+  make: z.string().min(1).max(80),
+  model: z.string().min(1).max(80),
+  year: z.number().int().min(2000).max(2027),
   trim: z.string().max(40).optional(),
   category: z.enum(["suv", "truck", "van", "sports", "overland"]),
   parkSlug: z.string().min(1),
@@ -713,7 +716,8 @@ const listingFields = z.object({
   seats: z.number().int().min(2).max(15),
   doors: z.number().int().min(2).max(5).optional(),
   transmission: z.enum(["Automatic", "Manual"]).optional(),
-  drivetrain: z.string().min(1).max(20),
+  drivetrain: z.enum(["2WD", "4x4", "AWD"]),
+  fuel: z.enum(FUELS),
   description: z.string().min(40).max(1200),
   camping: z.boolean(),
   petFriendly: z.boolean(),
@@ -728,6 +732,14 @@ const listingFields = z.object({
   policyNumber: z.string().min(2).max(40),
   phone: z.string().min(7).max(40),
   hometown: z.string().max(80).optional(),
+}).superRefine((data, ctx) => {
+  if (!isListedVehicle(data.year, data.make, data.model)) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Choose a year, make, and model from the list.",
+      path: ["model"],
+    });
+  }
 });
 
 function mapHostListing(row: ListingRow, phone: string): HostListing {
@@ -742,6 +754,7 @@ function mapHostListing(row: ListingRow, phone: string): HostListing {
     pickupNotes: row.pickup_notes ?? "",
     insurer: row.insurer ?? "",
     policyNumber: row.policy_number ?? "",
+    fuel: parseFuel({ fuel: row.fuel, electric: Boolean(row.electric) }),
     shots,
     gaps: listingLiveGaps({
       shots,
@@ -784,14 +797,14 @@ export const createListing = createServerFn({ method: "POST" })
         id, user_id, make, model, year, trim, category, park_slug, daily_cents, seats, doors,
         transmission, drivetrain, description, features_json, camping, pet_friendly, instant_book,
         electric, insurance_attested, status, plate, vin, mileage, pickup_notes, insurer, policy_number,
-        images_json
+        images_json, fuel
       ) values (
         ${id}, ${context.userId}, ${data.make}, ${data.model}, ${data.year}, ${data.trim ?? ""},
         ${data.category}, ${data.parkSlug}, ${Math.round(data.daily * 100)}, ${data.seats},
         ${data.doors ?? 4}, ${data.transmission ?? "Automatic"}, ${data.drivetrain},
         ${data.description}, ${features}, ${data.camping}, ${data.petFriendly}, ${data.instantBook},
-        ${data.electric}, true, 'draft', ${data.plate.trim().toUpperCase()}, ${data.vin ?? ""},
-        ${data.mileage}, ${data.pickupNotes}, ${data.insurer}, ${data.policyNumber}, '[]'
+        ${data.fuel === "Electric"}, true, 'draft', ${data.plate.trim().toUpperCase()}, ${data.vin ?? ""},
+        ${data.mileage}, ${data.pickupNotes}, ${data.insurer}, ${data.policyNumber}, '[]', ${data.fuel}
       )
     `;
     return { id, status: "draft" as const };
@@ -827,11 +840,12 @@ export const updateListing = createServerFn({ method: "POST" })
         doors = ${data.doors ?? 4},
         transmission = ${data.transmission ?? "Automatic"},
         drivetrain = ${data.drivetrain},
+        fuel = ${data.fuel},
         description = ${data.description},
         camping = ${data.camping},
         pet_friendly = ${data.petFriendly},
         instant_book = ${data.instantBook},
-        electric = ${data.electric},
+        electric = ${data.fuel === "Electric"},
         insurance_attested = true,
         plate = ${data.plate.trim().toUpperCase()},
         vin = ${data.vin ?? ""},

@@ -12,7 +12,9 @@ import {
 } from "@/lib/api";
 import { CATEGORIES, PARKS, groupedParks } from "@/lib/catalog";
 import { listingLiveGaps, REQUIRED_PHOTO_IDS } from "@/lib/listing-photos";
+import { FUELS, type DrivetrainId, type FuelId } from "@/lib/us-vehicles";
 import { VehicleGallery } from "@/components/host/vehicle-gallery";
+import { VehicleIdentityFields } from "@/components/host/vehicle-identity";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -68,7 +70,6 @@ export function ListingForm({
       make: String(data.get("make") ?? ""),
       model: String(data.get("model") ?? ""),
       year: Number(data.get("year")),
-      trim: String(data.get("trim") ?? "") || undefined,
       category: String(data.get("category") ?? "suv") as "suv" | "truck" | "van" | "sports" | "overland",
       parkSlug: String(data.get("parkSlug") ?? ""),
       daily: Number(data.get("daily")),
@@ -77,12 +78,17 @@ export function ListingForm({
       transmission: (String(data.get("transmission") ?? "Automatic") === "Manual" ? "Manual" : "Automatic") as
         | "Automatic"
         | "Manual",
-      drivetrain: String(data.get("drivetrain") ?? "AWD"),
+      drivetrain: (["2WD", "4x4", "AWD"].includes(String(data.get("drivetrain")))
+        ? String(data.get("drivetrain"))
+        : "AWD") as DrivetrainId,
+      fuel: (FUELS as readonly string[]).includes(String(data.get("fuel")))
+        ? (String(data.get("fuel")) as FuelId)
+        : "Gas",
       description: String(data.get("description") ?? ""),
       camping: data.get("camping") === "on",
       petFriendly: data.get("petFriendly") === "on",
       instantBook: data.get("instantBook") === "on",
-      electric: data.get("electric") === "on",
+      electric: String(data.get("fuel") ?? "") === "Electric",
       insuranceAttested: true as const,
       plate: String(data.get("plate") ?? ""),
       vin: String(data.get("vin") ?? "") || undefined,
@@ -164,22 +170,7 @@ export function ListingForm({
     <Card className="p-6">
       <form className="grid gap-4 sm:grid-cols-2" onSubmit={(e) => void onSubmit(e, intentFrom(e))}>
         <Section title="01 · Vehicle" />
-        <div className="space-y-1.5">
-          <Label htmlFor="make">Make</Label>
-          <Input id="make" name="make" required placeholder="Toyota" defaultValue={car?.make} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="model">Model</Label>
-          <Input id="model" name="model" required placeholder="4Runner" defaultValue={car?.model} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="year">Year</Label>
-          <Input id="year" name="year" type="number" required min={1990} max={2027} defaultValue={car?.year ?? 2021} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="trim">Trim</Label>
-          <Input id="trim" name="trim" placeholder="TRD Off-Road" defaultValue={car?.trim} />
-        </div>
+        <VehicleIdentityFields car={{ ...car, fuel: existing?.fuel }} />
         <div className="space-y-1.5">
           <Label htmlFor="plate">License plate</Label>
           <Input id="plate" name="plate" required placeholder="NPS 4X4" defaultValue={existing?.plate} />
@@ -214,22 +205,6 @@ export function ListingForm({
         <div className="space-y-1.5">
           <Label htmlFor="doors">Doors</Label>
           <Input id="doors" name="doors" type="number" required min={2} max={5} defaultValue={car?.doors ?? 4} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="transmission">Transmission</Label>
-          <select
-            id="transmission"
-            name="transmission"
-            className="flex h-11 w-full rounded-md border border-input bg-card px-3 text-sm"
-            defaultValue={car?.transmission === "Manual" ? "Manual" : "Automatic"}
-          >
-            <option>Automatic</option>
-            <option>Manual</option>
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="drivetrain">Drivetrain</Label>
-          <Input id="drivetrain" name="drivetrain" defaultValue={car?.drivetrain ?? "4x4"} />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="description">About this car</Label>
@@ -306,10 +281,6 @@ export function ListingForm({
           <label className="flex min-h-11 items-center gap-2 text-sm">
             <input type="checkbox" name="petFriendly" className="size-4 accent-primary" defaultChecked={car?.petFriendly} />
             Pet friendly
-          </label>
-          <label className="flex min-h-11 items-center gap-2 text-sm">
-            <input type="checkbox" name="electric" className="size-4 accent-primary" defaultChecked={car?.electric} />
-            Electric
           </label>
         </div>
 
