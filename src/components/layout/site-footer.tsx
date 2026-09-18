@@ -1,15 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { LookoutMark } from "@/components/brand/logo";
+import { Logo } from "@/components/brand/logo";
 
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border bg-primary text-primary-foreground">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="flex items-center gap-2">
-            <LookoutMark onDark />
-            <span className="font-display text-xl font-medium">Lookout</span>
-          </div>
+          <Logo onDark />
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/75">
             Peer-to-peer cars from people who live at the park gate. All 63 U.S. national parks, with keys waiting in the next town over.
           </p>
