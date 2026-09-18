@@ -90,22 +90,59 @@ def front() -> Image.Image:
 
 
 def back() -> Image.Image:
+    """Address side. Postal matter stays in the top 3.25 in (half of 6.5)."""
     img = Image.new("RGB", (W, H), PARCHMENT)
     d = ImageDraw.Draw(img)
     pad = 90
-    left_w = 1180
-    d.text((pad, 90), "LOOKOUT", font=font("Figtree-Semibold.ttf", 32), fill=PINE)
-    d.text((pad, 132), "TWO SIDES OF THE SAME TOWN", font=font("Figtree-Medium.ttf", 24), fill=SAGE)
+    top_half = H // 2  # 3.25 in — USPS: entire mailing label above this line
+
+    d.text((pad, 56), "LOOKOUT", font=font("Figtree-Semibold.ttf", 28), fill=PINE)
     d.multiline_text(
-        (pad, 186),
-        "Unhook once.\nTour in a car.",
-        font=font("Fraunces-Semibold.ttf", 58),
+        (pad, 96),
+        "[Street]\n[City ST  ZIP]",
+        font=font("Figtree-Regular.ttf", 24),
         fill=INK,
-        spacing=2,
+        spacing=4,
     )
 
-    card_w, card_h = left_w, 270
-    y = 430
+    # Official Retail indicia: no city, no permit number.
+    iw, ih = int(1.55 * DPI), int(1.22 * DPI)
+    ix, iy = W - pad - iw, 38
+    rounded_rect(d, (ix, iy, ix + iw, iy + ih), 4, WHITE, PINE, 4)
+    indicia_font = font("Figtree-Semibold.ttf", 26)
+    indicia_lines = [
+        "PRSRT STD",
+        "ECRWSS",
+        "U.S. POSTAGE",
+        "PAID",
+        "EDDM RETAIL",
+    ]
+    ty = iy + 18
+    for line in indicia_lines:
+        tw = d.textlength(line, font=indicia_font)
+        d.text((ix + (iw - tw) / 2, ty), line, font=indicia_font, fill=INK)
+        ty += 66
+
+    addr = font("Figtree-Semibold.ttf", 32)
+    d.text((ix, iy + ih + 28), "LOCAL POSTAL", font=addr, fill=PINE)
+    d.text((ix, iy + ih + 72), "CUSTOMER", font=addr, fill=PINE)
+
+    # Headline sits in the top half, left of the mail column
+    d.text((pad, 220), "TWO SIDES OF THE SAME TOWN", font=font("Figtree-Medium.ttf", 22), fill=SAGE)
+    d.multiline_text(
+        (pad, 258),
+        "Unhook once.\nTour in a car.",
+        font=font("Fraunces-Semibold.ttf", 64),
+        fill=INK,
+        spacing=4,
+    )
+
+    d.line([(pad, top_half), (W - pad, top_half)], fill=STONE, width=2)
+
+    gap = 28
+    card_y = top_half + 40
+    card_h = 430
+    card_w = (W - pad * 2 - gap) // 2
     cards = [
         (
             "RV & MOTORHOME GUESTS",
@@ -116,70 +153,35 @@ def back() -> Image.Image:
             "Sedan, van, truck, 4x4, or the daily driver. If it is in a gateway town, list it. You set the rate and keep the keys until pickup.",
         ),
     ]
-    for title, copy in cards:
-        rounded_rect(d, (pad, y, pad + card_w, y + card_h), 24, WHITE, STONE, 3)
-        d.text((pad + 40, y + 28), title, font=font("Figtree-Semibold.ttf", 26), fill=SAGE)
+    for i, (title, copy) in enumerate(cards):
+        x = pad + i * (card_w + gap)
+        rounded_rect(d, (x, card_y, x + card_w, card_y + card_h), 24, WHITE, STONE, 3)
+        d.text((x + 36, card_y + 28), title, font=font("Figtree-Semibold.ttf", 24), fill=SAGE)
         d.multiline_text(
-            (pad + 40, y + 78),
-            wrap(d, copy, font("Figtree-Regular.ttf", 34), card_w - 80),
-            font=font("Figtree-Regular.ttf", 34),
+            (x + 36, card_y + 78),
+            wrap(d, copy, font("Figtree-Regular.ttf", 32), card_w - 72),
+            font=font("Figtree-Regular.ttf", 32),
             fill=INK,
             spacing=6,
         )
-        y += card_h + 24
 
     d.text(
-        (pad, y + 10),
-        "01  Find a park     02  Book or list a car     03  Camp stays put",
+        (pad, card_y + card_h + 28),
+        "01  Find a park      02  Book or list a car      03  Camp stays put",
         font=font("Figtree-Medium.ttf", 26),
         fill=PINE,
     )
 
     d.multiline_text(
-        (pad, 1760),
+        (pad, 1780),
         wrap(
             d,
             "Hosts carry their own auto insurance. Lookout Protection is a trip damage waiver, not a policy. Not affiliated with the National Park Service.",
             font("Figtree-Regular.ttf", 22),
-            left_w,
+            W - pad * 2,
         ),
         font=font("Figtree-Regular.ttf", 22),
         fill=SAGE,
-        spacing=4,
-    )
-
-    pw, ph = 4 * DPI, int(2.75 * DPI)
-    px, py = W - 90 - pw, 90
-    rounded_rect(d, (px, py, px + pw, py + ph), 8, WHITE, PINE, 4)
-    indicia = font("Figtree-Semibold.ttf", 28)
-    small = font("Figtree-Regular.ttf", 24)
-    lines = [
-        "EDDM RETAIL",
-        "U.S. POSTAGE PAID",
-        "[CITY, ST]",
-        "PERMIT NO. [    ]",
-    ]
-    ty = py + 80
-    for i, line in enumerate(lines):
-        fnt = indicia if i == 0 else small
-        tw = d.textlength(line, font=fnt)
-        d.text((px + (pw - tw) / 2, ty), line, font=fnt, fill=INK)
-        ty += 72
-    d.text((px + 36, py + 18), "KEEP THIS BOX CLEAR", font=font("Figtree-Medium.ttf", 18), fill=SAGE)
-
-    d.text((px, py + ph + 48), "LOCAL POSTAL CUSTOMER", font=font("Figtree-Semibold.ttf", 34), fill=PINE)
-    d.multiline_text(
-        (px, py + ph + 110),
-        "LOOKOUT\n[Your gateway town]\n[ST]  [ZIP]",
-        font=font("Figtree-Regular.ttf", 26),
-        fill=INK,
-        spacing=6,
-    )
-    d.multiline_text(
-        (px, py + ph + 280),
-        wrap(d, "Any car. RV guests and neighbors both use Lookout.", font("Figtree-Regular.ttf", 24), pw),
-        font=font("Figtree-Regular.ttf", 24),
-        fill=PINE,
         spacing=4,
     )
     return img
