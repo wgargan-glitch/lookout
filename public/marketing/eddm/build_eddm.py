@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lookout USPS EDDM 6.5in x 9in at 300 DPI — host-awareness mailer."""
+"""Lookout USPS EDDM 6.5in x 9in at 300 DPI — RV guests + any-car hosts."""
 
 from pathlib import Path
 
@@ -67,25 +67,25 @@ def front() -> Image.Image:
     img = Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB")
     d = ImageDraw.Draw(img)
     pad = 120
-    display = font("Fraunces-Semibold.ttf", 118)
+    display = font("Fraunces-Semibold.ttf", 112)
     body = font("Figtree-Regular.ttf", 40)
-    btn = font("Figtree-Semibold.ttf", 36)
+    btn = font("Figtree-Semibold.ttf", 34)
     d.text((pad, 110), "LOOKOUT", font=font("Figtree-Semibold.ttf", 44), fill=PARCHMENT)
-    d.text((pad, 168), "FOR NEIGHBORS NEAR THE PARKS", font=font("Figtree-Medium.ttf", 28), fill=SAGE)
-    headline = wrap(d, "Visitors need a 4x4. Yours is already here.", display, int(W * 0.52))
+    d.text((pad, 168), "CARS AT THE PARKS", font=font("Figtree-Medium.ttf", 28), fill=SAGE)
+    headline = wrap(d, "Leave the motorhome. Take the car.", display, int(W * 0.50))
     d.multiline_text((pad, 230), headline, font=display, fill=PARCHMENT, spacing=4)
     sub = wrap(
         d,
-        "List the truck, van, or overland rig in the driveway. You set the rate. Pickup stays in town.",
+        "Keep camp set up. Rent a local car for the sites, the overlooks, and town — then come back to a camp that’s still yours.",
         body,
-        int(W * 0.44),
+        int(W * 0.46),
     )
-    d.multiline_text((pad, 1320), sub, font=body, fill=PARCHMENT, spacing=8)
-    bx, by, bw, bh = pad, 1540, 460, 92
+    d.multiline_text((pad, 1280), sub, font=body, fill=PARCHMENT, spacing=8)
+    bx, by, bw, bh = pad, 1540, 520, 92
     rounded_rect(d, (bx, by, bx + bw, by + bh), 46, PARCHMENT)
-    tw = d.textlength("List your car", font=btn)
-    d.text((bx + (bw - tw) / 2, by + 24), "List your car", font=btn, fill=PINE)
-    d.text((pad + 500, by + 30), "Open Lookout · go live", font=font("Figtree-Regular.ttf", 28), fill=STONE)
+    tw = d.textlength("Find or list a car", font=btn)
+    d.text((bx + (bw - tw) / 2, by + 26), "Find or list a car", font=btn, fill=PINE)
+    d.text((pad + 560, by + 32), "Any car. Any host.", font=font("Figtree-Regular.ttf", 28), fill=STONE)
     return img
 
 
@@ -95,10 +95,10 @@ def back() -> Image.Image:
     pad = 90
     left_w = 1180
     d.text((pad, 90), "LOOKOUT", font=font("Figtree-Semibold.ttf", 32), fill=PINE)
-    d.text((pad, 132), "LIST A CAR AT THE PARKS", font=font("Figtree-Medium.ttf", 24), fill=SAGE)
+    d.text((pad, 132), "TWO SIDES OF THE SAME TOWN", font=font("Figtree-Medium.ttf", 24), fill=SAGE)
     d.multiline_text(
         (pad, 186),
-        "They flew in.\nThey still need your truck.",
+        "Unhook once.\nTour in a car.",
         font=font("Fraunces-Semibold.ttf", 58),
         fill=INK,
         spacing=2,
@@ -108,12 +108,12 @@ def back() -> Image.Image:
     y = 430
     cards = [
         (
-            "WHY LIST",
-            "Park guests land without a capable car. Airport counters don’t have one. They book the neighbor’s 4x4.",
+            "RV & MOTORHOME GUESTS",
+            "Leave the coach set up. Rent a local car for the park roads, the village, and the trailhead lots the motorhome will not fit.",
         ),
         (
-            "YOU KEEP",
-            "The keys until pickup. Your own auto insurance. The calendar. You set the daily rate.",
+            "HOSTS — ANY CAR",
+            "Sedan, van, truck, 4x4, or the daily driver. If it is in a gateway town, list it. You set the rate and keep the keys until pickup.",
         ),
     ]
     for title, copy in cards:
@@ -130,7 +130,7 @@ def back() -> Image.Image:
 
     d.text(
         (pad, y + 10),
-        "01  Open an account     02  Six photos of the actual car     03  Go live",
+        "01  Find a park     02  Book or list a car     03  Camp stays put",
         font=font("Figtree-Medium.ttf", 26),
         fill=PINE,
     )
@@ -177,8 +177,8 @@ def back() -> Image.Image:
     )
     d.multiline_text(
         (px, py + ph + 280),
-        wrap(d, "If you live here and own a capable car, list it.", font("Figtree-Regular.ttf", 26), pw),
-        font=font("Figtree-Regular.ttf", 26),
+        wrap(d, "Any car. RV guests and neighbors both use Lookout.", font("Figtree-Regular.ttf", 24), pw),
+        font=font("Figtree-Regular.ttf", 24),
         fill=PINE,
         spacing=4,
     )
