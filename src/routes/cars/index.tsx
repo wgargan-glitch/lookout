@@ -5,7 +5,7 @@ import { CarCard } from "@/components/cars/car-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CATEGORIES, PARKS, type Car } from "@/lib/catalog";
+import { CATEGORIES, EXTRA_CATEGORIES, PARKS, carMatchesCategory, type Car } from "@/lib/catalog";
 import { useFleet } from "@/lib/use-fleet";
 import { validateCarsSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,7 @@ function CarsPage() {
   const filtered = useMemo(() => {
     let list: Car[] = cars;
     if (search.park) list = list.filter((c) => c.parkSlug === search.park);
-    if (search.category) list = list.filter((c) => c.category === search.category);
+    if (search.category) list = list.filter((c) => carMatchesCategory(c, search.category!));
     if (search.camping) list = list.filter((c) => c.camping);
     if (search.pet) list = list.filter((c) => c.petFriendly);
     if (search.electric) list = list.filter((c) => c.electric);
@@ -92,6 +92,26 @@ function CarsPage() {
             <p className="mb-2 text-sm font-medium">Type</p>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() =>
+                    patch({ category: search.category === cat.id ? undefined : cat.id })
+                  }
+                  className={cn(
+                    "rounded-full border px-3 py-1.5 text-xs font-medium",
+                    search.category === cat.id
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card",
+                  )}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-3 mb-2 text-sm font-medium">Builds</p>
+            <div className="flex flex-wrap gap-1.5">
+              {EXTRA_CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"

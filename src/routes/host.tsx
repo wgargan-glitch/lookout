@@ -67,7 +67,7 @@ function HostPage() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[1fr_280px]">
         <ListingForm key={edit ?? "new"} profile={profile} existing={existing ?? undefined} />
         <aside className="space-y-4 text-sm text-muted-foreground">
-          <p>Year first, then make and model from the US-market list (2000 on). Trim is not required. Pick 2WD, 4x4 or AWD, fuel, and automatic or manual.</p>
+          <p>Year first, then make and model from the US-market list (2000 on). Type is set from that year and model — a 4Runner is an SUV, a Tacoma is a truck. Overland is an optional tag for the rare rigs that actually carry it. Trim is not required. Pick 2WD, 4x4 or AWD, fuel, and automatic or manual.</p>
           <p>Lookout keeps 10% as a service fee. Guests pay trip liability and a protection plan — that is the trip cover, not your personal policy.</p>
           <p>Your personal auto policy is for when the car is not rented. Personal policies usually exclude car-sharing. Ordinary hosts cannot opt out of trip cover.</p>
           <p>

@@ -3,7 +3,7 @@ import { Star } from "lucide-react";
 import { FavoriteButton } from "@/components/cars/favorite-button";
 import { Badge } from "@/components/ui/badge";
 import type { Car, Park } from "@/lib/catalog";
-import { carTitle } from "@/lib/catalog";
+import { carTitle, isOverlandCar } from "@/lib/catalog";
 import { formatMoney } from "@/lib/format";
 
 export function CarCard({ car, park }: { car: Car; park?: Park | null }) {
@@ -22,6 +22,7 @@ export function CarCard({ car, park }: { car: Car; park?: Park | null }) {
         <FavoriteButton id={car.id} className="absolute top-3 right-3" />
         <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
           {car.instantBook ? <Badge tone="pine">Instant book</Badge> : null}
+          {isOverlandCar(car) ? <Badge>Overland</Badge> : null}
           {car.camping ? <Badge>Camping</Badge> : null}
           {car.electric ? <Badge>Electric</Badge> : null}
         </div>

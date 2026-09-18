@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { listBookedRanges } from "@/lib/api";
-import { carTitle } from "@/lib/catalog";
+import { carTitle, isOverlandCar } from "@/lib/catalog";
+import { bodyTypeLabel } from "@/lib/us-vehicles";
 import { formatDate, formatMoney, parseISODate, toISODate } from "@/lib/format";
 import { blockedRanges, carBundle } from "@/lib/lookout-store";
 import { DEFAULT_PROTECTION, quoteTrip, type GuestPlanId } from "@/lib/pricing";
@@ -127,6 +128,7 @@ function CarDetail() {
             <div>
               <div className="flex flex-wrap gap-2">
                 {car.instantBook ? <Badge tone="pine">Instant book</Badge> : <Badge>Host approval</Badge>}
+                {isOverlandCar(car) ? <Badge>Overland</Badge> : null}
                 {car.camping ? <Badge>Camping</Badge> : null}
                 {car.petFriendly ? <Badge>Pets</Badge> : null}
                 {car.electric ? <Badge>Electric</Badge> : null}
@@ -151,7 +153,7 @@ function CarDetail() {
               { icon: Users, label: `${car.seats} seats` },
               { icon: Cog, label: car.transmission },
               { icon: Gauge, label: car.mpg === "n/a" ? car.drivetrain : `${car.mpg} mpg` },
-              { icon: MapPin, label: car.drivetrain },
+              { icon: MapPin, label: `${car.drivetrain} · ${bodyTypeLabel(car.category)}` },
             ].map((item) => (
               <div key={item.label} className="rounded-lg border border-border bg-card px-3 py-3 text-sm">
                 <item.icon className="size-4 text-primary" />

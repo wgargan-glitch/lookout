@@ -1,4 +1,5 @@
 import type { Car, Host, Park, Review } from "@/lib/catalog";
+import { resolvedBodyType } from "@/lib/us-vehicles";
 
 const F = {
   awd: "All-wheel drive",
@@ -90,10 +91,14 @@ export const FEDERAL_HOSTS: Host[] = [
 function listing(
   car: Omit<Car, "doors" | "transmission" | "features"> & { features?: string[]; doors?: number; transmission?: string },
 ): Car {
+  const overland = Boolean(car.overland) || car.category === "overland";
+  const category = car.category === "overland" ? resolvedBodyType(car.year, car.make, car.model) : car.category;
   return {
     doors: 4,
     transmission: "Automatic",
     ...car,
+    category,
+    overland,
     features: car.features ?? [F.awd, F.mile, F.apple],
   };
 }

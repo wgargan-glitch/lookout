@@ -10,9 +10,9 @@ import {
   type HostListing,
   type Profile,
 } from "@/lib/api";
-import { CATEGORIES, PARKS, groupedParks } from "@/lib/catalog";
+import { PARKS, groupedParks } from "@/lib/catalog";
 import { listingLiveGaps, REQUIRED_PHOTO_IDS } from "@/lib/listing-photos";
-import { FUELS, type DrivetrainId, type FuelId } from "@/lib/us-vehicles";
+import { FUELS, OPTIONAL_BUILD_TAGS, type DrivetrainId, type FuelId } from "@/lib/us-vehicles";
 import { VehicleGallery } from "@/components/host/vehicle-gallery";
 import { VehicleIdentityFields } from "@/components/host/vehicle-identity";
 import { Button } from "@/components/ui/button";
@@ -70,7 +70,6 @@ export function ListingForm({
       make: String(data.get("make") ?? ""),
       model: String(data.get("model") ?? ""),
       year: Number(data.get("year")),
-      category: String(data.get("category") ?? "suv") as "suv" | "truck" | "van" | "sports" | "overland",
       parkSlug: String(data.get("parkSlug") ?? ""),
       daily: Number(data.get("daily")),
       seats: Number(data.get("seats")),
@@ -88,6 +87,7 @@ export function ListingForm({
       camping: data.get("camping") === "on",
       petFriendly: data.get("petFriendly") === "on",
       instantBook: data.get("instantBook") === "on",
+      overland: data.get("overland") === "on",
       electric: String(data.get("fuel") ?? "") === "Electric",
       insuranceAttested: true as const,
       plate: String(data.get("plate") ?? ""),
@@ -171,6 +171,20 @@ export function ListingForm({
       <form className="grid gap-4 sm:grid-cols-2" onSubmit={(e) => void onSubmit(e, intentFrom(e))}>
         <Section title="01 · Vehicle" />
         <VehicleIdentityFields car={{ ...car, fuel: existing?.fuel }} />
+        {OPTIONAL_BUILD_TAGS.map((tag) => (
+          <label key={tag.id} className="flex min-h-11 items-start gap-2 text-sm sm:col-span-2">
+            <input
+              type="checkbox"
+              name={tag.id}
+              className="mt-1 size-4 accent-primary"
+              defaultChecked={Boolean(car?.[tag.id as "overland"]) || car?.category === "overland"}
+            />
+            <span>
+              {tag.label}
+              <span className="block text-xs text-muted-foreground">{tag.hint}</span>
+            </span>
+          </label>
+        ))}
         <div className="space-y-1.5">
           <Label htmlFor="plate">License plate</Label>
           <Input id="plate" name="plate" required placeholder="NPS 4X4" defaultValue={existing?.plate} />
@@ -182,21 +196,6 @@ export function ListingForm({
         <div className="space-y-1.5">
           <Label htmlFor="mileage">Current mileage</Label>
           <Input id="mileage" name="mileage" type="number" required min={0} max={800000} defaultValue={existing?.mileage ?? 42000} />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="category">Type</Label>
-          <select
-            id="category"
-            name="category"
-            className="flex h-11 w-full rounded-md border border-input bg-card px-3 text-sm"
-            defaultValue={car?.category ?? "overland"}
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.label}
-              </option>
-            ))}
-          </select>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="seats">Seats</Label>

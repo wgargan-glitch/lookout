@@ -12,7 +12,7 @@ import {
   type DamageItem,
 } from "@/lib/inspection";
 import { quoteTrip, rangesOverlap, parseProtection, type ProtectionId } from "@/lib/pricing";
-import { FUELS, isListedVehicle, parseFuel, type FuelId } from "@/lib/us-vehicles";
+import { BODY_TYPES, FUELS, isListedVehicle, parseFuel, resolvedBodyType, type BodyTypeId, type FuelId } from "@/lib/us-vehicles";
 
 export type Profile = {
   userId: string;
@@ -89,6 +89,7 @@ type ListingRow = {
   pet_friendly: boolean;
   instant_book: boolean;
   electric: boolean;
+  overland?: boolean;
   insurance_attested: boolean;
   fuel?: string | null;
   status: string;
@@ -103,6 +104,7 @@ const CATEGORY_FALLBACK: Record<Car["category"], string> = {
   truck: "/images/cars/tacoma-arches.jpg",
   van: "/images/cars/sprinter-joshua.jpg",
   sports: "/images/cars/mini-acadia.jpg",
+  car: "/images/cars/mini-acadia.jpg",
 };
 
 function asDate(value: unknown) {
@@ -110,17 +112,23 @@ function asDate(value: unknown) {
   return String(value).slice(0, 10);
 }
 
+function asBodyType(value: string): BodyTypeId {
+  return BODY_TYPES.some((t) => t.id === value) ? (value as BodyTypeId) : "suv";
+}
+
 function listingToCar(row: ListingRow): Car {
-  const category = (["suv", "truck", "van", "sports", "overland"] as const).includes(row.category)
-    ? row.category
-    : "suv";
+  const overland = Boolean(row.overland) || row.category === "overland";
+  const category =
+    row.category === "overland"
+      ? resolvedBodyType(Number(row.year), row.make, row.model)
+      : asBodyType(row.category);
   let features: string[] = [];
   try {
     features = JSON.parse(row.features_json) as string[];
   } catch {
     features = [];
   }
-  const hero = row.image || CATEGORY_FALLBACK[category];
+  const hero = row.image || CATEGORY_FALLBACK[category] || CATEGORY_FALLBACK.suv;
   const gallery = orderedGallerySrcs(parseGallery(row.images_json));
   return {
     id: row.id,
@@ -145,6 +153,7 @@ function listingToCar(row: ListingRow): Car {
     camping: Boolean(row.camping),
     instantBook: Boolean(row.instant_book),
     electric: parseFuel({ fuel: row.fuel, electric: Boolean(row.electric) }) === "Electric",
+    overland,
     ratingAvg: 5,
     tripCount: 0,
     pickupNotes: row.pickup_notes || undefined,
@@ -710,7 +719,7 @@ const listingFields = z.object({
   model: z.string().min(1).max(80),
   year: z.number().int().min(2000).max(2027),
   trim: z.string().max(40).optional(),
-  category: z.enum(["suv", "truck", "van", "sports", "overland"]),
+  category: z.enum(["suv", "truck", "van", "sports", "overland", "car"]).optional(),
   parkSlug: z.string().min(1),
   daily: z.number().min(20).max(2000),
   seats: z.number().int().min(2).max(15),
@@ -722,6 +731,7 @@ const listingFields = z.object({
   camping: z.boolean(),
   petFriendly: z.boolean(),
   instantBook: z.boolean(),
+  overland: z.boolean().optional(),
   electric: z.boolean(),
   insuranceAttested: z.literal(true),
   plate: z.string().min(1).max(20),
@@ -792,19 +802,21 @@ export const createListing = createServerFn({ method: "POST" })
     `;
     const id = `car-${crypto.randomUUID().slice(0, 8)}`;
     const features = JSON.stringify(["Unlimited miles", "Host off-trip insurance on file"]);
+    const category = resolvedBodyType(data.year, data.make, data.model);
     await sql`
       insert into listings (
         id, user_id, make, model, year, trim, category, park_slug, daily_cents, seats, doors,
         transmission, drivetrain, description, features_json, camping, pet_friendly, instant_book,
         electric, insurance_attested, status, plate, vin, mileage, pickup_notes, insurer, policy_number,
-        images_json, fuel
+        images_json, fuel, overland
       ) values (
         ${id}, ${context.userId}, ${data.make}, ${data.model}, ${data.year}, ${data.trim ?? ""},
-        ${data.category}, ${data.parkSlug}, ${Math.round(data.daily * 100)}, ${data.seats},
+        ${category}, ${data.parkSlug}, ${Math.round(data.daily * 100)}, ${data.seats},
         ${data.doors ?? 4}, ${data.transmission ?? "Automatic"}, ${data.drivetrain},
         ${data.description}, ${features}, ${data.camping}, ${data.petFriendly}, ${data.instantBook},
         ${data.fuel === "Electric"}, true, 'draft', ${data.plate.trim().toUpperCase()}, ${data.vin ?? ""},
-        ${data.mileage}, ${data.pickupNotes}, ${data.insurer}, ${data.policyNumber}, '[]', ${data.fuel}
+        ${data.mileage}, ${data.pickupNotes}, ${data.insurer}, ${data.policyNumber}, '[]', ${data.fuel},
+        ${Boolean(data.overland)}
       )
     `;
     return { id, status: "draft" as const };
@@ -827,13 +839,14 @@ export const updateListing = createServerFn({ method: "POST" })
       where user_id = ${context.userId}
     `;
     const nextStatus = owned[0].status === "rejected" ? "draft" : owned[0].status;
+    const category = resolvedBodyType(data.year, data.make, data.model);
     await sql`
       update listings set
         make = ${data.make},
         model = ${data.model},
         year = ${data.year},
         trim = ${data.trim ?? ""},
-        category = ${data.category},
+        category = ${category},
         park_slug = ${data.parkSlug},
         daily_cents = ${Math.round(data.daily * 100)},
         seats = ${data.seats},
@@ -846,6 +859,7 @@ export const updateListing = createServerFn({ method: "POST" })
         pet_friendly = ${data.petFriendly},
         instant_book = ${data.instantBook},
         electric = ${data.fuel === "Electric"},
+        overland = ${Boolean(data.overland)},
         insurance_attested = true,
         plate = ${data.plate.trim().toUpperCase()},
         vin = ${data.vin ?? ""},

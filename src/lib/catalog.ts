@@ -31,7 +31,7 @@ export type Car = {
   model: string;
   year: number;
   trim: string;
-  category: "suv" | "truck" | "van" | "sports" | "overland";
+  category: "suv" | "truck" | "van" | "sports" | "overland" | "car";
   parkSlug: string;
   hostId: string;
   dailyCents: number;
@@ -48,6 +48,7 @@ export type Car = {
   camping: boolean;
   instantBook: boolean;
   electric: boolean;
+  overland?: boolean;
   ratingAvg: number;
   tripCount: number;
   pickupNotes?: string;
@@ -390,7 +391,7 @@ export const CARS: Car[] = [
     model: "Bronco",
     year: 2022,
     trim: "Outer Banks",
-    category: "overland",
+    category: "suv",
     parkSlug: "yosemite",
     hostId: "wren",
     dailyCents: 12800,
@@ -412,6 +413,7 @@ export const CARS: Car[] = [
     camping: true,
     instantBook: true,
     electric: false,
+    overland: true,
     ratingAvg: 4.97,
     tripCount: 86,
   },
@@ -421,7 +423,7 @@ export const CARS: Car[] = [
     model: "4Runner",
     year: 2021,
     trim: "TRD Pro",
-    category: "overland",
+    category: "suv",
     parkSlug: "zion",
     hostId: "sienna",
     dailyCents: 11500,
@@ -443,6 +445,7 @@ export const CARS: Car[] = [
     camping: false,
     instantBook: true,
     electric: false,
+    overland: true,
     ratingAvg: 4.99,
     tripCount: 64,
   },
@@ -452,7 +455,7 @@ export const CARS: Car[] = [
     model: "Wrangler",
     year: 2023,
     trim: "Rubicon",
-    category: "overland",
+    category: "suv",
     parkSlug: "grand-canyon",
     hostId: "elias",
     dailyCents: 14200,
@@ -474,6 +477,7 @@ export const CARS: Car[] = [
     camping: false,
     instantBook: true,
     electric: false,
+    overland: true,
     ratingAvg: 4.94,
     tripCount: 112,
   },
@@ -731,7 +735,7 @@ export const CARS: Car[] = [
     model: "Land Cruiser",
     year: 1998,
     trim: "80-Series",
-    category: "overland",
+    category: "suv",
     parkSlug: "yellowstone",
     hostId: "kenji",
     dailyCents: 11000,
@@ -753,6 +757,7 @@ export const CARS: Car[] = [
     camping: true,
     instantBook: false,
     electric: false,
+    overland: true,
     ratingAvg: 4.96,
     tripCount: 77,
   },
@@ -1118,12 +1123,25 @@ export const BOOKING_SEEDS: BookingSeed[] = [
 ];
 
 export const CATEGORIES = [
-  { id: "overland", label: "Overland" },
   { id: "suv", label: "SUVs" },
   { id: "truck", label: "Trucks" },
-  { id: "van", label: "Campers" },
-  { id: "sports", label: "Scenic" },
+  { id: "van", label: "Vans" },
+  { id: "car", label: "Cars" },
+  { id: "sports", label: "Sports" },
 ] as const;
+
+export const EXTRA_CATEGORIES = [{ id: "overland", label: "Overland" }] as const;
+
+export function isOverlandCar(car: Car) {
+  return Boolean(car.overland) || car.category === "overland";
+}
+
+export function carMatchesCategory(car: Car, category: string) {
+  if (category === "overland") return isOverlandCar(car);
+  if (car.category === category) return true;
+  if (category === "suv" && car.category === "overland") return true;
+  return false;
+}
 
 export const TRAIL_ALIASES = [
   "Juniper",

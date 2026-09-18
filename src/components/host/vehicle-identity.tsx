@@ -5,6 +5,8 @@ import {
   FUELS,
   TRANSMISSIONS,
   VEHICLE_YEARS,
+  bodyTypeFor,
+  bodyTypeLabel,
   makesForYear,
   modelsForYearMake,
   parseDrivetrain,
@@ -40,6 +42,7 @@ export function VehicleIdentityFields({ car }: { car?: CarLike & { fuel?: string
     [year, make, model],
   );
 
+  const body = year !== "" && make && model ? bodyTypeFor(year, make, model) : null;
   const drivetrain: DrivetrainId = parseDrivetrain(car?.drivetrain);
   const fuel: FuelId = parseFuel({ fuel: car?.fuel, electric: car?.electric });
   const transmission: TransmissionId = car?.transmission === "Manual" ? "Manual" : "Automatic";
@@ -113,6 +116,14 @@ export function VehicleIdentityFields({ car }: { car?: CarLike & { fuel?: string
             </option>
           ))}
         </select>
+        {body ? (
+          <p className="text-xs text-muted-foreground">
+            Listed as {bodyTypeLabel(body)}. Optional builds such as Overland sit just below — they do not replace this type.
+          </p>
+        ) : (
+          <p className="text-xs text-muted-foreground">Type is set automatically from year and model.</p>
+        )}
+        <input type="hidden" name="category" value={body ?? ""} />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="drivetrain">Drivetrain</Label>

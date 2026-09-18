@@ -5,7 +5,7 @@ import { CarCard } from "@/components/cars/car-card";
 import { ParkCard } from "@/components/parks/park-card";
 import { PhoneFrame } from "@/components/layout/phone-frame";
 import { Button } from "@/components/ui/button";
-import { PARKS, carTitle, featuredParks } from "@/lib/catalog";
+import { PARKS, carTitle, featuredParks, isOverlandCar } from "@/lib/catalog";
 import { formatMoney } from "@/lib/format";
 import { useFleet } from "@/lib/use-fleet";
 import { useStandalone } from "@/lib/use-install-prompt";
@@ -31,7 +31,7 @@ function Home() {
   const parkCounts = new Map<string, number>();
   for (const car of cars) parkCounts.set(car.parkSlug, (parkCounts.get(car.parkSlug) ?? 0) + 1);
   const homeParks = featuredParks();
-  const overland = cars.filter((c) => c.category === "overland" || c.camping).slice(0, 4);
+  const overland = cars.filter((c) => isOverlandCar(c) || c.camping).slice(0, 4);
 
   return (
     <main>

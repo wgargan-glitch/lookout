@@ -1,9 +1,19 @@
 import catalog from "@/lib/us-vehicles.json";
 
+export const BODY_TYPES = [
+  { id: "suv", label: "SUV" },
+  { id: "truck", label: "Truck" },
+  { id: "van", label: "Van" },
+  { id: "car", label: "Car" },
+  { id: "sports", label: "Sports" },
+] as const;
+
+export type BodyTypeId = (typeof BODY_TYPES)[number]["id"];
+
 type Catalog = {
   minYear: number;
   maxYear: number;
-  years: Record<string, Record<string, string[]>>;
+  years: Record<string, Record<string, Record<string, string>>>;
 };
 
 const data = catalog as Catalog;
@@ -30,19 +40,41 @@ export type FuelId = (typeof FUELS)[number];
 export const TRANSMISSIONS = ["Automatic", "Manual"] as const;
 export type TransmissionId = (typeof TRANSMISSIONS)[number];
 
+export const OPTIONAL_BUILD_TAGS = [
+  {
+    id: "overland",
+    label: "Overland build",
+    hint: "Roof tent, recovery gear, or a serious off-pavement setup. Rare. Does not replace the vehicle type.",
+  },
+] as const;
+
 export function makesForYear(year: number): string[] {
   const block = data.years[String(year)];
   return block ? Object.keys(block) : [];
 }
 
 export function modelsForYearMake(year: number, make: string, extra?: string): string[] {
-  const models = data.years[String(year)]?.[make] ?? [];
+  const models = Object.keys(data.years[String(year)]?.[make] ?? {});
   if (extra && extra.trim() && !models.includes(extra)) return [extra, ...models];
   return models;
 }
 
 export function isListedVehicle(year: number, make: string, model: string): boolean {
-  return (data.years[String(year)]?.[make] ?? []).includes(model);
+  return Boolean(data.years[String(year)]?.[make]?.[model]);
+}
+
+export function bodyTypeFor(year: number, make: string, model: string): BodyTypeId | null {
+  const raw = data.years[String(year)]?.[make]?.[model];
+  if (raw === "suv" || raw === "truck" || raw === "van" || raw === "car" || raw === "sports") return raw;
+  return null;
+}
+
+export function resolvedBodyType(year: number, make: string, model: string): BodyTypeId {
+  return bodyTypeFor(year, make, model) ?? "suv";
+}
+
+export function bodyTypeLabel(id: BodyTypeId | string | null | undefined): string {
+  return BODY_TYPES.find((t) => t.id === id)?.label ?? "Vehicle";
 }
 
 export function parseDrivetrain(value: string | undefined): DrivetrainId {
