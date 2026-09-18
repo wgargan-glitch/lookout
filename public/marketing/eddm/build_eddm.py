@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lookout USPS EDDM 6.5in x 9in at 300 DPI (front + back)."""
+"""Lookout USPS EDDM 6.5in x 9in at 300 DPI — host-awareness mailer."""
 
 from pathlib import Path
 
@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path("/workspace/public/marketing/eddm")
 FONTS = Path("/tmp/fonts")
-HERO = Path("/workspace/artifacts/imagine_images/06b42d10-7b41-4e0c-b8d9-fa9ae88123b6.jpg")
+HERO = Path("/workspace/artifacts/imagine_images/40efd824-eac9-42f8-8a4a-c4e1a52f34b2.jpg")
 
 DPI = 300
 W, H = 9 * DPI, int(6.5 * DPI)  # 2700 x 1950 landscape
@@ -60,28 +60,32 @@ def front() -> Image.Image:
     img = cover(HERO, (W, H))
     overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(overlay)
-    for x in range(0, int(W * 0.62)):
-        t = 1 - (x / (W * 0.62))
-        a = int(210 * (t**1.15))
+    for x in range(0, int(W * 0.64)):
+        t = 1 - (x / (W * 0.64))
+        a = int(220 * (t**1.1))
         d.line([(x, 0), (x, H)], fill=(*PINE_DEEP, a))
     img = Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB")
     d = ImageDraw.Draw(img)
     pad = 120
-    kicker = font("Figtree-Semibold.ttf", 36)
-    display = font("Fraunces-Semibold.ttf", 128)
-    body = font("Figtree-Regular.ttf", 42)
+    display = font("Fraunces-Semibold.ttf", 118)
+    body = font("Figtree-Regular.ttf", 40)
     btn = font("Figtree-Semibold.ttf", 36)
-    d.text((pad, 120), "LOOKOUT", font=font("Figtree-Semibold.ttf", 44), fill=PARCHMENT)
-    d.text((pad, 176), "CARS AT THE PARKS", font=font("Figtree-Medium.ttf", 30), fill=SAGE)
-    headline = wrap(d, "The park car is already in town.", display, int(W * 0.50))
-    d.multiline_text((pad, 240), headline, font=display, fill=PARCHMENT, spacing=6)
-    sub = wrap(d, "Rent a 4x4 from a neighbor. Pickup in the gateway, not the airport.", body, int(W * 0.42))
-    d.multiline_text((pad, 1380), sub, font=body, fill=PARCHMENT, spacing=8)
-    bx, by, bw, bh = pad, 1540, 420, 92
+    d.text((pad, 110), "LOOKOUT", font=font("Figtree-Semibold.ttf", 44), fill=PARCHMENT)
+    d.text((pad, 168), "FOR NEIGHBORS NEAR THE PARKS", font=font("Figtree-Medium.ttf", 28), fill=SAGE)
+    headline = wrap(d, "Visitors need a 4x4. Yours is already here.", display, int(W * 0.52))
+    d.multiline_text((pad, 230), headline, font=display, fill=PARCHMENT, spacing=4)
+    sub = wrap(
+        d,
+        "List the truck, van, or overland rig in the driveway. You set the rate. Pickup stays in town.",
+        body,
+        int(W * 0.44),
+    )
+    d.multiline_text((pad, 1320), sub, font=body, fill=PARCHMENT, spacing=8)
+    bx, by, bw, bh = pad, 1540, 460, 92
     rounded_rect(d, (bx, by, bx + bw, by + bh), 46, PARCHMENT)
-    tw = d.textlength("Book a trip", font=btn)
-    d.text((bx + (bw - tw) / 2, by + 24), "Book a trip", font=btn, fill=PINE)
-    d.text((pad + 460, by + 30), "For guests and hosts", font=font("Figtree-Regular.ttf", 28), fill=STONE)
+    tw = d.textlength("List your car", font=btn)
+    d.text((bx + (bw - tw) / 2, by + 24), "List your car", font=btn, fill=PINE)
+    d.text((pad + 500, by + 30), "Open Lookout · go live", font=font("Figtree-Regular.ttf", 28), fill=STONE)
     return img
 
 
@@ -91,41 +95,51 @@ def back() -> Image.Image:
     pad = 90
     left_w = 1180
     d.text((pad, 90), "LOOKOUT", font=font("Figtree-Semibold.ttf", 32), fill=PINE)
-    d.text((pad, 132), "CARS AT THE PARKS", font=font("Figtree-Medium.ttf", 24), fill=SAGE)
+    d.text((pad, 132), "LIST A CAR AT THE PARKS", font=font("Figtree-Medium.ttf", 24), fill=SAGE)
     d.multiline_text(
-        (pad, 190),
-        wrap(d, "Two ways onto the trail.", font("Fraunces-Semibold.ttf", 68), left_w),
-        font=font("Fraunces-Semibold.ttf", 68),
+        (pad, 186),
+        "They flew in.\nThey still need your truck.",
+        font=font("Fraunces-Semibold.ttf", 58),
         fill=INK,
         spacing=2,
     )
 
-    card_w, card_h = left_w, 300
-    y = 420
+    card_w, card_h = left_w, 270
+    y = 430
     cards = [
-        ("GUESTS", "Book a local 4x4, van, or overland rig. Check in on your phone. Unlimited miles."),
-        ("HOSTS", "List the truck already in the driveway. You set the rate. You keep the keys until pickup."),
+        (
+            "WHY LIST",
+            "Park guests land without a capable car. Airport counters don’t have one. They book the neighbor’s 4x4.",
+        ),
+        (
+            "YOU KEEP",
+            "The keys until pickup. Your own auto insurance. The calendar. You set the daily rate.",
+        ),
     ]
     for title, copy in cards:
         rounded_rect(d, (pad, y, pad + card_w, y + card_h), 24, WHITE, STONE, 3)
-        d.text((pad + 40, y + 32), title, font=font("Figtree-Semibold.ttf", 28), fill=SAGE)
+        d.text((pad + 40, y + 28), title, font=font("Figtree-Semibold.ttf", 26), fill=SAGE)
         d.multiline_text(
-            (pad + 40, y + 88),
-            wrap(d, copy, font("Figtree-Regular.ttf", 36), card_w - 80),
-            font=font("Figtree-Regular.ttf", 36),
+            (pad + 40, y + 78),
+            wrap(d, copy, font("Figtree-Regular.ttf", 34), card_w - 80),
+            font=font("Figtree-Regular.ttf", 34),
             fill=INK,
-            spacing=8,
+            spacing=6,
         )
-        y += card_h + 28
+        y += card_h + 24
 
-    steps = ["01  Find a park", "02  Book the car", "03  Check in at the lot"]
-    d.text((pad, y + 8), "   ·   ".join(steps), font=font("Figtree-Medium.ttf", 30), fill=PINE)
+    d.text(
+        (pad, y + 10),
+        "01  Open an account     02  Six photos of the actual car     03  Go live",
+        font=font("Figtree-Medium.ttf", 26),
+        fill=PINE,
+    )
 
     d.multiline_text(
         (pad, 1760),
         wrap(
             d,
-            "Lookout Protection is a damage waiver, not an insurance policy. Hosts carry their own auto insurance. Not affiliated with the National Park Service.",
+            "Hosts carry their own auto insurance. Lookout Protection is a trip damage waiver, not a policy. Not affiliated with the National Park Service.",
             font("Figtree-Regular.ttf", 22),
             left_w,
         ),
@@ -134,7 +148,6 @@ def back() -> Image.Image:
         spacing=4,
     )
 
-    # USPS mail panel — 4.00 x 2.75 in, upper right of the address side
     pw, ph = 4 * DPI, int(2.75 * DPI)
     px, py = W - 90 - pw, 90
     rounded_rect(d, (px, py, px + pw, py + ph), 8, WHITE, PINE, 4)
@@ -161,6 +174,13 @@ def back() -> Image.Image:
         font=font("Figtree-Regular.ttf", 26),
         fill=INK,
         spacing=6,
+    )
+    d.multiline_text(
+        (px, py + ph + 280),
+        wrap(d, "If you live here and own a capable car, list it.", font("Figtree-Regular.ttf", 26), pw),
+        font=font("Figtree-Regular.ttf", 26),
+        fill=PINE,
+        spacing=4,
     )
     return img
 
