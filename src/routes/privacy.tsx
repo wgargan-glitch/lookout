@@ -16,8 +16,10 @@ function PrivacyPage() {
       <p>
         When you create an account we store the name and email from Google, X, or the address you
         type, plus a Lookout user id. You may add a trail name, phone, hometown, and bio. We store
-        listings, bookings, support tickets, and claims you submit, including dates, car details,
-        and the protection plan you pick.
+        listings, bookings, support tickets, claims you submit, including dates, car details,
+        the protection plan you pick, and host insurance carrier names. If live insurer
+        verification (Axle or equivalent) is connected later, we would receive policy status
+        needed to confirm P2P cover — not a photo of your card.
       </p>
       <p>
         We do not collect precise GPS, contacts, photos from your camera roll, or payment card

@@ -2,7 +2,7 @@
 
 Peer-to-peer car rentals from private hosts at all **63 U.S. national parks**. Guests book a local car in the gateway town. Hosts list from the park gate. Same account on the website, iPhone, and Android.
 
-Live product includes sign-in, trips, host listings, ranger desk, Lookout Protection (a contractual waiver, not a licensed policy), help desk, claims, privacy/terms, and account deletion.
+Live product includes sign-in, trips, host listings, ranger desk, renter-paid trip liability plus Minimum/Standard/Premier protection (waivers until a licensed carrier is bound), help desk, claims, privacy/terms, and account deletion.
 
 ## Stack
 

@@ -23,7 +23,7 @@ function HowItWorks() {
           },
           {
             t: "Book, or request",
-            d: "Sign in, pick dates, then Trail, Ridge, or Summit protection. Instant book listings confirm immediately. Lookout adds a 10% service fee. Pickup is in the gateway town on the listing.",
+            d: "Sign in, pick dates, then a protection plan — Minimum, Standard, or Premier. Trip liability is on every booking and the guest pays it. Instant book listings confirm immediately. Lookout adds a 10% service fee. Pickup is in the gateway town on the listing.",
           },
           {
             t: "Check in on your phone",
@@ -35,7 +35,7 @@ function HowItWorks() {
           },
           {
             t: "List your own",
-            d: "Create an account, add six required photos of the actual car, name your insurance carrier, and list it in a gateway town. You choose the daily rate. Drafts stay on your account until the gallery is complete. The ranger desk can pause a car or review a claim.",
+            d: "Create an account, add six required photos of the actual car, name the auto carrier that covers the car when it is not rented, and list it in a gateway town. You choose the daily rate. Guests pay trip cover. Drafts stay on your account until the gallery is complete.",
           },
         ].map((block, i) => (
           <Card key={block.t} className="p-6">

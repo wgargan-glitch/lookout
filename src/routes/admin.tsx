@@ -14,6 +14,7 @@ import {
 } from "@/lib/api";
 import { carTitle } from "@/lib/catalog";
 import { formatMoney } from "@/lib/format";
+import { planLabel } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -76,7 +77,7 @@ function AdminPage() {
 
       <Section title="Trips">
         {(lists?.bookings ?? []).map((b) => (
-          <Row key={b.id} kicker={b.confirmation} title={`${b.carId} · ${b.startDate} → ${b.endDate}`} meta={`${formatMoney(b.totalCents)} · ${b.protection} · ${b.status}`} />
+          <Row key={b.id} kicker={b.confirmation} title={`${b.carId} · ${b.startDate} → ${b.endDate}`} meta={`${formatMoney(b.totalCents)} · ${planLabel(b.protection)} · ${b.status}`} />
         ))}
         {lists?.bookings.length === 0 ? <Empty /> : null}
       </Section>

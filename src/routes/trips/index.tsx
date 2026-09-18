@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { carTitle } from "@/lib/catalog";
 import { formatDateRange, formatMoney } from "@/lib/format";
 import { parkMap } from "@/lib/lookout-store";
+import { planLabel } from "@/lib/pricing";
 import { useFleet } from "@/lib/use-fleet";
 
 export const Route = createFileRoute("/trips/")({
@@ -145,7 +146,7 @@ function TripCard({
         </p>
         <p className="mt-1 text-sm tabular-nums">{formatMoney(trip.totalCents)}</p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Confirmation {trip.confirmation} · {trip.protection}
+          Confirmation {trip.confirmation} · {planLabel(trip.protection)}
         </p>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {trip.checkinComplete ? <Badge tone="pine">Checked in</Badge> : <Badge tone="outline">Check-in due</Badge>}

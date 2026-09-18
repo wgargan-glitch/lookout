@@ -11,7 +11,7 @@ import {
   type CleanlinessId,
   type DamageItem,
 } from "@/lib/inspection";
-import { quoteTrip, rangesOverlap, type ProtectionId } from "@/lib/pricing";
+import { parseProtection, quoteTrip, rangesOverlap, type ProtectionId } from "@/lib/pricing";
 
 export type Profile = {
   userId: string;
@@ -222,8 +222,7 @@ function mapBooking(row: {
   confirmation: string;
   created_at: unknown;
 }): BookingRow {
-  const protection: ProtectionId =
-    row.protection === "trail" || row.protection === "summit" ? row.protection : "ridge";
+  const protection = parseProtection(row.protection);
   return {
     id: row.id,
     userId: row.user_id,
@@ -360,10 +359,15 @@ export const createBooking = createServerFn({ method: "POST" })
       carId: z.string().min(1),
       startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
       endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-      protection: z.enum(["trail", "ridge", "summit"]),
+      protection: z.enum(["trail", "ridge", "summit", "own"]),
     }),
   )
   .handler(async ({ context, data }) => {
+    if (data.protection === "own") {
+      throw new Error(
+        "Live carrier verification is required to decline physical-damage cover. Photos of insurance cards are not accepted.",
+      );
+    }
     if (data.endDate <= data.startDate) throw new Error("Return date must be after pickup.");
     const sql = await getSql();
     await ensureProfileRow(sql, context.userId);
@@ -774,7 +778,7 @@ export const createListing = createServerFn({ method: "POST" })
       where user_id = ${context.userId}
     `;
     const id = `car-${crypto.randomUUID().slice(0, 8)}`;
-    const features = JSON.stringify(["Unlimited miles", "Host-attested auto insurance"]);
+    const features = JSON.stringify(["Unlimited miles", "Host off-trip insurance on file"]);
     await sql`
       insert into listings (
         id, user_id, make, model, year, trim, category, park_slug, daily_cents, seats, doors,

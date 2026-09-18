@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { planLabel } from "@/lib/pricing";
 
 export const Route = createFileRoute("/claims")({ component: ClaimsPage });
 
@@ -53,7 +54,7 @@ function ClaimsPage() {
       <p className="text-sm font-medium tracking-wide text-sage uppercase">Claims</p>
       <h1 className="mt-1 font-display text-4xl">Tell us what happened</h1>
       <p className="mt-2 text-muted-foreground">
-        File against a confirmed trip. Ridge and Summit waivers are reviewed here. Trail incidents stay between you and the host.
+        File against a confirmed trip. Minimum, Standard, and Premier waivers are reviewed here. Interior, mechanical wear, and the pickup window before check-in are usually outside the plan.
       </p>
 
       <Card className="mt-8 p-6">
@@ -72,7 +73,7 @@ function ClaimsPage() {
               <select id="bookingId" name="bookingId" required className="flex h-11 w-full rounded-md border border-input bg-card px-3 text-sm">
                 {bookings.map((b) => (
                   <option key={b.id} value={b.id}>
-                    {b.confirmation} · {b.startDate} → {b.endDate} · {b.protection}
+                    {b.confirmation} · {b.startDate} → {b.endDate} · {planLabel(b.protection)}
                   </option>
                 ))}
               </select>

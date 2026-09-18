@@ -313,7 +313,10 @@ export function ListingForm({
           </label>
         </div>
 
-        <Section title="05 · Insurance" />
+        <Section title="05 · Off-trip insurance" />
+        <p className="sm:col-span-2 text-sm text-muted-foreground">
+          This policy covers the car when it is not on a Lookout trip. Guests pay trip liability and a protection plan at checkout. Personal auto policies usually exclude car-sharing — they are not the trip cover.
+        </p>
         <div className="space-y-1.5">
           <Label htmlFor="insurer">Carrier</Label>
           <Input id="insurer" name="insurer" required placeholder="State Farm, GEICO…" defaultValue={existing?.insurer} />
@@ -325,7 +328,7 @@ export function ListingForm({
         <label className="flex min-h-11 items-start gap-2 text-sm sm:col-span-2">
           <input type="checkbox" name="insuranceAttested" className="mt-1 size-4 accent-primary" required defaultChecked={existing?.insuranceAttested} />
           <span>
-            I carry current auto insurance on this car in the state where it is registered. Lookout Protection is a trip waiver, not a replacement for that policy.{" "}
+            I carry current auto insurance on this car for periods when it is not rented on Lookout. I understand that policy does not cover guest trips, that Lookout Protection is a guest-paid waiver, and that I cannot opt out of trip cover as an ordinary host.{" "}
             <Link to="/protection" className="underline">
               Read coverage
             </Link>

@@ -3,6 +3,8 @@ import { DayPicker, type DateRange } from "react-day-picker";
 import { Star, MapPin, Gauge, Users, Cog, Check } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { ProtectionPicker } from "@/components/booking/protection-picker";
+import { TripQuoteLines } from "@/components/booking/trip-quote";
 import { FavoriteButton } from "@/components/cars/favorite-button";
 import { CarCard } from "@/components/cars/car-card";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +14,7 @@ import { listBookedRanges } from "@/lib/api";
 import { carTitle } from "@/lib/catalog";
 import { formatDate, formatMoney, parseISODate, toISODate } from "@/lib/format";
 import { blockedRanges, carBundle } from "@/lib/lookout-store";
-import { PROTECTION_PLANS, quoteTrip, type ProtectionId } from "@/lib/pricing";
+import { DEFAULT_PROTECTION, quoteTrip, type GuestPlanId } from "@/lib/pricing";
 import { useFleet } from "@/lib/use-fleet";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +30,7 @@ function CarDetail() {
   const navigate = useNavigate();
   const [photo, setPhoto] = useState(0);
   const [range, setRange] = useState<DateRange | undefined>();
-  const [protection, setProtection] = useState<ProtectionId>("ridge");
+  const [protection, setProtection] = useState<GuestPlanId>(DEFAULT_PROTECTION);
   const [remoteBlocked, setRemoteBlocked] = useState<{ startDate: string; endDate: string }[]>([]);
 
   useEffect(() => {
@@ -225,7 +227,7 @@ function CarDetail() {
               {formatMoney(car.dailyCents)}
               <span className="text-base font-sans text-muted-foreground"> / day</span>
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">Plus 10% service fee and protection.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Plus 10% service, trip liability, and a protection plan.</p>
 
             <div className="rdp-root mt-4">
               <DayPicker
@@ -244,51 +246,11 @@ function CarDetail() {
               <p className="mt-2 text-sm text-muted-foreground">Choose pickup and return.</p>
             )}
 
-            <div className="mt-4 space-y-2">
-              {PROTECTION_PLANS.map((plan) => (
-                <label
-                  key={plan.id}
-                  className={cn(
-                    "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 text-sm",
-                    protection === plan.id ? "border-primary bg-secondary" : "border-border",
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name="protection"
-                    className="mt-1 accent-primary"
-                    checked={protection === plan.id}
-                    onChange={() => setProtection(plan.id)}
-                  />
-                  <span>
-                    <span className="font-medium">{plan.name}</span>
-                    {plan.dailyCents > 0 ? (
-                      <span className="text-muted-foreground"> · {formatMoney(plan.dailyCents)}/day</span>
-                    ) : (
-                      <span className="text-muted-foreground"> · included</span>
-                    )}
-                    <span className="mt-0.5 block text-xs text-muted-foreground">{plan.summary}</span>
-                  </span>
-                </label>
-              ))}
+            <div className="mt-4">
+              <ProtectionPicker value={protection} onChange={setProtection} tripDailyCents={car.dailyCents} />
             </div>
 
-            {quote ? (
-              <dl className="mt-4 space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <dt>Trip</dt>
-                  <dd className="tabular-nums">{formatMoney(quote.tripCents)}</dd>
-                </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <dt>Fee + protection</dt>
-                  <dd className="tabular-nums">{formatMoney(quote.serviceCents + quote.protectionCents)}</dd>
-                </div>
-                <div className="flex justify-between border-t border-border pt-2 font-medium">
-                  <dt>Total</dt>
-                  <dd className="tabular-nums">{formatMoney(quote.totalCents)}</dd>
-                </div>
-              </dl>
-            ) : null}
+            {quote ? <div className="mt-4"><TripQuoteLines quote={quote} /></div> : null}
 
             <Button className="mt-4 w-full" size="lg" onClick={book}>
               Continue to book

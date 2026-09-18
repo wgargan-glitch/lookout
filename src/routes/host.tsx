@@ -68,8 +68,8 @@ function HostPage() {
         <ListingForm key={edit ?? "new"} profile={profile} existing={existing ?? undefined} />
         <aside className="space-y-4 text-sm text-muted-foreground">
           <p>Six required photos before a listing can go live. Suggested angles help guests trust the car.</p>
-          <p>Lookout keeps 10% as a service fee on completed trips. You set the daily rate.</p>
-          <p>Your personal auto policy stays primary. Lookout Protection is a trip waiver, not a carrier policy.</p>
+          <p>Lookout keeps 10% as a service fee. Guests pay trip liability and a protection plan — that is the trip cover, not your personal policy.</p>
+          <p>Your personal auto policy is for when the car is not rented. Personal policies usually exclude car-sharing. Ordinary hosts cannot opt out of trip cover.</p>
           <p>
             Drafts stay on{" "}
             <Link to="/account" className="underline">

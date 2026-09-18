@@ -134,14 +134,14 @@ const ParksParkSlugRoute = ParksParkSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const TripsIndexRoute = TripsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => TripsRoute,
+  id: '/trips/',
+  path: '/trips/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const TripsTripIdRoute = TripsTripIdRouteImport.update({
-  id: '/$tripId',
-  path: '/$tripId',
-  getParentRoute: () => TripsRoute,
+  id: '/trips/$tripId',
+  path: '/trips/$tripId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -321,9 +321,11 @@ export interface RootRouteChildren {
   CarsCarIdRoute: typeof CarsCarIdRoute
   HelpSlugRoute: typeof HelpSlugRoute
   ParksParkSlugRoute: typeof ParksParkSlugRoute
+  TripsTripIdRoute: typeof TripsTripIdRoute
   CarsIndexRoute: typeof CarsIndexRoute
   HelpIndexRoute: typeof HelpIndexRoute
   ParksIndexRoute: typeof ParksIndexRoute
+  TripsIndexRoute: typeof TripsIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -471,17 +473,17 @@ declare module '@tanstack/react-router' {
     }
     '/trips/': {
       id: '/trips/'
-      path: '/'
+      path: '/trips'
       fullPath: '/trips/'
       preLoaderRoute: typeof TripsIndexRouteImport
-      parentRoute: typeof TripsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/trips/$tripId': {
       id: '/trips/$tripId'
-      path: '/$tripId'
+      path: '/trips/$tripId'
       fullPath: '/trips/$tripId'
       preLoaderRoute: typeof TripsTripIdRouteImport
-      parentRoute: typeof TripsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -511,9 +513,11 @@ const rootRouteChildren: RootRouteChildren = {
   CarsCarIdRoute: CarsCarIdRoute,
   HelpSlugRoute: HelpSlugRoute,
   ParksParkSlugRoute: ParksParkSlugRoute,
+  TripsTripIdRoute: TripsTripIdRoute,
   CarsIndexRoute: CarsIndexRoute,
   HelpIndexRoute: HelpIndexRoute,
   ParksIndexRoute: ParksIndexRoute,
+  TripsIndexRoute: TripsIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

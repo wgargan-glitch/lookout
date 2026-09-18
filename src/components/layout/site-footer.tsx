@@ -62,7 +62,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-primary-foreground/15 px-4 py-4 text-center text-xs text-primary-foreground/55">
-        Private cars. Public lands. Lookout Protection is a contractual waiver, not a licensed insurance policy. Not affiliated with the National Park Service.
+        Private cars. Public lands. Guests pay trip liability and a protection plan. Those plans are waivers until a licensed carrier is bound. Not affiliated with the National Park Service.
       </div>
     </footer>
   );

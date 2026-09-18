@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { carTitle } from "@/lib/catalog";
 import { formatDateRange, formatMoney } from "@/lib/format";
 import { CLEANLINESS, fuelLabel } from "@/lib/inspection";
+import { planLabel } from "@/lib/pricing";
 
 export const Route = createFileRoute("/trips/$tripId")({
   loader: ({ params }) => {
@@ -65,7 +66,7 @@ function TripDetailPage() {
         {car ? <img src={car.images[0]} alt="" className="aspect-[16/8] w-full object-cover" /> : null}
       </div>
       <p className="mt-6 text-sm font-medium tracking-wide text-sage uppercase">
-        {booking.confirmation} · {booking.protection}
+        {booking.confirmation} · {planLabel(booking.protection)}
       </p>
       <h1 className="mt-1 font-display text-4xl">{car ? carTitle(car) : "Trip"}</h1>
       <p className="mt-2 text-muted-foreground">

@@ -6,9 +6,9 @@ export const STORE_LISTING = {
   subtitle: "Cars at the park gate",
   shortDescription: "Peer-to-peer cars from locals at all 63 U.S. national parks.",
   fullDescription: [
-    "Lookout is a peer-to-peer car marketplace for trips to America's national parks. Hosts keep a vehicle in the gateway town. Guests book dates, pick a protection plan, and meet at the gate — not at an airport counter.",
+    "Lookout is a peer-to-peer car marketplace for trips to America's national parks. Hosts keep a vehicle in the gateway town. Guests book dates, pay trip liability plus a protection plan, and meet at the gate — not at an airport counter.",
     "Browse all 63 parks, filter overland rigs, vans, trucks, and electric cars, and keep trips on the same account as the website.",
-    "Lookout Protection (Trail, Ridge, Summit) is a contractual damage waiver, not a licensed insurance policy. Hosts must carry their own auto insurance. Lookout is not affiliated with the National Park Service.",
+    "Trip liability is a required renter-paid line on every booking (a licensed carrier is not bound yet). Guest plans Minimum, Standard, and Premier are contractual damage waivers, not licensed insurance. Hosts keep personal auto insurance for off-trip use. Lookout is not affiliated with the National Park Service.",
     "Card charges are not live yet. Booking confirms the reservation and the waiver; payment processing ships when Stripe is connected.",
   ].join("\n\n"),
   keywords: "national parks,car rental,Turo,overland,road trip,Yosemite,camping",
