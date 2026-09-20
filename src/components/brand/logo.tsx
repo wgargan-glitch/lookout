@@ -1,6 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
+function Tower({ className }: { className?: string }) {
+  return (
+    <img
+      src="/favicon.svg"
+      alt=""
+      className={cn("size-9 shrink-0 rounded-full", className)}
+      aria-hidden="true"
+    />
+  );
+}
+
 /** Official tower icon — USFS lookout on pine. */
 export function LookoutIcon({
   className,
@@ -8,14 +19,7 @@ export function LookoutIcon({
   className?: string;
   onDark?: boolean;
 }) {
-  return (
-    <img
-      src="/favicon.svg"
-      alt=""
-      className={cn("size-7 shrink-0", className)}
-      aria-hidden="true"
-    />
-  );
+  return <Tower className={cn("size-7", className)} />;
 }
 
 /** Official circular tower mark. */
@@ -25,41 +29,26 @@ export function LookoutMark({
   className?: string;
   onDark?: boolean;
 }) {
-  return (
-    <img
-      src="/favicon.svg"
-      alt=""
-      className={cn("size-9 shrink-0", className)}
-      aria-hidden="true"
-    />
-  );
+  return <Tower className={className} />;
 }
 
-/** Official header lockup. Footer uses the tower + cream type on pine. */
+/** Tower + LOOKOUT. No JPEG plate — sits on whatever color the chrome is. */
 export function Logo({ className, onDark = false }: { className?: string; onDark?: boolean }) {
   return (
     <Link
       to="/"
-      className={cn("flex items-center text-foreground", onDark && "text-primary-foreground", className)}
+      className={cn("flex items-center gap-2.5 text-foreground", onDark && "text-primary-foreground", className)}
       aria-label="Lookout home"
     >
-      {onDark ? (
-        <span className="flex items-center gap-2.5">
-          <img src="/favicon.svg" alt="" className="size-10 shrink-0" />
-          <span className="flex flex-col leading-tight">
-            <span className="font-display text-[1.35rem] font-medium tracking-[0.12em]">LOOKOUT</span>
-            <span className="text-[0.62rem] font-medium tracking-[0.14em] uppercase text-primary-foreground/70">
-              A local car. At the trailhead.
-            </span>
+      <Tower className="size-9 md:size-10" />
+      <span className="flex min-w-0 flex-col leading-none">
+        <span className="font-display text-[1.35rem] font-medium tracking-[0.12em]">LOOKOUT</span>
+        {onDark ? (
+          <span className="mt-1 text-[0.62rem] font-medium tracking-[0.14em] uppercase text-primary-foreground/70">
+            A local car. At the trailhead.
           </span>
-        </span>
-      ) : (
-        <img
-          src="/brand/header-lockup.jpg"
-          alt="Lookout — A local car. At the trailhead."
-          className="h-10 w-auto max-w-[210px] object-contain md:h-12 md:max-w-[260px]"
-        />
-      )}
+        ) : null}
+      </span>
     </Link>
   );
 }
