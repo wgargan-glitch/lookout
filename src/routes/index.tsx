@@ -37,11 +37,11 @@ function Home() {
     <main>
       <section className="relative min-h-[78vh] overflow-hidden">
         <img
-          src="/images/parks/yosemite.jpg"
-          alt=""
-          className="absolute inset-0 size-full object-cover"
+          src="/brand/hero.jpg"
+          alt="A local 4x4 at a park trailhead, fire lookout on the ridge"
+          className="absolute inset-0 size-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/45 to-ink/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/40 to-ink/15" />
         <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end gap-8 px-4 pt-24 pb-12">
           <div className="max-w-2xl text-primary-foreground">
             <p className="text-sm font-medium tracking-[0.18em] uppercase text-primary-foreground/75">
@@ -55,23 +55,6 @@ function Home() {
             </p>
           </div>
           <TripSearch parks={parks} />
-        </div>
-      </section>
-
-      <section className="border-b border-border bg-card">
-        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-10 sm:grid-cols-[minmax(0,1fr)_180px]">
-          <div>
-            <p className="text-sm font-medium tracking-wide text-sage uppercase">Lookout at the trailhead</p>
-            <h2 className="mt-1 font-display text-3xl">Local keys. Wilder weekends.</h2>
-            <p className="mt-3 max-w-2xl text-muted-foreground">
-              Start with a car that already lives near the park, then spend less of the trip at an airport counter.
-            </p>
-          </div>
-          <img
-            src="/brand/illustrated-badge.jpg"
-            alt="Lookout illustrated trailhead badge"
-            className="mx-auto aspect-square w-40 rounded-full object-cover"
-          />
         </div>
       </section>
 
