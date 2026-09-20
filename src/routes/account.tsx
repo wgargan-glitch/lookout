@@ -74,6 +74,9 @@ function AccountPage() {
         <Button asChild variant="outline" size="sm">
           <Link to="/get-the-app">Get the app</Link>
         </Button>
+        <Button asChild variant="outline" size="sm">
+          <Link to="/partners">Hotels & campgrounds</Link>
+        </Button>
         {profile?.role === "admin" ? (
           <Button asChild size="sm">
             <Link to="/admin">Ranger desk</Link>

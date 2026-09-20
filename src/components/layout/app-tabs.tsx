@@ -12,7 +12,7 @@ const TABS = [
     label: "You",
     icon: User,
     active: (path: string) =>
-      path.startsWith("/account") || path.startsWith("/login") || path.startsWith("/host") || path.startsWith("/claims"),
+      path.startsWith("/account") || path.startsWith("/login") || path.startsWith("/host") || path.startsWith("/claims") || path.startsWith("/partners"),
   },
 ] as const;
 

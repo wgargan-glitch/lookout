@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Lookout rack card — leave the rig</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet" />
+  <style>
+    @page { size: 4in 9in; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-family: Figtree, sans-serif; color: #1a1915; }
+    .card {
+      width: 4in;
+      height: 9in;
+      overflow: hidden;
+      page-break-after: always;
+      position: relative;
+    }
+    .front { background: #1a1915; color: #f4efe4; }
+    .front img.hero {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: 40% 50%;
+    }
+    .front .scrim {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #1a1915 0%, #1a1915cc 38%, #1a191500 62%);
+    }
+    .front .copy {
+      position: absolute; left: 0.28in; right: 0.28in; bottom: 0.32in;
+    }
+    .kicker {
+      font-size: 8.5pt;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+    h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 500;
+      font-size: 26pt;
+      line-height: 1.05;
+      margin-top: 0.12in;
+    }
+    .front p {
+      margin-top: 0.12in;
+      font-size: 10.5pt;
+      line-height: 1.35;
+      opacity: 0.9;
+    }
+    .mark {
+      position: absolute; top: 0.28in; left: 0.28in;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .mark img { width: 0.42in; height: 0.42in; border-radius: 50%; }
+    .mark span {
+      font-family: Fraunces, Georgia, serif;
+      letter-spacing: 0.12em;
+      font-size: 11pt;
+    }
+    .back {
+      background: #f4efe4;
+      padding: 0.38in 0.32in 0.32in;
+      display: flex;
+      flex-direction: column;
+    }
+    .back h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 16pt;
+      font-weight: 500;
+      color: #2f4a38;
+      line-height: 1.15;
+    }
+    .steps { margin-top: 0.28in; display: grid; gap: 0.22in; }
+    .step .n {
+      display: block;
+      font-family: Fraunces, Georgia, serif;
+      color: #2f4a38;
+      font-size: 14pt;
+    }
+    .step strong { display: block; font-size: 11pt; margin-top: 2px; }
+    .step span { display: block; font-size: 9.5pt; color: #6b6458; margin-top: 2px; line-height: 1.35; }
+    .foot {
+      margin-top: auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0.12in;
+      border-top: 1px solid #d4cbb8;
+      padding-top: 0.2in;
+    }
+    .foot img.qr { width: 0.85in; height: 0.85in; }
+    .url { font-weight: 600; color: #2f4a38; font-size: 10pt; }
+    .tiny { font-size: 8pt; color: #6b6458; margin-top: 3px; }
+  </style>
+</head>
+<body>
+  <section class="card front">
+    <img class="hero" src="/print/rv-camp.jpg" alt="" />
+    <div class="scrim"></div>
+    <div class="mark">
+      <img src="/favicon.svg" alt="" />
+      <span>LOOKOUT</span>
+    </div>
+    <div class="copy">
+      <p class="kicker">For motorhome guests</p>
+      <h1>Leave the rig.<br />Take a car.</h1>
+      <p>Your camp stays put. A local car is waiting in this gateway town.</p>
+    </div>
+  </section>
+
+  <section class="card back">
+    <p class="kicker" style="color:#6b7f6e">How a Lookout day works</p>
+    <h2>Park once. See the park.</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="n">01</span>
+        <strong>Leave camp set up</strong>
+        <span>The motorhome stays on the pad. Awnings, chairs, hookups — all of it.</span>
+      </div>
+      <div class="step">
+        <span class="n">02</span>
+        <strong>Pick up a local car</strong>
+        <span>Daily drivers, 4x4s, vans — whatever is listed. Keys from someone who lives in town, not a counter.</span>
+      </div>
+      <div class="step">
+        <span class="n">03</span>
+        <strong>Drive the park. Come back.</strong>
+        <span>Unlimited miles. Return the car to town. Dinner is still where you left it.</span>
+      </div>
+    </div>
+    <div class="foot">
+      <div>
+        <p class="url">lookoutparks.com</p>
+        <p class="tiny">A local car. At the trailhead.<br />Ask the desk where pickup is in this town.</p>
+      </div>
+      <img class="qr" src="/print/qr-lookout.png" alt="lookoutparks.com" />
+    </div>
+  </section>
+</body>
+</html>

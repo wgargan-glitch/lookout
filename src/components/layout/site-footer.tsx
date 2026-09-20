@@ -38,6 +38,9 @@ export function SiteFooter() {
             <Link to="/host" className="hover:underline">
               List a car
             </Link>
+            <Link to="/partners" className="hover:underline">
+              Hotels & campgrounds
+            </Link>
             <Link to="/trips" className="hover:underline">
               Your trips
             </Link>

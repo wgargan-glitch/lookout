@@ -25,3 +25,4 @@ artifacts
 /tmp
 *.log
 .DS_Store
+public/print/Lookout-canva-*.pdf

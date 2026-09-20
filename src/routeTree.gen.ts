@@ -19,6 +19,7 @@ import { Route as HostRouteImport } from './routes/host'
 import { Route as HostAgreementRouteImport } from './routes/host-agreement'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProtectionRouteImport } from './routes/protection'
 import { Route as SupportRouteImport } from './routes/support'
@@ -82,6 +83,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/host-agreement': typeof HostAgreementRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/protection': typeof ProtectionRoute
   '/support': typeof SupportRoute
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/host-agreement': typeof HostAgreementRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/protection': typeof ProtectionRoute
   '/support': typeof SupportRoute
@@ -219,6 +227,7 @@ export interface FileRoutesById {
   '/host-agreement': typeof HostAgreementRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/protection': typeof ProtectionRoute
   '/support': typeof SupportRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
     | '/host-agreement'
     | '/how-it-works'
     | '/login'
+    | '/partners'
     | '/privacy'
     | '/protection'
     | '/support'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
     | '/host-agreement'
     | '/how-it-works'
     | '/login'
+    | '/partners'
     | '/privacy'
     | '/protection'
     | '/support'
@@ -299,6 +310,7 @@ export interface FileRouteTypes {
     | '/host-agreement'
     | '/how-it-works'
     | '/login'
+    | '/partners'
     | '/privacy'
     | '/protection'
     | '/support'
@@ -326,6 +338,7 @@ export interface RootRouteChildren {
   HostAgreementRoute: typeof HostAgreementRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
+  PartnersRoute: typeof PartnersRoute
   PrivacyRoute: typeof PrivacyRoute
   ProtectionRoute: typeof ProtectionRoute
   SupportRoute: typeof SupportRoute
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -526,6 +546,7 @@ const rootRouteChildren: RootRouteChildren = {
   HostAgreementRoute: HostAgreementRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
+  PartnersRoute: PartnersRoute,
   PrivacyRoute: PrivacyRoute,
   ProtectionRoute: ProtectionRoute,
   SupportRoute: SupportRoute,
