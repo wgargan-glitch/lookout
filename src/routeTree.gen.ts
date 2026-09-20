@@ -16,6 +16,7 @@ import { Route as ClaimsRouteImport } from './routes/claims'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as GetTheAppRouteImport } from './routes/get-the-app'
 import { Route as HostRouteImport } from './routes/host'
+import { Route as HostAgreementRouteImport } from './routes/host-agreement'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -66,6 +67,11 @@ const GetTheAppRoute = GetTheAppRouteImport.update({
 const HostRoute = HostRouteImport.update({
   id: '/host',
   path: '/host',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostAgreementRoute = HostAgreementRouteImport.update({
+  id: '/host-agreement',
+  path: '/host-agreement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof FavoritesRoute
   '/get-the-app': typeof GetTheAppRoute
   '/host': typeof HostRoute
+  '/host-agreement': typeof HostAgreementRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof FavoritesRoute
   '/get-the-app': typeof GetTheAppRoute
   '/host': typeof HostRoute
+  '/host-agreement': typeof HostAgreementRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/favorites': typeof FavoritesRoute
   '/get-the-app': typeof GetTheAppRoute
   '/host': typeof HostRoute
+  '/host-agreement': typeof HostAgreementRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
@@ -235,6 +244,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/get-the-app'
     | '/host'
+    | '/host-agreement'
     | '/how-it-works'
     | '/login'
     | '/privacy'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/get-the-app'
     | '/host'
+    | '/host-agreement'
     | '/how-it-works'
     | '/login'
     | '/privacy'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/get-the-app'
     | '/host'
+    | '/host-agreement'
     | '/how-it-works'
     | '/login'
     | '/privacy'
@@ -311,6 +323,7 @@ export interface RootRouteChildren {
   FavoritesRoute: typeof FavoritesRoute
   GetTheAppRoute: typeof GetTheAppRoute
   HostRoute: typeof HostRoute
+  HostAgreementRoute: typeof HostAgreementRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -378,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/host'
       fullPath: '/host'
       preLoaderRoute: typeof HostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/host-agreement': {
+      id: '/host-agreement'
+      path: '/host-agreement'
+      fullPath: '/host-agreement'
+      preLoaderRoute: typeof HostAgreementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -503,6 +523,7 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritesRoute: FavoritesRoute,
   GetTheAppRoute: GetTheAppRoute,
   HostRoute: HostRoute,
+  HostAgreementRoute: HostAgreementRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,

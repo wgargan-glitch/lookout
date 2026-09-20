@@ -80,7 +80,7 @@ function Home() {
           {[
             { icon: MapPinned, title: `${PARKS.length} national parks`, body: "Every official U.S. National Park. Pickup in the gateway town, not a city airport." },
             { icon: KeyRound, title: "Keys from locals", body: "Hosts who know which overlook still has shade, and which road is still closed." },
-            { icon: Shield, title: "Ridge & Summit cover", body: "Optional protection on every trip, plus a 10% service fee. No surprise counter." },
+            { icon: Shield, title: "Ridge & Summit cover", body: "Optional protection on every trip. No surprise counter." },
           ].map((item) => (
             <div key={item.title} className="flex gap-3">
               <item.icon className="mt-0.5 size-5 shrink-0 text-primary" />
@@ -193,7 +193,7 @@ function Home() {
           <p className="text-sm font-medium tracking-wide uppercase text-primary-foreground/70">For hosts</p>
           <h2 className="mt-2 max-w-xl font-display text-4xl md:text-5xl">Your driveway is a trailhead.</h2>
           <p className="mt-4 max-w-lg text-primary-foreground/80">
-            List the 4Runner that already lives by the gate. Lookout takes a 10% service fee. You keep the rest.
+            List the 4Runner that already lives by the gate. You set the daily rate. Guests pay trip cover.
           </p>
           <Button asChild size="lg" className="mt-8 bg-card text-foreground hover:bg-secondary">
             <Link to="/host">List a car</Link>

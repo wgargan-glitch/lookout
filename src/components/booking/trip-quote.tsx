@@ -9,7 +9,7 @@ export function TripQuoteLines({ quote }: { quote: TripQuote }) {
         <dd className="tabular-nums">{formatMoney(quote.tripCents)}</dd>
       </div>
       <div className="flex justify-between gap-3 text-muted-foreground">
-        <dt>Lookout service fee (10%)</dt>
+        <dt>Lookout service fee</dt>
         <dd className="tabular-nums">{formatMoney(quote.serviceCents)}</dd>
       </div>
       <div className="flex justify-between gap-3 text-muted-foreground">

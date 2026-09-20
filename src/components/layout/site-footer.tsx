@@ -55,6 +55,9 @@ export function SiteFooter() {
             <Link to="/terms" className="hover:underline">
               Terms
             </Link>
+            <Link to="/host-agreement" className="hover:underline">
+              Host agreement
+            </Link>
           </div>
         </div>
       </div>

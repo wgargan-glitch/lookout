@@ -23,7 +23,7 @@ function HowItWorks() {
           },
           {
             t: "Book, or request",
-            d: "Sign in, pick dates, then a protection plan — Minimum, Standard, or Premier. Trip liability is on every booking and the guest pays it. Instant book listings confirm immediately. Lookout adds a 10% service fee. Pickup is in the gateway town on the listing.",
+            d: "Sign in, pick dates, then a protection plan — Minimum, Standard, or Premier. Trip liability is on every booking and the guest pays it. Instant book listings confirm immediately. Pickup is in the gateway town on the listing.",
           },
           {
             t: "Check in on your phone",

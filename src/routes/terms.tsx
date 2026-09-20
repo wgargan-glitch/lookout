@@ -29,13 +29,13 @@ function TermsPage() {
 
       <h2>Money</h2>
       <p>
-        Trip totals show four renter-paid lines: the host's daily rate, a 10% Lookout service fee,
-        trip liability, and a guest protection plan (Minimum, Standard, or Premier). Card charges
-        are not collected yet — a booking confirms the reservation, the liability line, and the
-        waiver only. When payments go live, the same split applies and refunds follow the host's
-        cancellation window. The 10% fee is the platform cut. Host reimbursement for a covered
-        incident is funded from the renter-paid protection line, not by taking a larger share of
-        host earnings.
+        Trip totals at checkout show the host's daily rate, trip liability, and a guest protection
+        plan (Minimum, Standard, or Premier), plus any platform fees that apply to that booking.
+        Card charges are not collected yet — a booking confirms the reservation, the liability
+        line, and the waiver only. When payments go live, refunds follow the host's cancellation
+        window. Host reimbursement for a covered incident is funded from the renter-paid
+        protection line. The fee Lookout Parks charges hosts is set out only in the{" "}
+        <Link to="/host-agreement">Host agreement</Link>.
       </p>
 
       <h2>Trip cover</h2>

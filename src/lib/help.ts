@@ -16,7 +16,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       "Choose a park, then a car. Pickup and return dates are nights the car is yours — return on the morning of the end date.",
       "Instant-book listings confirm as soon as you sign in and accept trip liability plus a protection plan. Host-approval listings wait for the host.",
       "Pickup is always in the gateway town on the listing, not at a city airport counter. The host will share a pin after you book.",
-      "Trip totals include the daily rate, a 10% Lookout service fee, trip liability, and the protection plan you pick (Minimum, Standard, or Premier). The renter pays all four. You cannot skip protection with a photo of an insurance card.",
+      "Trip totals include the daily rate, trip liability, and the protection plan you pick (Minimum, Standard, or Premier). You cannot skip protection with a photo of an insurance card.",
       "You do not have the keys until you check in. Open the trip on your phone at pickup, photograph the car, and submit the inspection.",
     ],
   },
@@ -42,7 +42,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       "You need an account with a phone number. List from List a car — vehicle details, park, pickup notes, insurance, and the photo gallery.",
       "Six photos are required before a listing can go live: front 3/4, rear 3/4, both sides, cabin, and cargo. Suggested shots (tires, odometer, roof, wear, pickup spot) help guests book and keep claims honest.",
       "Hosts must carry their own valid auto insurance for when the car is not on a Lookout trip. You name the carrier and policy number when you list. Trip-period liability is Lookout’s program, paid by the guest. Lookout Protection is a damage waiver for the trip, not a replacement for your personal policy — and your personal policy usually excludes car-sharing.",
-      "Incomplete listings save as drafts on your account. Publish when the gallery and insurance fields are complete. Admin can pause a listing if a claim is open.",
+      "You set the daily rate. What Lookout Parks keeps as its platform fee is in the Host agreement — it is not advertised on guest pages. Incomplete listings save as drafts on your account. Publish when the gallery and insurance fields are complete. Admin can pause a listing if a claim is open.",
     ],
   },
   {

@@ -66,6 +66,10 @@ export function ListingForm({
       toast("Hosts must attest they carry current auto insurance.");
       return;
     }
+    if (intent === "live" && data.get("hostAgreement") !== "on") {
+      toast("Agree to the Host agreement to publish.");
+      return;
+    }
     const payload = {
       make: String(data.get("make") ?? ""),
       model: String(data.get("model") ?? ""),
@@ -303,6 +307,16 @@ export function ListingForm({
               Read coverage
             </Link>
             .
+          </span>
+        </label>
+        <label className="flex min-h-11 items-start gap-2 text-sm sm:col-span-2">
+          <input type="checkbox" name="hostAgreement" className="mt-1 size-4 accent-primary" defaultChecked={existing?.status === "live"} />
+          <span>
+            I agree to the{" "}
+            <Link to="/host-agreement" className="underline">
+              Host agreement
+            </Link>{" "}
+            between me and Lookout Parks, including the platform service fee.
           </span>
         </label>
 

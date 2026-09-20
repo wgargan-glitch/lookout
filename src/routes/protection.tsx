@@ -118,7 +118,11 @@ function ProtectionPage() {
         <p className="mt-3 text-sm text-muted-foreground">{HOST_OFF_TRIP}</p>
         <p className="mt-3 text-sm text-muted-foreground">{COMMERCIAL_HOST_WAIVER}</p>
         <p className="mt-3 text-sm text-muted-foreground">
-          Host reimbursement for a covered incident is funded from the renter-paid protection line, not by taking a huge slice of host earnings. The 10% service fee is the platform cut.
+          Host reimbursement for a covered incident is funded from the renter-paid protection line, not by taking a larger share of host earnings. The platform fee between Lookout and hosts is in the{" "}
+          <Link to="/host-agreement" className="underline">
+            Host agreement
+          </Link>
+          .
         </p>
       </Card>
 
