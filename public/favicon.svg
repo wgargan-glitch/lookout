@@ -1,14 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#2f4a38"/>
-  <polygon points="16,2.2 7.6,11.8 24.4,11.8" fill="#f4efe4"/>
-  <rect x="10.6" y="11.8" width="10.8" height="5.8" fill="#f4efe4"/>
-  <rect x="14" y="13.2" width="4" height="3" fill="#2f4a38"/>
-  <rect x="8.2" y="17.4" width="15.6" height="1.3" fill="#f4efe4"/>
-  <rect x="11.4" y="18.6" width="2.2" height="3.2" fill="#f4efe4"/>
-  <rect x="18.4" y="18.6" width="2.2" height="3.2" fill="#f4efe4"/>
-  <rect x="8" y="20.8" width="8.8" height="4" rx="0.5" fill="#f4efe4"/>
-  <rect x="10.2" y="21.6" width="4.2" height="2.2" fill="#2f4a38"/>
-  <rect x="7.2" y="24.4" width="17.6" height="3.8" rx="0.7" fill="#f4efe4"/>
-  <circle cx="11.2" cy="28.4" r="1.85" fill="#1a1915"/>
-  <circle cx="20.8" cy="28.4" r="1.85" fill="#1a1915"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="1024" height="1024">
+  <circle cx="128" cy="128" r="128" fill="#2F4A38"/>
+  <!-- mountains -->
+  <polygon points="18,214 78,150 118,186 168,128 238,214" fill="#F4EFE4"/>
+  <polygon points="118,186 168,128 198,168 158,214" fill="#E4DCCE"/>
+  <!-- tower legs / trestle -->
+  <g fill="none" stroke="#F4EFE4" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M96 168 L108 86"/>
+    <path d="M160 168 L148 86"/>
+    <path d="M96 168 L148 86"/>
+    <path d="M160 168 L108 86"/>
+    <path d="M100 148 L156 148"/>
+    <path d="M104 118 L152 118"/>
+  </g>
+  <!-- cab -->
+  <rect x="100" y="54" width="56" height="36" fill="#F4EFE4"/>
+  <!-- roof -->
+  <rect x="94" y="48" width="68" height="8" fill="#F4EFE4"/>
+  <!-- window -->
+  <rect x="116" y="62" width="24" height="16" fill="#2F4A38"/>
+  <!-- railing suggestion -->
+  <rect x="100" y="86" width="56" height="4" fill="#F4EFE4"/>
+  <!-- antennas -->
+  <rect x="112" y="28" width="3" height="22" fill="#F4EFE4"/>
+  <rect x="141" y="22" width="3" height="28" fill="#F4EFE4"/>
 </svg>

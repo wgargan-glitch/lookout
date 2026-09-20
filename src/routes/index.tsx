@@ -59,6 +59,23 @@ function Home() {
       </section>
 
       <section className="border-b border-border bg-card">
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-10 sm:grid-cols-[minmax(0,1fr)_180px]">
+          <div>
+            <p className="text-sm font-medium tracking-wide text-sage uppercase">Lookout at the trailhead</p>
+            <h2 className="mt-1 font-display text-3xl">Local keys. Wilder weekends.</h2>
+            <p className="mt-3 max-w-2xl text-muted-foreground">
+              Start with a car that already lives near the park, then spend less of the trip at an airport counter.
+            </p>
+          </div>
+          <img
+            src="/brand/illustrated-badge.jpg"
+            alt="Lookout illustrated trailhead badge"
+            className="mx-auto aspect-square w-40 rounded-full object-cover"
+          />
+        </div>
+      </section>
+
+      <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 md:grid-cols-3">
           {[
             { icon: MapPinned, title: `${PARKS.length} national parks`, body: "Every official U.S. National Park. Pickup in the gateway town, not a city airport." },
