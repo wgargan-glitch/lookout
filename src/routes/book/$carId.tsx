@@ -8,7 +8,7 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { createBooking } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { carTitle } from "@/lib/catalog";
+import { carTitle, parkBookingsOpen } from "@/lib/catalog";
 import { formatDateRange, formatMoney } from "@/lib/format";
 import { carBundle } from "@/lib/lookout-store";
 import {
@@ -68,6 +68,19 @@ function BookPage() {
   }
 
   const { car, park } = bundle;
+  if (!parkBookingsOpen(park)) {
+    return (
+      <main className="mx-auto max-w-xl px-4 py-16 text-center">
+        <h1 className="font-display text-3xl">This region is still opening.</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Guest trips are not live yet. You can list a car if you live in the gateway town.
+        </p>
+        <Button asChild className="mt-6">
+          <Link to="/host">List a car</Link>
+        </Button>
+      </main>
+    );
+  }
   const quote =
     from && to && to > from
       ? quoteTrip({ dailyCents: car.dailyCents, fromISO: from, toISO: to, protection })

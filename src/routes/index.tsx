@@ -5,9 +5,9 @@ import { CarCard } from "@/components/cars/car-card";
 import { ParkCard } from "@/components/parks/park-card";
 import { PhoneFrame } from "@/components/layout/phone-frame";
 import { Button } from "@/components/ui/button";
-import { PARKS, carTitle, featuredParks, isOverlandCar } from "@/lib/catalog";
+import { carTitle, isOverlandCar } from "@/lib/catalog";
 import { formatMoney } from "@/lib/format";
-import { useFleet } from "@/lib/use-fleet";
+import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
 import { useStandalone } from "@/lib/use-install-prompt";
 
 export const Route = createFileRoute("/")({
@@ -15,8 +15,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const parks = PARKS;
-  const { cars } = useFleet();
+  const { parks, cars, featured: homeParks, territory } = useTerritoryCatalog();
   const featuredIds = [
     "bronco-yosemite",
     "wrangler-grand-canyon",
@@ -30,28 +29,27 @@ function Home() {
     .filter((c): c is (typeof cars)[number] => Boolean(c));
   const parkCounts = new Map<string, number>();
   for (const car of cars) parkCounts.set(car.parkSlug, (parkCounts.get(car.parkSlug) ?? 0) + 1);
-  const homeParks = featuredParks();
   const overland = cars.filter((c) => isOverlandCar(c) || c.camping).slice(0, 4);
 
   return (
     <main>
       <section className="relative min-h-[78vh] overflow-hidden">
         <img
-          src="/brand/hero.jpg"
-          alt="A local 4x4 at a park trailhead, fire lookout on the ridge"
+          src={territory.heroImage}
+          alt={territory.heroAlt}
           className="absolute inset-0 size-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/40 to-ink/15" />
         <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end gap-8 px-4 pt-24 pb-12">
           <div className="max-w-2xl text-primary-foreground">
             <p className="text-sm font-medium tracking-[0.18em] uppercase text-primary-foreground/75">
-              Private cars at the park gate
+              {territory.kicker}
             </p>
             <h1 className="mt-3 font-display text-5xl font-medium tracking-tight md:text-6xl">
-              A local car. At the trailhead.
+              {territory.headline}
             </h1>
             <p className="mt-4 max-w-xl text-base text-primary-foreground/80 md:text-lg">
-              Borrow a Bronco in Yosemite, a Sprinter in Joshua Tree, a 911 for the rim. Hosts live in the next town over.
+              {territory.intro}
             </p>
           </div>
           <TripSearch parks={parks} />
@@ -61,7 +59,7 @@ function Home() {
       <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 md:grid-cols-3">
           {[
-            { icon: MapPinned, title: `${PARKS.length} national parks`, body: "Every official U.S. National Park. Pickup in the gateway town, not a city airport." },
+            { icon: MapPinned, title: `${parks.length} parks`, body: territory.parksIntro },
             { icon: KeyRound, title: "Keys from locals", body: "Hosts who know which overlook still has shade, and which road is still closed." },
             { icon: Shield, title: "Meet at the gate", body: "Pickup in the next town over. Keys from someone who knows the road." },
           ].map((item) => (
@@ -95,6 +93,7 @@ function Home() {
         </div>
       </section>
 
+      {featured.length ? (
       <section className="bg-secondary/60">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="flex items-end justify-between gap-4">
@@ -119,7 +118,20 @@ function Home() {
           </div>
         </div>
       </section>
+      ) : (
+      <section className="bg-secondary/60">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <p className="text-sm font-medium tracking-wide text-sage uppercase">In the lot</p>
+          <h2 className="mt-1 font-display text-3xl md:text-4xl">Hosts are still pulling in</h2>
+          <p className="mt-3 max-w-xl text-muted-foreground">{territory.emptyCars}</p>
+          <Button asChild className="mt-6">
+            <Link to="/host">{territory.hostCta}</Link>
+          </Button>
+        </div>
+      </section>
+      )}
 
+      {overland.length >= 2 ? (
       <section className="mx-auto max-w-6xl px-4 py-16">
         <p className="text-sm font-medium tracking-wide text-sage uppercase">Overland & camp</p>
         <h2 className="mt-1 font-display text-3xl md:text-4xl">Sleep where the road ends</h2>
@@ -150,13 +162,14 @@ function Home() {
           })}
         </div>
       </section>
+      ) : null}
 
       <section className="border-y border-border bg-card">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-3">
           {[
-            { n: "01", t: "Pick a park", d: "All 63 national parks, each with a gateway town. Search dates the way you would a campsite." },
-            { n: "02", t: "Book a neighbor's car", d: "Instant book on most listings. Protection plans from Trail to Summit. Keys at a porch, lot, or lockbox." },
-            { n: "03", t: "Drive in before the lot fills", d: "Return it washed enough. Unlimited miles. The host lives there — they will tell you if Tioga is open." },
+            { n: "01", t: "Pick a park", d: `${parks.length} parks, each with a gateway town. Search dates the way you would a campsite.` },
+            { n: "02", t: "Book a neighbor's car", d: territory.published ? "Instant book on most listings. You’ll add protection when you reserve. Keys at a porch, lot, or lockbox." : "Guest trips here are not open yet. You can still browse parks and, if you live nearby, list a car." },
+            { n: "03", t: "Drive in before the lot fills", d: "Return it washed enough. Unlimited miles. The host lives there — they will tell you if the pass is open." },
           ].map((step) => (
             <div key={step.n}>
               <p className="font-display text-4xl text-sage">{step.n}</p>
@@ -179,7 +192,7 @@ function Home() {
             List the 4Runner that already lives by the gate. You set the daily rate. Guests pay trip cover.
           </p>
           <Button asChild size="lg" className="mt-8 bg-card text-foreground hover:bg-secondary">
-            <Link to="/host">List a car</Link>
+            <Link to="/host">{territory.hostCta}</Link>
           </Button>
         </div>
       </section>

@@ -1,4 +1,6 @@
 import { FEDERAL_CARS, FEDERAL_HOSTS, FEDERAL_PARKS, FEDERAL_REVIEWS } from "@/lib/catalog-federal";
+import { EUROPE_FEATURED_SLUGS, EUROPE_PARKS, EUROPE_REGION_FILTERS } from "@/lib/catalog-europe";
+import { territoryById, type TerritoryId } from "@/lib/territory";
 
 export type Park = {
   slug: string;
@@ -11,6 +13,8 @@ export type Park = {
   image: string;
   established: number;
   acres: string;
+  territoryId?: TerritoryId;
+  areaUnit?: "acres" | "ha";
 };
 
 export type Host = {
@@ -1157,7 +1161,21 @@ export const TRAIL_ALIASES = [
 ];
 
 export function parkBySlug(slug: string) {
-  return PARKS.find((p) => p.slug === slug);
+  return ALL_PARKS.find((p) => p.slug === slug);
+}
+
+export function parkTerritoryId(park: Park): TerritoryId {
+  return park.territoryId ?? "us";
+}
+
+export const ALL_PARKS: Park[] = [...PARKS, ...EUROPE_PARKS];
+
+export function parksForTerritory(id: TerritoryId) {
+  return ALL_PARKS.filter((p) => parkTerritoryId(p) === id);
+}
+
+export function regionFiltersFor(id: TerritoryId) {
+  return id === "europe" ? EUROPE_REGION_FILTERS : PARK_REGION_FILTERS;
 }
 
 export function hostById(id: string) {
@@ -1203,7 +1221,13 @@ export function groupedParks(parks: Park[] = PARKS) {
     .map(([region, list]) => ({ region, parks: list }));
 }
 
-export function featuredParks() {
-  const bySlug = new Map(PARKS.map((p) => [p.slug, p]));
-  return FEATURED_PARK_SLUGS.map((slug) => bySlug.get(slug)).filter((p): p is Park => Boolean(p));
+export function parkBookingsOpen(park: Park | null | undefined) {
+  if (!park) return true;
+  return territoryById(parkTerritoryId(park)).published;
+}
+
+export function featuredParks(territoryId: TerritoryId = "us") {
+  const slugs = territoryId === "europe" ? EUROPE_FEATURED_SLUGS : FEATURED_PARK_SLUGS;
+  const bySlug = new Map(parksForTerritory(territoryId).map((p) => [p.slug, p]));
+  return slugs.map((slug) => bySlug.get(slug)).filter((p): p is Park => Boolean(p));
 }

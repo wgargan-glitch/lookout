@@ -19,7 +19,7 @@ function HowItWorks() {
         {[
           {
             t: "Find a park, then a car",
-            d: "Search all 63 U.S. National Parks. Filter for camping kits, electric range, pets, or a 4x4. Dates matter — popular cars (the Yosemite Bronco, the Glacier Rivian, the Denali Land Cruiser) book out around holidays and first-open of Going-to-the-Sun.",
+            d: "Search national parks in the US or Europe from the region switcher. Filter for camping kits, electric range, pets, or a 4x4. Dates matter — popular cars book out around holidays.",
           },
           {
             t: "Book, or request",

@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
+  ALL_PARKS,
   BOOKING_SEEDS,
   CARS,
   HOSTS,
-  PARKS,
   REVIEWS,
+  parkBySlug,
   type Car,
   type Host,
   type Park,
@@ -80,7 +81,7 @@ export function allHosts(extra: Host[] = []) {
 export function carBundle(id: string, extraCars: Car[] = [], extraHosts: Host[] = []) {
   const car = allCars(extraCars).find((c) => c.id === id);
   if (!car) return null;
-  const park = PARKS.find((p) => p.slug === car.parkSlug) ?? null;
+  const park = parkBySlug(car.parkSlug) ?? null;
   const host = allHosts(extraHosts).find((h) => h.id === car.hostId) ?? null;
   const reviews = REVIEWS.filter((r) => r.carId === car.id).map((r, i) => ({
     ...r,
@@ -93,7 +94,7 @@ export function carBundle(id: string, extraCars: Car[] = [], extraHosts: Host[] 
 }
 
 export function parkBundle(slug: string, extraCars: Car[] = []) {
-  const park = PARKS.find((p) => p.slug === slug);
+  const park = parkBySlug(slug);
   if (!park) return null;
   const cars = allCars(extraCars).filter((c) => c.parkSlug === slug);
   return { park, cars };
@@ -146,8 +147,8 @@ export function placeBooking(input: {
   return { trip, quote };
 }
 
-export { PARKS };
+export { ALL_PARKS as PARKS };
 
 export function parkMap() {
-  return new Map<string, Park>(PARKS.map((p) => [p.slug, p]));
+  return new Map<string, Park>(ALL_PARKS.map((p) => [p.slug, p]));
 }

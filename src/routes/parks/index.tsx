@@ -2,8 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ParkCard } from "@/components/parks/park-card";
 import { Input } from "@/components/ui/input";
-import { PARKS, PARK_REGION_FILTERS } from "@/lib/catalog";
-import { useFleet } from "@/lib/use-fleet";
+import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
 import { cn } from "@/lib/utils";
 
 type ParksSearch = {
@@ -20,7 +19,7 @@ export const Route = createFileRoute("/parks/")({
 });
 
 function ParksPage() {
-  const { cars } = useFleet();
+  const { parks: allParks, cars, regionFilters, territory } = useTerritoryCatalog();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const [q, setQ] = useState(search.q ?? "");
@@ -28,11 +27,11 @@ function ParksPage() {
   const counts = new Map<string, number>();
   for (const car of cars) counts.set(car.parkSlug, (counts.get(car.parkSlug) ?? 0) + 1);
 
-  const regionFilter = PARK_REGION_FILTERS.find((r) => r.id === search.region);
+  const regionFilter = regionFilters.find((r) => r.id === search.region);
 
   const parks = useMemo(() => {
     const query = (search.q ?? q).trim().toLowerCase();
-    return [...PARKS]
+    return [...allParks]
       .sort((a, b) => a.name.localeCompare(b.name))
       .filter((park) => {
         if (regionFilter && !(regionFilter.match as readonly string[]).includes(park.region)) return false;
@@ -41,7 +40,7 @@ function ParksPage() {
           .toLowerCase()
           .includes(query);
       });
-  }, [q, search.q, regionFilter]);
+  }, [q, search.q, regionFilter, allParks]);
 
   function patch(next: ParksSearch) {
     void navigate({
@@ -56,16 +55,16 @@ function ParksPage() {
     <main className="mx-auto max-w-6xl px-4 py-10">
       <p className="text-sm font-medium tracking-wide text-sage uppercase">The map</p>
       <h1 className="mt-1 font-display text-4xl md:text-5xl">
-        {PARKS.length} national parks. A car in the next town.
+        {allParks.length} parks. A town at the gate.
       </h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        Every official U.S. National Park, with pickup in the gateway town — not the airport. Remote Alaska parks stage in Fairbanks, Healy, Seward. The car gets you to the plane, the ferry, or the gate.
+        {territory.parksIntro}
       </p>
 
       <div className="mt-8 space-y-4">
         <Input
           value={q}
-          placeholder="Search a park, state, or town"
+          placeholder="Search a park, country, or town"
           aria-label="Search parks"
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => {
@@ -88,7 +87,7 @@ function ParksPage() {
           >
             All regions
           </button>
-          {PARK_REGION_FILTERS.map((region) => (
+          {regionFilters.map((region) => (
             <button
               key={region.id}
               type="button"

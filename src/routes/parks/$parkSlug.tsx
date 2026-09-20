@@ -1,13 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { CarCard } from "@/components/cars/car-card";
 import { Button } from "@/components/ui/button";
-import { PARKS } from "@/lib/catalog";
+import { parkBySlug } from "@/lib/catalog";
 import { parkBundle } from "@/lib/lookout-store";
 import { useFleet } from "@/lib/use-fleet";
 
 export const Route = createFileRoute("/parks/$parkSlug")({
   loader: ({ params }) => {
-    if (!PARKS.some((p) => p.slug === params.parkSlug)) throw notFound();
+    if (!parkBySlug(params.parkSlug)) throw notFound();
     return { slug: params.parkSlug };
   },
   component: ParkPage,
@@ -30,7 +30,7 @@ function ParkPage() {
             {park.region} · est. {park.established}
           </p>
           <h1 className="mt-2 font-display text-5xl">{park.name}</h1>
-          <p className="mt-2 text-primary-foreground/80">{park.state} · {park.acres} acres</p>
+          <p className="mt-2 text-primary-foreground/80">{park.state} · {park.acres} {park.areaUnit ?? "acres"}</p>
         </div>
       </section>
       <div className="mx-auto max-w-6xl px-4 py-10">
@@ -51,7 +51,9 @@ function ParkPage() {
           </Button>
         </div>
         {cars.length === 0 ? (
-          <p className="mt-6 text-sm text-muted-foreground">No listings here yet.</p>
+          <p className="mt-6 text-sm text-muted-foreground">
+            No listings here yet. If you live in {park.pickupTown}, you can list a car while this region opens.
+          </p>
         ) : (
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {cars.map((car) => (

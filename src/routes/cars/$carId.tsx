@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { listBookedRanges } from "@/lib/api";
-import { carTitle, isOverlandCar } from "@/lib/catalog";
+import { carTitle, isOverlandCar, parkBookingsOpen } from "@/lib/catalog";
 import { bodyTypeLabel } from "@/lib/us-vehicles";
 import { formatDate, formatMoney, parseISODate, toISODate } from "@/lib/format";
 import { blockedRanges, carBundle } from "@/lib/lookout-store";
@@ -56,6 +56,7 @@ function CarDetail() {
   }
 
   const { car, park, host, reviews, nearby } = bundle;
+  const bookingsOpen = parkBookingsOpen(park);
   const booked = remoteBlocked.length ? remoteBlocked : blockedRanges(car.id, []);
 
   const bookedMatchers = useMemo(
@@ -229,6 +230,8 @@ function CarDetail() {
               {formatMoney(car.dailyCents)}
               <span className="text-base font-sans text-muted-foreground"> / day</span>
             </p>
+            {bookingsOpen ? (
+              <>
             <p className="mt-1 text-xs text-muted-foreground">Protection is added when you reserve.</p>
 
             <div className="rdp-root mt-4">
@@ -258,12 +261,20 @@ function CarDetail() {
               Continue to book
             </Button>
             <p className="mt-3 text-xs text-muted-foreground">
-              Sign in is required at checkout.{" "}
-              <Link to="/protection" className="underline">
-                Coverage terms
-              </Link>
-              .
+              Sign in is required at checkout.
             </p>
+              </>
+            ) : (
+              <>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  This park is in a region that is still opening. Guest trips are not live yet.
+                  {park ? ` If you live in ${park.pickupTown}, you can list a car.` : ""}
+                </p>
+                <Button asChild className="mt-4 w-full" size="lg">
+                  <Link to="/host">List a car</Link>
+                </Button>
+              </>
+            )}
           </Card>
         </aside>
       </div>

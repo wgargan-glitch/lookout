@@ -10,9 +10,10 @@ import {
   type HostListing,
   type Profile,
 } from "@/lib/api";
-import { PARKS, groupedParks } from "@/lib/catalog";
+import { groupedParks } from "@/lib/catalog";
 import { listingLiveGaps, REQUIRED_PHOTO_IDS } from "@/lib/listing-photos";
 import { FUELS, OPTIONAL_BUILD_TAGS, type DrivetrainId, type FuelId } from "@/lib/us-vehicles";
+import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
 import { VehicleGallery } from "@/components/host/vehicle-gallery";
 import { VehicleIdentityFields } from "@/components/host/vehicle-identity";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,8 @@ export function ListingForm({
   profile: Profile;
   existing?: HostListing;
 }) {
-  const parkGroups = groupedParks(PARKS);
+  const { parks } = useTerritoryCatalog();
+  const parkGroups = groupedParks(parks);
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/components/brand/logo";
+import { TerritorySwitcher } from "@/components/layout/territory-switcher";
 
 export function SiteFooter() {
   return (
@@ -8,8 +9,11 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <Logo onDark />
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/75">
-            Peer-to-peer cars from people who live at the park gate. All 63 U.S. national parks, with keys waiting in the next town over.
+            Peer-to-peer cars from people who live at the park gate. Switch US and Europe anytime — more regions will land in the same menu.
           </p>
+          <div className="mt-4">
+            <TerritorySwitcher tone="dark" />
+          </div>
         </div>
         <div>
           <p className="text-xs font-medium tracking-wide uppercase text-primary-foreground/55">Explore</p>

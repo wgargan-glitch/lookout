@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import { AuthControls } from "@/components/auth/auth-controls";
 import { Logo } from "@/components/brand/logo";
+import { TerritorySwitcher } from "@/components/layout/territory-switcher";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/lib/favorites";
 import { useStandalone } from "@/lib/use-install-prompt";
@@ -37,7 +38,10 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          <div className="hidden md:block">
+            <TerritorySwitcher />
+          </div>
           <Link
             to="/favorites"
             className="relative inline-flex size-11 items-center justify-center rounded-md text-foreground hover:bg-secondary"

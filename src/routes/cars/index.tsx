@@ -5,8 +5,8 @@ import { CarCard } from "@/components/cars/car-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CATEGORIES, EXTRA_CATEGORIES, PARKS, carMatchesCategory, type Car } from "@/lib/catalog";
-import { useFleet } from "@/lib/use-fleet";
+import { CATEGORIES, EXTRA_CATEGORIES, carMatchesCategory, type Car } from "@/lib/catalog";
+import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
 import { validateCarsSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
 
@@ -16,8 +16,7 @@ export const Route = createFileRoute("/cars/")({
 });
 
 function CarsPage() {
-  const { cars } = useFleet();
-  const parks = PARKS;
+  const { cars, parks, territory } = useTerritoryCatalog();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const [q, setQ] = useState(search.q ?? "");
@@ -170,7 +169,7 @@ function CarsPage() {
           {filtered.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border bg-card px-6 py-16 text-center">
               <p className="font-display text-2xl">Nothing on that trail.</p>
-              <p className="mt-2 text-sm text-muted-foreground">Widen the filters, or browse every park.</p>
+              <p className="mt-2 text-sm text-muted-foreground">{territory.emptyCars}</p>
               <Button asChild className="mt-5">
                 <Link to="/cars" search={{}}>
                   Clear filters
