@@ -1,5 +1,9 @@
 import { FEDERAL_CARS, FEDERAL_HOSTS, FEDERAL_PARKS, FEDERAL_REVIEWS } from "@/lib/catalog-federal";
 import { EUROPE_FEATURED_SLUGS, EUROPE_PARKS, EUROPE_REGION_FILTERS } from "@/lib/catalog-europe";
+import { LATAM_FEATURED_SLUGS, LATAM_PARKS, LATAM_REGION_FILTERS } from "@/lib/catalog-latam";
+import { CANADA_FEATURED_SLUGS, CANADA_PARKS, CANADA_REGION_FILTERS } from "@/lib/catalog-canada";
+import { ANZ_FEATURED_SLUGS, ANZ_PARKS, ANZ_REGION_FILTERS } from "@/lib/catalog-anz";
+import { SOUTHERN_AFRICA_FEATURED_SLUGS, SOUTHERN_AFRICA_PARKS, SOUTHERN_AFRICA_REGION_FILTERS } from "@/lib/catalog-southern-africa";
 import { territoryById, type TerritoryId } from "@/lib/territory";
 
 export type Park = {
@@ -1168,14 +1172,34 @@ export function parkTerritoryId(park: Park): TerritoryId {
   return park.territoryId ?? "us";
 }
 
-export const ALL_PARKS: Park[] = [...PARKS, ...EUROPE_PARKS];
+export const ALL_PARKS: Park[] = [
+  ...PARKS,
+  ...EUROPE_PARKS,
+  ...LATAM_PARKS,
+  ...CANADA_PARKS,
+  ...ANZ_PARKS,
+  ...SOUTHERN_AFRICA_PARKS,
+];
 
 export function parksForTerritory(id: TerritoryId) {
   return ALL_PARKS.filter((p) => parkTerritoryId(p) === id);
 }
 
 export function regionFiltersFor(id: TerritoryId) {
-  return id === "europe" ? EUROPE_REGION_FILTERS : PARK_REGION_FILTERS;
+  switch (id) {
+    case "europe":
+      return EUROPE_REGION_FILTERS;
+    case "latam":
+      return LATAM_REGION_FILTERS;
+    case "canada":
+      return CANADA_REGION_FILTERS;
+    case "anz":
+      return ANZ_REGION_FILTERS;
+    case "southern-africa":
+      return SOUTHERN_AFRICA_REGION_FILTERS;
+    default:
+      return PARK_REGION_FILTERS;
+  }
 }
 
 export function hostById(id: string) {
@@ -1227,7 +1251,18 @@ export function parkBookingsOpen(park: Park | null | undefined) {
 }
 
 export function featuredParks(territoryId: TerritoryId = "us") {
-  const slugs = territoryId === "europe" ? EUROPE_FEATURED_SLUGS : FEATURED_PARK_SLUGS;
+  const slugs =
+    territoryId === "europe"
+      ? EUROPE_FEATURED_SLUGS
+      : territoryId === "latam"
+        ? LATAM_FEATURED_SLUGS
+        : territoryId === "canada"
+          ? CANADA_FEATURED_SLUGS
+          : territoryId === "anz"
+            ? ANZ_FEATURED_SLUGS
+            : territoryId === "southern-africa"
+              ? SOUTHERN_AFRICA_FEATURED_SLUGS
+              : FEATURED_PARK_SLUGS;
   const bySlug = new Map(parksForTerritory(territoryId).map((p) => [p.slug, p]));
   return slugs.map((slug) => bySlug.get(slug)).filter((p): p is Park => Boolean(p));
 }

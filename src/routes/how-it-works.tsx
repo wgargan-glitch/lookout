@@ -19,7 +19,7 @@ function HowItWorks() {
         {[
           {
             t: "Find a park, then a car",
-            d: "Search national parks in the US or Europe from the region switcher. Filter for camping kits, electric range, pets, or a 4x4. Dates matter — popular cars book out around holidays.",
+            d: "Search parks from the region switcher — US, Europe, Latin America, Canada, Australia & New Zealand, Southern Africa. Filter for camping kits, electric range, pets, or a 4x4. Dates matter — popular cars book out around holidays.",
           },
           {
             t: "Book, or request",

@@ -9,7 +9,7 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <Logo onDark />
           <p className="mt-3 max-w-sm text-sm text-primary-foreground/75">
-            Peer-to-peer cars from people who live at the park gate. Switch US and Europe anytime — more regions will land in the same menu.
+            Peer-to-peer cars from people who live at the park gate. Switch region anytime — US is live; the others are maps you can plan against.
           </p>
           <div className="mt-4">
             <TerritorySwitcher tone="dark" />

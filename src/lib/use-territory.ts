@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { detectTerritory, type TerritoryId } from "@/lib/territory";
+import { detectTerritory, isTerritoryId, type TerritoryId } from "@/lib/territory";
 
 const STORAGE = "lookout-territory";
 
@@ -18,7 +18,15 @@ export const useTerritory = create<TerritoryState>()(
       chosen: false,
       setTerritory: (id) => set({ id, chosen: true }),
     }),
-    { name: STORAGE, partialize: (s) => ({ id: s.id, chosen: s.chosen }) },
+    {
+      name: STORAGE,
+      partialize: (s) => ({ id: s.id, chosen: s.chosen }),
+      merge: (persisted, current) => {
+        const p = persisted as { id?: string; chosen?: boolean } | undefined;
+        const id = p?.id && isTerritoryId(p.id) ? p.id : current.id;
+        return { ...current, id, chosen: Boolean(p?.chosen) };
+      },
+    },
   ),
 );
 
