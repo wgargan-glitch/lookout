@@ -26,9 +26,6 @@ export function SiteFooter() {
             <Link to="/how-it-works" className="hover:underline">
               How it works
             </Link>
-            <Link to="/protection" className="hover:underline">
-              Protection
-            </Link>
           </div>
         </div>
         <div>
@@ -62,7 +59,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-primary-foreground/15 px-4 py-4 text-center text-xs text-primary-foreground/55">
-        Private cars. Public lands. Guests pay trip liability and a protection plan. Those plans are waivers until a licensed carrier is bound. Not affiliated with the National Park Service.
+        Private cars. Public lands. Not affiliated with the National Park Service.
       </div>
     </footer>
   );

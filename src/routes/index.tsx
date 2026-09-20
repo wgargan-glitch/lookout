@@ -63,7 +63,7 @@ function Home() {
           {[
             { icon: MapPinned, title: `${PARKS.length} national parks`, body: "Every official U.S. National Park. Pickup in the gateway town, not a city airport." },
             { icon: KeyRound, title: "Keys from locals", body: "Hosts who know which overlook still has shade, and which road is still closed." },
-            { icon: Shield, title: "Ridge & Summit cover", body: "Optional protection on every trip. No surprise counter." },
+            { icon: Shield, title: "Meet at the gate", body: "Pickup in the next town over. Keys from someone who knows the road." },
           ].map((item) => (
             <div key={item.title} className="flex gap-3">
               <item.icon className="mt-0.5 size-5 shrink-0 text-primary" />

@@ -1,8 +1,6 @@
-import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { INSURANCE_PARTNER, REJECTED_PROOF } from "@/lib/insurance";
 import { formatMoney } from "@/lib/format";
 import {
   PROTECTION_PLANS,
@@ -61,32 +59,21 @@ export function OwnInsurancePanel({
 
   function connect() {
     setStatus("unavailable");
-    toast("Insurer connection is not live. Buy a protection plan — cards and PDFs are not proof.");
+    toast("We can’t verify a personal policy yet. Pick a Lookout plan to finish booking.");
   }
 
   return (
     <div className="rounded-lg border border-border p-3 text-sm">
       <p className="font-medium">Use your own insurance?</p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Only after a live carrier connection ({INSURANCE_PARTNER.name}) confirms the policy covers this
-        P2P rental. Trip liability still applies. This is the Getaround path — not a Hertz counter.
+        If we can confirm your policy covers this trip, you may skip a Lookout damage plan. That
+        check isn’t live yet.
       </p>
-      <ul className="mt-2 space-y-0.5 text-xs text-muted-foreground">
-        {REJECTED_PROOF.map((line) => (
-          <li key={line}>Not accepted: {line.toLowerCase()}.</li>
-        ))}
-      </ul>
       <Button type="button" variant="outline" size="sm" className="mt-3" onClick={connect}>
-        Connect insurer
+        Check my policy
       </Button>
       {status === "unavailable" || protection === "own" ? (
-        <p className="mt-2 text-xs text-muted-foreground">
-          {INSURANCE_PARTNER.note}{" "}
-          <Link to="/protection" className="underline">
-            Coverage terms
-          </Link>
-          .
-        </p>
+        <p className="mt-2 text-xs text-muted-foreground">Pick Minimum, Standard, or Premier above to continue.</p>
       ) : null}
     </div>
   );

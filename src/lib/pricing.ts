@@ -6,8 +6,7 @@ export const SERVICE_FEE_RATE = 0.1;
 export const TRIP_LIABILITY = {
   name: "Trip liability",
   dailyCents: 1200,
-  summary:
-    "Required. Platform motor liability during the booked trip — not the host’s personal policy. A licensed carrier is not bound yet; this line still collects on every trip so the product matches the Turo model.",
+  summary: "Included on every trip. Covers other people and their cars while you’re driving.",
 } as const;
 
 export const PROTECTION_PLANS = [
@@ -19,9 +18,10 @@ export const PROTECTION_PLANS = [
     guestResponsibility: "$3,000",
     vehicleCap: "$75,000",
     roadside: false,
-    summary: "Physical-damage protection. $3,000 guest responsibility if you damage the host’s car.",
+    guestBlurb: "The lightest plan. You’ll see the daily price when you reserve.",
+    summary: "You’ll owe up to $3,000 if the car is damaged.",
     details: [
-      "Contractual cap on what you owe for collision and comprehensive during the booked trip.",
+      "Caps what you owe for collision and theft of the host’s car during the booked trip.",
       "$3,000 guest responsibility per incident, $75,000 vehicle cap.",
       "This is a Lookout contract, not a licensed insurance policy, until a carrier is bound.",
       "Does not replace trip liability. Does not cover the host’s off-trip personal policy.",
@@ -35,10 +35,11 @@ export const PROTECTION_PLANS = [
     guestResponsibility: "$500",
     vehicleCap: "$75,000",
     roadside: false,
-    summary: "Lower guest responsibility ($500). This is the default at checkout.",
+    guestBlurb: "What most guests pick. Lower amount you’d owe if something happens.",
+    summary: "You’ll owe up to $500 if the car is damaged. Most guests pick this.",
     details: [
-      "Same waiver structure as Minimum, with $500 guest responsibility and a $75,000 vehicle cap.",
-      "About 40% of the trip daily rate, with a $19/day floor — Turo Standard is in this band.",
+      "Same structure as Minimum, with $500 guest responsibility and a $75,000 vehicle cap.",
+      "About 40% of the trip daily rate, with a $19/day floor.",
       "Still a Lookout-administered waiver until a physical-damage program is bound.",
     ],
   },
@@ -50,7 +51,8 @@ export const PROTECTION_PLANS = [
     guestResponsibility: "$0",
     vehicleCap: "$150,000",
     roadside: true,
-    summary: "$0 guest responsibility, higher vehicle cap, park roadside.",
+    guestBlurb: "Nothing extra to owe for covered damage, plus help if you get stuck near the park.",
+    summary: "You owe $0 for covered damage, plus roadside near the park.",
     details: [
       "$0 guest responsibility, $150,000 vehicle cap.",
       "Park roadside within 50 miles of the listed park: jump, spare, winch-out on a legal road.",

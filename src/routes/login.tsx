@@ -128,14 +128,10 @@ function Login() {
             By continuing you agree to the{" "}
             <Link to="/terms" className="underline">
               terms
-            </Link>
-            ,{" "}
+            </Link>{" "}
+            and{" "}
             <Link to="/privacy" className="underline">
               privacy policy
-            </Link>
-            , and{" "}
-            <Link to="/protection" className="underline">
-              protection waiver
             </Link>
             .
           </p>

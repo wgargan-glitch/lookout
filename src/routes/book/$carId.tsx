@@ -152,9 +152,9 @@ function BookPage() {
             </div>
           </Card>
           <Card className="p-5">
-            <p className="text-sm font-medium">Protection plan</p>
+            <p className="text-sm font-medium">Protection for this trip</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Required. Caps what you owe if you damage the host’s car. Default is Standard.
+              Choose what you might owe if the car is damaged. Standard is the usual pick.
             </p>
             <div className="mt-3">
               <ProtectionPicker value={protection} onChange={setProtection} tripDailyCents={car.dailyCents} />
@@ -171,11 +171,7 @@ function BookPage() {
             {pending ? "Booking…" : "Confirm booking"}
           </Button>
           <p className="mt-3 text-xs text-muted-foreground">
-            No card is charged in this build. The trip, liability line, waiver, and confirmation are stored on your account.{" "}
-            <Link to="/protection" className="underline">
-              Coverage terms
-            </Link>
-            .
+            No card is charged yet. We’ll save the reservation on your account.
           </p>
         </Card>
       </div>

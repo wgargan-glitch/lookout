@@ -229,7 +229,7 @@ function CarDetail() {
               {formatMoney(car.dailyCents)}
               <span className="text-base font-sans text-muted-foreground"> / day</span>
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">Plus trip liability and a protection plan.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Protection is added when you reserve.</p>
 
             <div className="rdp-root mt-4">
               <DayPicker

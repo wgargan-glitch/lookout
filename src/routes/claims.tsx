@@ -54,7 +54,7 @@ function ClaimsPage() {
       <p className="text-sm font-medium tracking-wide text-sage uppercase">Claims</p>
       <h1 className="mt-1 font-display text-4xl">Tell us what happened</h1>
       <p className="mt-2 text-muted-foreground">
-        File against a confirmed trip. Minimum, Standard, and Premier waivers are reviewed here. Interior, mechanical wear, and the pickup window before check-in are usually outside the plan.
+        File against a confirmed trip. Use your check-in photos and a short note about what changed.
       </p>
 
       <Card className="mt-8 p-6">

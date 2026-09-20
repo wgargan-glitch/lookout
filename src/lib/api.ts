@@ -376,7 +376,7 @@ export const createBooking = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     if (data.protection === "own") {
       throw new Error(
-        "Live carrier verification is required to decline physical-damage cover. Photos of insurance cards are not accepted.",
+        "Pick a Lookout protection plan to finish this booking. We can’t verify a personal policy yet.",
       );
     }
     if (data.endDate <= data.startDate) throw new Error("Return date must be after pickup.");

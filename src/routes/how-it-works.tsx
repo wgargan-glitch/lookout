@@ -12,7 +12,7 @@ function HowItWorks() {
       <p className="text-sm font-medium tracking-wide text-sage uppercase">The trail</p>
       <h1 className="mt-1 font-display text-4xl md:text-5xl">How Lookout works</h1>
       <p className="mt-4 text-muted-foreground">
-        A Turo-style marketplace, pointed at the parks. You book a car from someone who already lives beside the gate. They are not a counter. They will tell you if the pass is open.
+        Book a car from someone who already lives beside the park. They are not a counter. They will tell you if the pass is open.
       </p>
 
       <div className="mt-10 space-y-6">
@@ -23,7 +23,7 @@ function HowItWorks() {
           },
           {
             t: "Book, or request",
-            d: "Sign in, pick dates, then a protection plan — Minimum, Standard, or Premier. Trip liability is on every booking and the guest pays it. Instant book listings confirm immediately. Pickup is in the gateway town on the listing.",
+            d: "Sign in and pick dates. Instant-book cars confirm right away; others wait for the host. You’ll add trip protection on the reservation. Pickup is in the gateway town on the listing.",
           },
           {
             t: "Check in on your phone",
@@ -35,7 +35,7 @@ function HowItWorks() {
           },
           {
             t: "List your own",
-            d: "Create an account, add six required photos of the actual car, name the auto carrier that covers the car when it is not rented, and list it in a gateway town. You choose the daily rate. Guests pay trip cover. Drafts stay on your account until the gallery is complete.",
+            d: "Create an account, add six photos of the actual car, and list it in a gateway town. You set the daily rate. Host rules live in the Host agreement.",
           },
         ].map((block, i) => (
           <Card key={block.t} className="p-6">

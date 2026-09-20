@@ -14,9 +14,9 @@ export const HELP_ARTICLES: HelpArticle[] = [
     topic: "guests",
     body: [
       "Choose a park, then a car. Pickup and return dates are nights the car is yours — return on the morning of the end date.",
-      "Instant-book listings confirm as soon as you sign in and accept trip liability plus a protection plan. Host-approval listings wait for the host.",
+      "Instant-book listings confirm as soon as you sign in. Host-approval listings wait for the host.",
       "Pickup is always in the gateway town on the listing, not at a city airport counter. The host will share a pin after you book.",
-      "Trip totals include the daily rate, trip liability, and the protection plan you pick (Minimum, Standard, or Premier). You cannot skip protection with a photo of an insurance card.",
+      "When you reserve, you’ll pick trip protection and see the full total for those dates. That’s the place for coverage details.",
       "You do not have the keys until you check in. Open the trip on your phone at pickup, photograph the car, and submit the inspection.",
     ],
   },
@@ -60,15 +60,14 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     slug: "protection",
-    title: "Trip cover",
-    blurb: "Trip liability, Minimum / Standard / Premier, and why a card is not enough.",
+    title: "Trip protection",
+    blurb: "You’ll choose a plan when you reserve.",
     topic: "protection",
     body: [
-      "Every trip has two layers. Trip liability is meant to be a motor policy issued to Lookout — the guest pays it as a required line item. Guest protection (Minimum, Standard, Premier) is a contract that caps what the guest owes if they damage the host’s car. Do not read that as “fully insured.”",
-      "Minimum is about 20% of the trip daily rate ($14/day floor) with a $3,000 guest responsibility. Standard (the default) is about 40% / $19 floor / $500. Premier is about 65% / $34 floor / $0, plus park roadside.",
-      "You cannot decline physical-damage cover with a photo of a Geico card, a declarations page, or a credit-card rental benefit. Those go stale and often exclude P2P. The only alternative is live carrier verification (Axle). That partner is not connected yet, so checkout forces a paid plan.",
-      "Hosts keep personal insurance for off-trip use only. Ordinary hosts cannot opt out of trip cover. New York and Maryland may require platform liability to be primary.",
-      "A live admitted or surplus-lines program with a named carrier requires a licensed producer and a signed program agreement. That is not bound on this site.",
+      "Listing pages are about the car and the park. Protection shows up at checkout, for the dates you picked.",
+      "Minimum, Standard, and Premier set what you might owe if the car is damaged. Standard is the usual pick. Premier adds roadside near the park.",
+      "If you have your own auto policy, checkout is where you can try to use it — once we can verify it with your insurer. Until then, pick a Lookout plan to finish the booking.",
+      "Questions after a trip belong on Claims, with your check-in photos.",
     ],
   },
   {
@@ -78,8 +77,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     topic: "protection",
     body: [
       "Sign in, open Claims, and file against a confirmed booking. Photos from check-in and check-out are already on the trip — add a written description of what changed.",
-      "Admin reviews every claim. Status moves from Filed → Reviewing → Approved or Denied.",
-      "Approved Minimum, Standard, and Premier claims apply the guest responsibility first, then Lookout’s waiver up to the plan cap. Interior, mechanical wear, late return, and the pickup window before check-in are usually outside the plan.",
+      "The ranger desk reviews every claim.",
       "File within 48 hours of the incident, or before you return the car, whichever is sooner.",
     ],
   },
