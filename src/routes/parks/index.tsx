@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ParkCard } from "@/components/parks/park-card";
 import { Input } from "@/components/ui/input";
 import { parkPlace } from "@/lib/catalog";
+import { intlTag } from "@/lib/locale";
 import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
 import { useLocale, useT } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
@@ -36,7 +37,7 @@ function ParksPage() {
   const parks = useMemo(() => {
     const query = (search.q ?? q).trim().toLowerCase();
     return [...allParks]
-      .sort((a, b) => a.name.localeCompare(b.name, loc === "es" ? "es" : "en"))
+      .sort((a, b) => a.name.localeCompare(b.name, intlTag(loc)))
       .filter((park) => {
         if (regionFilter && !(regionFilter.match as readonly string[]).includes(park.region)) return false;
         if (!query) return true;

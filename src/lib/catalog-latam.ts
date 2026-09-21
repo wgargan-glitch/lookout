@@ -75,6 +75,8 @@ export const LATAM_PARKS: Park[] = [
   row({ slug: "queulat", name: "Queulat", state: "Chile", region: "Southern Cone", tagline: "A hanging glacier, the Carretera Austral, rain that is a climate.", description: "Puyuhuapi. The hanging glacier is a short walk. The car is the Carretera. Hosts expect mud.", pickupTown: "Puyuhuapi, Chile", image: I.patagonia, established: 1983, acres: "154,093" }),
   row({ slug: "villarrica", name: "Villarrica", state: "Chile", region: "Southern Cone", tagline: "A volcano that still smokes, Pucón as the porch.", description: "Pucón. The ski road in summer is the hike. A car for the lakes and the day the cone is closed.", pickupTown: "Pucón, Chile", image: I.patagonia, established: 1940, acres: "63,000" }),
   row({ slug: "santa-teresa", name: "Santa Teresa", state: "Uruguay", region: "Southern Cone", tagline: "A fortress, a beach, the Atlantic that Uruguay actually uses.", description: "Punta del Diablo or Castillos. The park is coast and a fort. Hosts leave sand in the pedals on purpose.", pickupTown: "Punta del Diablo, Uruguay", image: I.patagonia, established: 1927, acres: "3,000" }),
+  row({ slug: "cerro-cora", name: "Cerro Corá", state: "Paraguay", region: "Southern Cone", tagline: "Red sandstone, a last battle, Paraguay’s first national park.", description: "Pedro Juan Caballero or Concepción. The hills are the park. A car for the dirt and the border that is a town.", pickupTown: "Pedro Juan Caballero, Paraguay", image: I.patagonia, established: 1973, acres: "12,038" }),
+  row({ slug: "vinales", name: "Viñales", state: "Cuba", region: "Central America", tagline: "Mogotes, tobacco, a valley you drive into.", description: "Viñales village. The park is the landscape around the town. Hosts leave a car that likes a dirt track between mogotes and a house that still rolls cigars.", pickupTown: "Viñales, Cuba", image: I.central, established: 1999, acres: "15,000" }),
 ];
 
 export const LATAM_FEATURED_SLUGS = [
@@ -90,7 +92,7 @@ export const LATAM_FEATURED_SLUGS = [
 
 export const LATAM_REGION_FILTERS = [
   { id: "mexico", label: "Mexico & Baja", labelEs: "México y Baja", match: ["Mexico & Baja"] },
-  { id: "central", label: "Central America", labelEs: "Centroamérica", match: ["Central America"] },
+  { id: "central-am", label: "Central America", labelEs: "Centroamérica", match: ["Central America"] },
   { id: "andes", label: "Andes", labelEs: "Andes", match: ["Andes"] },
   { id: "brazil", label: "Brazil", labelEs: "Brasil", match: ["Brazil"] },
   { id: "cone", label: "Southern Cone", labelEs: "Cono Sur", match: ["Southern Cone"] },

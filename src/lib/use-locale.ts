@@ -45,7 +45,7 @@ export function useDetectLocale() {
   }, [setLocale]);
   useEffect(() => {
     setFormatLocale(intlTag(id));
-    if (typeof document !== "undefined") document.documentElement.lang = id === "es" ? "es" : "en";
+    if (typeof document !== "undefined") document.documentElement.lang = id;
   }, [id]);
 }
 

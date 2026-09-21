@@ -1,10 +1,11 @@
 import { FEDERAL_CARS, FEDERAL_HOSTS, FEDERAL_PARKS, FEDERAL_REVIEWS } from "@/lib/catalog-federal";
 import { EUROPE_FEATURED_SLUGS, EUROPE_PARKS, EUROPE_REGION_FILTERS } from "@/lib/catalog-europe";
 import { LATAM_FEATURED_SLUGS, LATAM_PARKS, LATAM_REGION_FILTERS } from "@/lib/catalog-latam";
-import { LATAM_ES, LATAM_REGION_ES, LATAM_STATE_ES } from "@/lib/catalog-latam-es";
+import { FILTER_I18N, parkCopy, REGION_I18N, STATE_I18N } from "@/lib/catalog-i18n";
 import { CANADA_FEATURED_SLUGS, CANADA_PARKS, CANADA_REGION_FILTERS } from "@/lib/catalog-canada";
 import { ANZ_FEATURED_SLUGS, ANZ_PARKS, ANZ_REGION_FILTERS } from "@/lib/catalog-anz";
 import { SOUTHERN_AFRICA_FEATURED_SLUGS, SOUTHERN_AFRICA_PARKS, SOUTHERN_AFRICA_REGION_FILTERS } from "@/lib/catalog-southern-africa";
+import { isLocaleId } from "@/lib/locale";
 import { territoryById, type TerritoryId } from "@/lib/territory";
 
 export type Park = {
@@ -1204,9 +1205,10 @@ export function regionFiltersFor(id: TerritoryId) {
 }
 
 export function localizePark(park: Park, locale: string): Park {
-  if (locale !== "es") return park;
-  const copy = parkTerritoryId(park) === "latam" ? LATAM_ES[park.slug] : undefined;
-  const state = copy?.state ?? (parkTerritoryId(park) === "latam" ? LATAM_STATE_ES[park.state] : undefined) ?? park.state;
+  const loc = isLocaleId(locale) ? locale : "en";
+  if (loc === "en") return park;
+  const copy = parkCopy(park.slug, loc);
+  const state = copy?.state ?? STATE_I18N[loc]?.[park.state] ?? park.state;
   return {
     ...park,
     tagline: copy?.tagline ?? park.tagline,
@@ -1216,28 +1218,37 @@ export function localizePark(park: Park, locale: string): Park {
 }
 
 export function parkRegionLabel(region: string, locale: string) {
-  if (locale !== "es") return region;
-  return LATAM_REGION_ES[region] ?? region;
+  const loc = isLocaleId(locale) ? locale : "en";
+  return REGION_I18N[loc]?.[region] ?? region;
 }
 
 export function parkPlace(park: Park, locale: string) {
   const region = parkRegionLabel(park.region, locale);
-  return region === park.state ? park.state : `${region} · ${park.state}`;
+  const loc = isLocaleId(locale) ? locale : "en";
+  const state = STATE_I18N[loc]?.[park.state] ?? park.state;
+  return region === state ? state : `${region} · ${state}`;
 }
 
 export function localizeTown(town: string, locale: string) {
-  if (locale !== "es") return town;
+  const loc = isLocaleId(locale) ? locale : "en";
+  const map = STATE_I18N[loc];
+  if (!map) return town;
   let out = town;
-  for (const [en, es] of Object.entries(LATAM_STATE_ES)) {
-    if (out.endsWith(`, ${en}`)) out = `${out.slice(0, -en.length)}${es}`;
+  for (const [en, localized] of Object.entries(map)) {
+    if (out.endsWith(`, ${en}`)) out = `${out.slice(0, -en.length)}${localized}`;
   }
   return out;
 }
 
 export function localizeRegionFilters(id: TerritoryId, locale: string) {
+  const loc = isLocaleId(locale) ? locale : "en";
   return regionFiltersFor(id).map((f) => ({
     ...f,
-    label: locale === "es" && "labelEs" in f && typeof f.labelEs === "string" ? f.labelEs : f.label,
+    label:
+      loc === "en"
+        ? f.label
+        : (FILTER_I18N[f.id]?.[loc] ??
+          ("labelEs" in f && loc === "es" && typeof f.labelEs === "string" ? f.labelEs : f.label)),
   }));
 }
 

@@ -1,3 +1,6 @@
+import { isLocaleId } from "@/lib/locale";
+import { TERRITORY_I18N } from "@/lib/territory-i18n";
+
 export const TERRITORY_IDS = ["us", "europe", "latam", "canada", "anz", "southern-africa"] as const;
 export type TerritoryId = (typeof TERRITORY_IDS)[number];
 
@@ -194,19 +197,20 @@ export function isTerritoryId(value: string): value is TerritoryId {
 }
 
 export function localizedTerritory(territory: Territory, locale: string): Territory {
-  if (locale !== "es" || !territory.es) return territory;
-  const es = territory.es;
+  if (!isLocaleId(locale) || locale === "en") return territory;
+  const pack = TERRITORY_I18N[territory.id]?.[locale] ?? (locale === "es" ? territory.es : undefined);
+  if (!pack) return territory;
   return {
     ...territory,
-    name: es.name,
-    shortLabel: es.shortLabel,
-    kicker: es.kicker,
-    headline: es.headline,
-    intro: es.intro,
-    parksIntro: es.parksIntro,
-    heroAlt: es.heroAlt,
-    emptyCars: es.emptyCars,
-    hostCta: es.hostCta,
+    name: pack.name,
+    shortLabel: pack.shortLabel,
+    kicker: pack.kicker,
+    headline: pack.headline,
+    intro: pack.intro,
+    parksIntro: pack.parksIntro,
+    heroAlt: pack.heroAlt,
+    emptyCars: pack.emptyCars,
+    hostCta: pack.hostCta,
   };
 }
 
@@ -299,6 +303,8 @@ const LATAM_TZ = [
   "America/Tijuana",
   "America/Bahia_Banderas",
   "America/Ciudad_Juarez",
+  "America/Havana",
+  "America/Santo_Domingo",
 ];
 
 const SOUTHERN_AFRICA_TZ = [

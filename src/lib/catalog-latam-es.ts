@@ -250,4 +250,12 @@ export const LATAM_ES: Record<string, ParkEs> = {
     tagline: "Una fortaleza, una playa, el Atlántico que Uruguay sí usa.",
     description: "Punta del Diablo o Castillos. El parque es costa y un fuerte. Los anfitriones dejan arena en los pedales a propósito.",
   },
+  "cerro-cora": {
+    tagline: "Arenisca roja, una última batalla, el primer parque nacional del Paraguay.",
+    description: "Pedro Juan Caballero o Concepción. Los cerros son el parque. Un auto para la tierra y la frontera que es un pueblo.",
+  },
+  vinales: {
+    tagline: "Mogotes, tabaco, un valle al que se entra en auto.",
+    description: "El pueblo de Viñales. El parque es el paisaje alrededor. Los anfitriones dejan un auto que aguanta un camino de tierra entre mogotes y una casa que todavía tuerce tabaco.",
+  },
 };

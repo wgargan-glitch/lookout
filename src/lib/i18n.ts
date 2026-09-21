@@ -1,4 +1,5 @@
 import type { LocaleId } from "@/lib/locale";
+import { de, fr, it, nl, pt } from "@/lib/i18n-locales";
 
 export const en = {
   langName: "English",
@@ -304,9 +305,9 @@ export const es: typeof en = {
   },
 };
 
-const DICTS: Record<LocaleId, typeof en> = { en, es };
+const DICTS: Record<LocaleId, typeof en> = { en, es, pt, fr, de, it, nl };
 
-export type MessageKey = string;
+export type Messages = typeof en;
 
 export function translate(locale: LocaleId, key: string, vars?: Record<string, string | number>) {
   const parts = key.split(".");
