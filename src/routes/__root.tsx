@@ -3,6 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { ServiceWorkerRegister } from "@/components/layout/service-worker";
 import { SiteShell } from "@/components/layout/site-shell";
+import { useT } from "@/lib/use-locale";
 import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 
@@ -71,13 +72,14 @@ function Root() {
 }
 
 function NotFound() {
+  const t = useT();
   return (
     <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 text-center">
-      <p className="text-sm font-medium tracking-wide text-muted-foreground uppercase">Off trail</p>
-      <h1 className="mt-2 font-display text-4xl">This page is not on the map.</h1>
-      <p className="mt-3 text-muted-foreground">Try the parks directory, or go back to the gate.</p>
+      <p className="text-sm font-medium tracking-wide text-muted-foreground uppercase">{t("notFound.kicker")}</p>
+      <h1 className="mt-2 font-display text-4xl">{t("notFound.title")}</h1>
+      <p className="mt-3 text-muted-foreground">{t("notFound.body")}</p>
       <a href="/" className="mt-6 inline-flex h-11 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground">
-        Back to Lookout
+        {t("notFound.back")}
       </a>
     </main>
   );

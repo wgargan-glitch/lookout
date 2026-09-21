@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CATEGORIES, EXTRA_CATEGORIES, carMatchesCategory, type Car } from "@/lib/catalog";
 import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
+import { useT } from "@/lib/use-locale";
 import { validateCarsSearch } from "@/lib/search";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/cars/")({
 
 function CarsPage() {
   const { cars, parks, territory } = useTerritoryCatalog();
+  const t = useT();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const [q, setQ] = useState(search.q ?? "");
@@ -55,12 +57,15 @@ function CarsPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
-      <p className="text-sm font-medium tracking-wide text-sage uppercase">The fleet</p>
+      <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("carsPage.kicker")}</p>
       <h1 className="mt-1 font-display text-4xl">
-        {park ? `Cars at ${park.name}` : "Cars at the parks"}
+        {park ? t("carsPage.titlePark", { name: park.name }) : t("carsPage.title")}
       </h1>
       <p className="mt-2 max-w-2xl text-muted-foreground">
-        {filtered.length} {filtered.length === 1 ? "listing" : "listings"} from hosts in the gateway towns.
+        {t("carsPage.listings", {
+          n: filtered.length,
+          word: filtered.length === 1 ? t("carsPage.listing") : t("carsPage.listingsWord"),
+        })}
       </p>
 
       <div className="mt-6">
@@ -76,11 +81,11 @@ function CarsPage() {
       <div className="mt-6 flex flex-col gap-4 lg:flex-row">
         <aside className="w-full shrink-0 space-y-5 rounded-xl border border-border bg-card p-4 lg:w-64">
           <div className="space-y-1.5">
-            <Label htmlFor="q">Search</Label>
+            <Label htmlFor="q">{t("carsPage.search")}</Label>
             <Input
               id="q"
               value={q}
-              placeholder="Make or model"
+              placeholder={t("carsPage.makeModel")}
               onChange={(e) => setQ(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") patch({ q: q || undefined });
@@ -88,7 +93,7 @@ function CarsPage() {
             />
           </div>
           <div>
-            <p className="mb-2 text-sm font-medium">Type</p>
+            <p className="mb-2 text-sm font-medium">{t("carsPage.type")}</p>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map((cat) => (
                 <button
@@ -104,11 +109,11 @@ function CarsPage() {
                       : "border-border bg-card",
                   )}
                 >
-                  {cat.label}
+                  {t(`carsPage.${cat.id}`)}
                 </button>
               ))}
             </div>
-            <p className="mt-3 mb-2 text-sm font-medium">Builds</p>
+            <p className="mt-3 mb-2 text-sm font-medium">{t("carsPage.builds")}</p>
             <div className="flex flex-wrap gap-1.5">
               {EXTRA_CATEGORIES.map((cat) => (
                 <button
@@ -124,17 +129,17 @@ function CarsPage() {
                       : "border-border bg-card",
                   )}
                 >
-                  {cat.label}
+                  {t(`carsPage.${cat.id}`)}
                 </button>
               ))}
             </div>
           </div>
           <div className="space-y-2">
             {[
-              { key: "instant" as const, label: "Instant book" },
-              { key: "camping" as const, label: "Camping kit" },
-              { key: "pet" as const, label: "Pet friendly" },
-              { key: "electric" as const, label: "Electric" },
+              { key: "instant" as const, label: t("carsPage.instant") },
+              { key: "camping" as const, label: t("carsPage.camping") },
+              { key: "pet" as const, label: t("carsPage.pet") },
+              { key: "electric" as const, label: t("carsPage.electric") },
             ].map((f) => (
               <label key={f.key} className="flex min-h-11 items-center gap-2 text-sm">
                 <input
@@ -148,7 +153,7 @@ function CarsPage() {
             ))}
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="sort">Sort</Label>
+            <Label htmlFor="sort">{t("carsPage.sort")}</Label>
             <select
               id="sort"
               value={search.sort ?? "recommended"}
@@ -157,10 +162,10 @@ function CarsPage() {
               }
               className="flex h-11 w-full rounded-md border border-input bg-card px-3 text-sm"
             >
-              <option value="recommended">Recommended</option>
-              <option value="price-asc">Price: low to high</option>
-              <option value="price-desc">Price: high to low</option>
-              <option value="rating">Rating</option>
+              <option value="recommended">{t("carsPage.recommended")}</option>
+              <option value="price-asc">{t("carsPage.priceAsc")}</option>
+              <option value="price-desc">{t("carsPage.priceDesc")}</option>
+              <option value="rating">{t("carsPage.rating")}</option>
             </select>
           </div>
         </aside>
@@ -168,11 +173,11 @@ function CarsPage() {
         <div className="min-w-0 flex-1">
           {filtered.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border bg-card px-6 py-16 text-center">
-              <p className="font-display text-2xl">Nothing on that trail.</p>
+              <p className="font-display text-2xl">{t("carsPage.emptyTitle")}</p>
               <p className="mt-2 text-sm text-muted-foreground">{territory.emptyCars}</p>
               <Button asChild className="mt-5">
                 <Link to="/cars" search={{}}>
-                  Clear filters
+                  {t("carsPage.clear")}
                 </Link>
               </Button>
             </div>

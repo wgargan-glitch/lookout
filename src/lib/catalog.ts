@@ -1,6 +1,7 @@
 import { FEDERAL_CARS, FEDERAL_HOSTS, FEDERAL_PARKS, FEDERAL_REVIEWS } from "@/lib/catalog-federal";
 import { EUROPE_FEATURED_SLUGS, EUROPE_PARKS, EUROPE_REGION_FILTERS } from "@/lib/catalog-europe";
 import { LATAM_FEATURED_SLUGS, LATAM_PARKS, LATAM_REGION_FILTERS } from "@/lib/catalog-latam";
+import { LATAM_ES, LATAM_REGION_ES, LATAM_STATE_ES } from "@/lib/catalog-latam-es";
 import { CANADA_FEATURED_SLUGS, CANADA_PARKS, CANADA_REGION_FILTERS } from "@/lib/catalog-canada";
 import { ANZ_FEATURED_SLUGS, ANZ_PARKS, ANZ_REGION_FILTERS } from "@/lib/catalog-anz";
 import { SOUTHERN_AFRICA_FEATURED_SLUGS, SOUTHERN_AFRICA_PARKS, SOUTHERN_AFRICA_REGION_FILTERS } from "@/lib/catalog-southern-africa";
@@ -1200,6 +1201,44 @@ export function regionFiltersFor(id: TerritoryId) {
     default:
       return PARK_REGION_FILTERS;
   }
+}
+
+export function localizePark(park: Park, locale: string): Park {
+  if (locale !== "es") return park;
+  const copy = parkTerritoryId(park) === "latam" ? LATAM_ES[park.slug] : undefined;
+  const state = copy?.state ?? (parkTerritoryId(park) === "latam" ? LATAM_STATE_ES[park.state] : undefined) ?? park.state;
+  return {
+    ...park,
+    tagline: copy?.tagline ?? park.tagline,
+    description: copy?.description ?? park.description,
+    state,
+  };
+}
+
+export function parkRegionLabel(region: string, locale: string) {
+  if (locale !== "es") return region;
+  return LATAM_REGION_ES[region] ?? region;
+}
+
+export function parkPlace(park: Park, locale: string) {
+  const region = parkRegionLabel(park.region, locale);
+  return region === park.state ? park.state : `${region} · ${park.state}`;
+}
+
+export function localizeTown(town: string, locale: string) {
+  if (locale !== "es") return town;
+  let out = town;
+  for (const [en, es] of Object.entries(LATAM_STATE_ES)) {
+    if (out.endsWith(`, ${en}`)) out = `${out.slice(0, -en.length)}${es}`;
+  }
+  return out;
+}
+
+export function localizeRegionFilters(id: TerritoryId, locale: string) {
+  return regionFiltersFor(id).map((f) => ({
+    ...f,
+    label: locale === "es" && "labelEs" in f && typeof f.labelEs === "string" ? f.labelEs : f.label,
+  }));
 }
 
 export function hostById(id: string) {

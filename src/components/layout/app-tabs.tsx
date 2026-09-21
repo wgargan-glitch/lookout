@@ -1,31 +1,32 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { CalendarDays, Car, House, MapPinned, User } from "lucide-react";
+import { useT } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
-
-const TABS = [
-  { to: "/", label: "Home", icon: House, active: (path: string) => path === "/" },
-  { to: "/parks", label: "Parks", icon: MapPinned, active: (path: string) => path.startsWith("/parks") },
-  { to: "/cars", label: "Cars", icon: Car, active: (path: string) => path.startsWith("/cars") || path.startsWith("/book") },
-  { to: "/trips", label: "Trips", icon: CalendarDays, active: (path: string) => path.startsWith("/trips") },
-  {
-    to: "/account",
-    label: "You",
-    icon: User,
-    active: (path: string) =>
-      path.startsWith("/account") || path.startsWith("/login") || path.startsWith("/host") || path.startsWith("/claims") || path.startsWith("/partners"),
-  },
-] as const;
 
 export function AppTabs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const t = useT();
+  const tabs = [
+    { to: "/", label: t("nav.home"), icon: House, active: (path: string) => path === "/" },
+    { to: "/parks", label: t("nav.parks"), icon: MapPinned, active: (path: string) => path.startsWith("/parks") },
+    { to: "/cars", label: t("nav.cars"), icon: Car, active: (path: string) => path.startsWith("/cars") || path.startsWith("/book") },
+    { to: "/trips", label: t("nav.trips"), icon: CalendarDays, active: (path: string) => path.startsWith("/trips") },
+    {
+      to: "/account",
+      label: t("nav.you"),
+      icon: User,
+      active: (path: string) =>
+        path.startsWith("/account") || path.startsWith("/login") || path.startsWith("/host") || path.startsWith("/claims") || path.startsWith("/partners"),
+    },
+  ] as const;
 
   return (
     <nav
-      aria-label="App"
+      aria-label={t("nav.home")}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 pt-1 pb-safe backdrop-blur-md md:hidden"
     >
       <ul className="mx-auto grid max-w-lg grid-cols-5">
-        {TABS.map((tab) => {
+        {tabs.map((tab) => {
           const on = tab.active(pathname);
           return (
             <li key={tab.to}>

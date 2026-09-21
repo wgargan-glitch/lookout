@@ -32,10 +32,12 @@ export const useTerritory = create<TerritoryState>()(
 
 /** First visit: pick from timezone. After that the switcher wins. */
 export function useDetectTerritory() {
-  const chosen = useTerritory((s) => s.chosen);
   const setTerritory = useTerritory((s) => s.setTerritory);
   useEffect(() => {
-    if (chosen) return;
-    setTerritory(detectTerritory());
-  }, [chosen, setTerritory]);
+    const apply = () => {
+      if (!useTerritory.getState().chosen) setTerritory(detectTerritory());
+    };
+    if (useTerritory.persist.hasHydrated()) apply();
+    return useTerritory.persist.onFinishHydration(apply);
+  }, [setTerritory]);
 }

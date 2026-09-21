@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import type { Park } from "@/lib/catalog";
+import { parkPlace, type Park } from "@/lib/catalog";
+import { useLocale, useT } from "@/lib/use-locale";
 
 export function ParkCard({ park, count }: { park: Park; count?: number }) {
-  const place = park.region === park.state ? park.state : `${park.region} · ${park.state}`;
+  const locale = useLocale((s) => s.id);
+  const t = useT();
+  const place = parkPlace(park, locale);
   return (
     <Link
       to="/parks/$parkSlug"
@@ -19,7 +22,7 @@ export function ParkCard({ park, count }: { park: Park; count?: number }) {
         <p className="font-display text-2xl font-medium">{park.name}</p>
         <p className="text-sm text-primary-foreground/80">
           {place}
-          {typeof count === "number" ? ` · ${count} ${count === 1 ? "car" : "cars"}` : ""}
+          {typeof count === "number" ? ` · ${count} ${count === 1 ? t("parks.car") : t("parks.cars")}` : ""}
         </p>
       </div>
     </Link>

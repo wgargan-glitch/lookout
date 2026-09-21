@@ -1,19 +1,23 @@
 export const TERRITORY_IDS = ["us", "europe", "latam", "canada", "anz", "southern-africa"] as const;
 export type TerritoryId = (typeof TERRITORY_IDS)[number];
 
-export type Territory = {
-  id: TerritoryId;
+export type TerritoryCopy = {
   name: string;
   shortLabel: string;
-  published: boolean;
   kicker: string;
   headline: string;
   intro: string;
   parksIntro: string;
-  heroImage: string;
   heroAlt: string;
   emptyCars: string;
   hostCta: string;
+};
+
+export type Territory = TerritoryCopy & {
+  id: TerritoryId;
+  published: boolean;
+  heroImage: string;
+  es?: TerritoryCopy;
 };
 
 /** Add a row here when a new geography opens. The switcher and geo-detect pick it up. */
@@ -32,6 +36,18 @@ export const TERRITORIES: Territory[] = [
     heroAlt: "A local 4x4 at a park trailhead, fire lookout on the ridge",
     emptyCars: "No cars match those filters.",
     hostCta: "List a car at the gate",
+    es: {
+      name: "Estados Unidos",
+      shortLabel: "EE.UU.",
+      kicker: "Autos particulares en la puerta del parque",
+      headline: "Un auto local. En el sendero.",
+      intro: "Pide un Bronco en Yosemite, un Sprinter en Joshua Tree, un 911 para el borde. Los anfitriones viven en el pueblo de al lado.",
+      parksIntro:
+        "Cada parque nacional oficial de EE.UU., con entrega en el pueblo de acceso — no en el aeropuerto. Los parques remotos de Alaska se recogen en Fairbanks, Healy o Seward.",
+      heroAlt: "Un 4x4 local en la entrada de un parque, torre de vigía en la cresta",
+      emptyCars: "Ningún auto coincide con esos filtros.",
+      hostCta: "Publica un auto en la puerta",
+    },
   },
   {
     id: "europe",
@@ -47,6 +63,18 @@ export const TERRITORIES: Territory[] = [
     heroAlt: "A Highland loch and a single-track road toward the park",
     emptyCars: "Hosts near these parks are still joining. Guest trips are not open yet — you can list a car if you live in a gateway town.",
     hostCta: "List a car in a gateway town",
+    es: {
+      name: "Europa",
+      shortLabel: "Europa",
+      kicker: "Abriendo en los parques de Europa",
+      headline: "Un auto local. En el sendero.",
+      intro: "Llaves en Aviemore, Torla, Bohinj, Lom. Europa no tiene un solo servicio de parques: cada país nombra los suyos. Listamos los que se llegan en auto.",
+      parksIntro:
+        "Los parques de Europa son nacionales solo de nombre: Francia, España, Noruega, el Reino Unido y el resto designan los suyos. Lookout mapea los de acceso por carretera, con un pueblo para las llaves. Los viajes de huéspedes aún no están abiertos.",
+      heroAlt: "Un loch de las Highlands y un camino de un solo carril hacia el parque",
+      emptyCars: "Los anfitriones cerca de estos parques todavía se están sumando. Los viajes de huéspedes aún no están abiertos: puedes publicar un auto si vives en un pueblo de acceso.",
+      hostCta: "Publica un auto en un pueblo de acceso",
+    },
   },
   {
     id: "latam",
@@ -62,6 +90,18 @@ export const TERRITORIES: Territory[] = [
     heroAlt: "A gravel Patagonian road toward granite spires",
     emptyCars: "Hosts near these parks are still joining. Guest trips are not open yet — you can list a car if you live in a gateway town.",
     hostCta: "List a car in a gateway town",
+    es: {
+      name: "América Latina",
+      shortLabel: "LatAm",
+      kicker: "De Baja a la Patagonia",
+      headline: "Un auto local. En el sendero.",
+      intro: "Deja la casa rodante en Creel, El Calafate, Puerto Natales, Quepos. Lleva un auto que ya conoce el ripio.",
+      parksIntro:
+        "No hay un solo servicio de parques de México a Tierra del Fuego. Lookout mapea los de acceso por carretera — Baja, los Andes, las chapadas de Brasil, la Patagonia — con un pueblo para las llaves. Los viajes de huéspedes aún no están abiertos.",
+      heroAlt: "Un camino de ripio en la Patagonia hacia torres de granito",
+      emptyCars: "Los anfitriones cerca de estos parques todavía se están sumando. Los viajes de huéspedes aún no están abiertos: puedes publicar un auto si vives en un pueblo de acceso.",
+      hostCta: "Publica un auto en un pueblo de acceso",
+    },
   },
   {
     id: "canada",
@@ -77,6 +117,18 @@ export const TERRITORIES: Territory[] = [
     heroAlt: "A parkway beside a turquoise lake in the Canadian Rockies",
     emptyCars: "Hosts near these parks are still joining. Guest trips are not open yet — you can list a car if you live in a gateway town.",
     hostCta: "List a car in a gateway town",
+    es: {
+      name: "Canadá",
+      shortLabel: "Canadá",
+      kicker: "Abriendo en Parks Canada",
+      headline: "Un auto local. En el sendero.",
+      intro: "Banff, Tofino, Rocky Harbour. La casa rodante se queda en el predio. Un auto local hace Icefields y la costa.",
+      parksIntro:
+        "Parks Canada es otro mapa. Lookout lista los parques de acceso por carretera con un pueblo para las llaves: las Rocosas, ambas costas, las praderas. Los viajes de huéspedes aún no están abiertos.",
+      heroAlt: "Una carretera junto a un lago turquesa en las Rocosas canadienses",
+      emptyCars: "Los anfitriones cerca de estos parques todavía se están sumando. Los viajes de huéspedes aún no están abiertos: puedes publicar un auto si vives en un pueblo de acceso.",
+      hostCta: "Publica un auto en un pueblo de acceso",
+    },
   },
   {
     id: "anz",
@@ -92,6 +144,18 @@ export const TERRITORIES: Territory[] = [
     heroAlt: "An outback highway toward a sandstone monolith at dusk",
     emptyCars: "Hosts near these parks are still joining. Guest trips are not open yet — you can list a car if you live in a gateway town.",
     hostCta: "List a car in a gateway town",
+    es: {
+      name: "Australia y Nueva Zelanda",
+      shortLabel: "Aus y NZ",
+      kicker: "Para grey nomads y campervans",
+      headline: "Un auto local. En el sendero.",
+      intro: "Deja la van en Yulara, Te Anau, Exmouth. Pide algo más chico para el camino del cañón y el estacionamiento que no está hecho para un motorhome de 7 metros.",
+      parksIntro:
+        "Australia y Nueva Zelanda son los otros grandes países de motorhome. Lookout mapea los parques de acceso por carretera — el centro rojo, ambas islas, Tasmania — con un pueblo para las llaves. Los viajes de huéspedes aún no están abiertos.",
+      heroAlt: "Una carretera del outback hacia un monolito de arenisca al atardecer",
+      emptyCars: "Los anfitriones cerca de estos parques todavía se están sumando. Los viajes de huéspedes aún no están abiertos: puedes publicar un auto si vives en un pueblo de acceso.",
+      hostCta: "Publica un auto en un pueblo de acceso",
+    },
   },
   {
     id: "southern-africa",
@@ -107,15 +171,43 @@ export const TERRITORIES: Territory[] = [
     heroAlt: "A red earth track through acacia bushveld",
     emptyCars: "Hosts near these parks are still joining. Guest trips are not open yet — you can list a car if you live in a gateway town.",
     hostCta: "List a car in a gateway town",
+    es: {
+      name: "África austral",
+      shortLabel: "Áfr. austral",
+      kicker: "En el circuito self-drive",
+      headline: "Un auto local. En el sendero.",
+      intro: "Kruger, Sossusvlei, Chobe, Garden Route. Deja el camper en el campamento. Lleva un auto que ya conoce un camino de ripio.",
+      parksIntro:
+        "El sur de África es un circuito self-drive, no un solo servicio de parques. Lookout mapea de Kruger al Cabo, Namibia, Botsuana y las Cataratas — con un pueblo para las llaves. Los viajes de huéspedes aún no están abiertos.",
+      heroAlt: "Un camino de tierra roja entre acacias",
+      emptyCars: "Los anfitriones cerca de estos parques todavía se están sumando. Los viajes de huéspedes aún no están abiertos: puedes publicar un auto si vives en un pueblo de acceso.",
+      hostCta: "Publica un auto en un pueblo de acceso",
+    },
   },
 ];
-
 export function territoryById(id: TerritoryId | string): Territory {
   return TERRITORIES.find((t) => t.id === id) ?? TERRITORIES[0]!;
 }
 
 export function isTerritoryId(value: string): value is TerritoryId {
   return (TERRITORY_IDS as readonly string[]).includes(value);
+}
+
+export function localizedTerritory(territory: Territory, locale: string): Territory {
+  if (locale !== "es" || !territory.es) return territory;
+  const es = territory.es;
+  return {
+    ...territory,
+    name: es.name,
+    shortLabel: es.shortLabel,
+    kicker: es.kicker,
+    headline: es.headline,
+    intro: es.intro,
+    parksIntro: es.parksIntro,
+    heroAlt: es.heroAlt,
+    emptyCars: es.emptyCars,
+    hostCta: es.hostCta,
+  };
 }
 
 const EUROPE_TZ = [

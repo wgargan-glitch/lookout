@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ParkCard } from "@/components/parks/park-card";
 import { Input } from "@/components/ui/input";
+import { parkPlace } from "@/lib/catalog";
 import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
+import { useLocale, useT } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
 type ParksSearch = {
@@ -19,7 +21,9 @@ export const Route = createFileRoute("/parks/")({
 });
 
 function ParksPage() {
-  const { parks: allParks, cars, regionFilters, territory } = useTerritoryCatalog();
+  const { parks: allParks, cars, regionFilters, territory, locale } = useTerritoryCatalog();
+  const t = useT();
+  const loc = useLocale((s) => s.id);
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const [q, setQ] = useState(search.q ?? "");
@@ -32,15 +36,15 @@ function ParksPage() {
   const parks = useMemo(() => {
     const query = (search.q ?? q).trim().toLowerCase();
     return [...allParks]
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => a.name.localeCompare(b.name, loc === "es" ? "es" : "en"))
       .filter((park) => {
         if (regionFilter && !(regionFilter.match as readonly string[]).includes(park.region)) return false;
         if (!query) return true;
-        return `${park.name} ${park.state} ${park.region} ${park.pickupTown} ${park.tagline}`
+        return `${park.name} ${park.state} ${park.region} ${parkPlace(park, locale)} ${park.pickupTown} ${park.tagline}`
           .toLowerCase()
           .includes(query);
       });
-  }, [q, search.q, regionFilter, allParks]);
+  }, [q, search.q, regionFilter, allParks, locale, loc]);
 
   function patch(next: ParksSearch) {
     void navigate({
@@ -53,9 +57,9 @@ function ParksPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
-      <p className="text-sm font-medium tracking-wide text-sage uppercase">The map</p>
+      <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("parks.kicker")}</p>
       <h1 className="mt-1 font-display text-4xl md:text-5xl">
-        {allParks.length} parks. A town at the gate.
+        {t("parks.title", { n: allParks.length })}
       </h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
         {territory.parksIntro}
@@ -64,8 +68,8 @@ function ParksPage() {
       <div className="mt-8 space-y-4">
         <Input
           value={q}
-          placeholder="Search a park, country, or town"
-          aria-label="Search parks"
+          placeholder={t("parks.search")}
+          aria-label={t("parks.search")}
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") patch({ q });
@@ -85,7 +89,7 @@ function ParksPage() {
                 : "border-border bg-card",
             )}
           >
-            All regions
+            {t("parks.allRegions")}
           </button>
           {regionFilters.map((region) => (
             <button
@@ -106,12 +110,12 @@ function ParksPage() {
       </div>
 
       <p className="mt-6 text-sm text-muted-foreground">
-        {parks.length} {parks.length === 1 ? "park" : "parks"}
-        {regionFilter ? ` in ${regionFilter.label}` : ""}
+        {parks.length} {parks.length === 1 ? t("parks.one") : t("parks.many")}
+        {regionFilter ? t("parks.inRegion", { region: regionFilter.label }) : ""}
       </p>
 
       {parks.length === 0 ? (
-        <p className="mt-8 text-muted-foreground">No parks match that search.</p>
+        <p className="mt-8 text-muted-foreground">{t("parks.empty")}</p>
       ) : (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {parks.map((park) => (

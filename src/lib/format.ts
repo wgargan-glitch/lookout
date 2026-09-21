@@ -1,3 +1,9 @@
+let formatLocale = "en-US";
+
+export function setFormatLocale(locale: string) {
+  formatLocale = locale || "en-US";
+}
+
 export function formatMoney(cents: number) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -16,7 +22,7 @@ export function formatMoneyExact(cents: number) {
 export function formatDate(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(y, m - 1, d));
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(formatLocale, {
     month: "short",
     day: "numeric",
     year: "numeric",

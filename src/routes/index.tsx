@@ -9,6 +9,7 @@ import { carTitle, isOverlandCar } from "@/lib/catalog";
 import { formatMoney } from "@/lib/format";
 import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
 import { useStandalone } from "@/lib/use-install-prompt";
+import { useT } from "@/lib/use-locale";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { parks, cars, featured: homeParks, territory } = useTerritoryCatalog();
+  const t = useT();
   const featuredIds = [
     "bronco-yosemite",
     "wrangler-grand-canyon",
@@ -59,9 +61,9 @@ function Home() {
       <section className="border-b border-border bg-card">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-8 md:grid-cols-3">
           {[
-            { icon: MapPinned, title: `${parks.length} parks`, body: territory.parksIntro },
-            { icon: KeyRound, title: "Keys from locals", body: "Hosts who know which overlook still has shade, and which road is still closed." },
-            { icon: Shield, title: "Meet at the gate", body: "Pickup in the next town over. Keys from someone who knows the road." },
+            { icon: MapPinned, title: t("home.parksCount", { n: parks.length }), body: territory.parksIntro },
+            { icon: KeyRound, title: t("home.keysTitle"), body: t("home.keysBody") },
+            { icon: Shield, title: t("home.meetTitle"), body: t("home.meetBody") },
           ].map((item) => (
             <div key={item.title} className="flex gap-3">
               <item.icon className="mt-0.5 size-5 shrink-0 text-primary" />
@@ -77,12 +79,12 @@ function Home() {
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-medium tracking-wide text-sage uppercase">The map</p>
-            <h2 className="mt-1 font-display text-3xl md:text-4xl">Parks with a driveway next door</h2>
+            <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("home.mapKicker")}</p>
+            <h2 className="mt-1 font-display text-3xl md:text-4xl">{t("home.mapTitle")}</h2>
           </div>
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
             <Link to="/parks">
-              All parks <ArrowRight />
+              {t("home.allParks")} <ArrowRight />
             </Link>
           </Button>
         </div>
@@ -98,12 +100,12 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-medium tracking-wide text-sage uppercase">In the lot</p>
-              <h2 className="mt-1 font-display text-3xl md:text-4xl">Cars the visitors bureau will not mention</h2>
+              <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("home.lotKicker")}</p>
+              <h2 className="mt-1 font-display text-3xl md:text-4xl">{t("home.lotTitle")}</h2>
             </div>
             <Button asChild variant="ghost">
               <Link to="/cars">
-                Browse all <ArrowRight />
+                {t("home.browseAll")} <ArrowRight />
               </Link>
             </Button>
           </div>
@@ -121,8 +123,8 @@ function Home() {
       ) : (
       <section className="bg-secondary/60">
         <div className="mx-auto max-w-6xl px-4 py-16">
-          <p className="text-sm font-medium tracking-wide text-sage uppercase">In the lot</p>
-          <h2 className="mt-1 font-display text-3xl md:text-4xl">Hosts are still pulling in</h2>
+          <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("home.lotKicker")}</p>
+          <h2 className="mt-1 font-display text-3xl md:text-4xl">{t("home.hostsTitle")}</h2>
           <p className="mt-3 max-w-xl text-muted-foreground">{territory.emptyCars}</p>
           <Button asChild className="mt-6">
             <Link to="/host">{territory.hostCta}</Link>
@@ -133,8 +135,8 @@ function Home() {
 
       {overland.length >= 2 ? (
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <p className="text-sm font-medium tracking-wide text-sage uppercase">Overland & camp</p>
-        <h2 className="mt-1 font-display text-3xl md:text-4xl">Sleep where the road ends</h2>
+        <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("home.overlandKicker")}</p>
+        <h2 className="mt-1 font-display text-3xl md:text-4xl">{t("home.overlandTitle")}</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {overland.slice(0, 2).map((car) => {
             const park = parks.find((p) => p.slug === car.parkSlug);
@@ -154,7 +156,7 @@ function Home() {
                 <div className="absolute inset-x-0 bottom-0 p-5 text-primary-foreground">
                   <p className="font-display text-2xl">{carTitle(car)}</p>
                   <p className="text-sm text-primary-foreground/80">
-                    {park?.name} · {formatMoney(car.dailyCents)} / day
+                    {park?.name} · {formatMoney(car.dailyCents)} {t("home.day")}
                   </p>
                 </div>
               </Link>
@@ -167,9 +169,9 @@ function Home() {
       <section className="border-y border-border bg-card">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-3">
           {[
-            { n: "01", t: "Pick a park", d: `${parks.length} parks, each with a gateway town. Search dates the way you would a campsite.` },
-            { n: "02", t: "Book a neighbor's car", d: territory.published ? "Instant book on most listings. You’ll add protection when you reserve. Keys at a porch, lot, or lockbox." : "Guest trips here are not open yet. You can still browse parks and, if you live nearby, list a car." },
-            { n: "03", t: "Drive in before the lot fills", d: "Return it washed enough. Unlimited miles. The host lives there — they will tell you if the pass is open." },
+            { n: "01", t: t("home.step1t"), d: t("home.step1d", { n: parks.length }) },
+            { n: "02", t: t("home.step2t"), d: territory.published ? t("home.step2open") : t("home.step2closed") },
+            { n: "03", t: t("home.step3t"), d: t("home.step3d") },
           ].map((step) => (
             <div key={step.n}>
               <p className="font-display text-4xl text-sage">{step.n}</p>
@@ -186,11 +188,9 @@ function Home() {
         <img src="/images/cars/transit-yosemite.jpg" alt="" className="absolute inset-0 size-full object-cover" />
         <div className="absolute inset-0 bg-ink/60" />
         <div className="relative mx-auto max-w-6xl px-4 py-24 text-primary-foreground">
-          <p className="text-sm font-medium tracking-wide uppercase text-primary-foreground/70">For hosts</p>
-          <h2 className="mt-2 max-w-xl font-display text-4xl md:text-5xl">Your driveway is a trailhead.</h2>
-          <p className="mt-4 max-w-lg text-primary-foreground/80">
-            List the 4Runner that already lives by the gate. You set the daily rate. Guests pay trip cover.
-          </p>
+          <p className="text-sm font-medium tracking-wide uppercase text-primary-foreground/70">{t("home.hostsKicker")}</p>
+          <h2 className="mt-2 max-w-xl font-display text-4xl md:text-5xl">{t("home.hostsHeadline")}</h2>
+          <p className="mt-4 max-w-lg text-primary-foreground/80">{t("home.hostsBody")}</p>
           <Button asChild size="lg" className="mt-8 bg-card text-foreground hover:bg-secondary">
             <Link to="/host">{territory.hostCta}</Link>
           </Button>
@@ -202,17 +202,16 @@ function Home() {
 
 function AppPromo() {
   const standalone = useStandalone();
+  const t = useT();
   if (standalone) return null;
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2">
       <div>
-        <p className="text-sm font-medium tracking-wide text-sage uppercase">iPhone & Android</p>
-        <h2 className="mt-1 font-display text-3xl md:text-4xl">Take the gate with you.</h2>
-        <p className="mt-3 max-w-xl text-muted-foreground">
-          Lookout installs on your home screen. Bottom tabs for parks, cars, and trips. Same account as the website.
-        </p>
+        <p className="text-sm font-medium tracking-wide text-sage uppercase">{t("home.appKicker")}</p>
+        <h2 className="mt-1 font-display text-3xl md:text-4xl">{t("home.appTitle")}</h2>
+        <p className="mt-3 max-w-xl text-muted-foreground">{t("home.appBody")}</p>
         <Button asChild className="mt-6">
-          <Link to="/get-the-app">Get the iPhone & Android app</Link>
+          <Link to="/get-the-app">{t("home.appCta")}</Link>
         </Button>
       </div>
       <div className="mx-auto w-full max-w-xs">

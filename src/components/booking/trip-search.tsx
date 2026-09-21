@@ -3,8 +3,9 @@ import { type FormEvent, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import type { Park } from "@/lib/catalog";
-import { groupedParks } from "@/lib/catalog";
+import { groupedParks, parkRegionLabel } from "@/lib/catalog";
 import { addDays, toISODate } from "@/lib/format";
+import { useLocale, useT } from "@/lib/use-locale";
 
 export function TripSearch({
   parks,
@@ -20,6 +21,8 @@ export function TripSearch({
   defaultTo?: string;
 }) {
   const navigate = useNavigate();
+  const t = useT();
+  const locale = useLocale((s) => s.id);
   const today = useMemo(() => toISODate(new Date()), []);
   const [park, setPark] = useState(defaultPark ?? "");
   const [from, setFrom] = useState(defaultFrom ?? addDays(today, 1));
@@ -47,16 +50,16 @@ export function TripSearch({
       }
     >
       <div className="space-y-1.5">
-        <Label htmlFor="park">Park</Label>
+        <Label htmlFor="park">{t("search.park")}</Label>
         <select
           id="park"
           value={park}
           onChange={(e) => setPark(e.target.value)}
           className="flex h-11 w-full rounded-md border border-input bg-card px-3 text-sm"
         >
-          <option value="">Any park</option>
+          <option value="">{t("search.anyPark")}</option>
           {groupedParks(parks).map((group) => (
-            <optgroup key={group.region} label={group.region}>
+            <optgroup key={group.region} label={parkRegionLabel(group.region, locale)}>
               {group.parks.map((p) => (
                 <option key={p.slug} value={p.slug}>
                   {p.name}, {p.state}
@@ -67,7 +70,7 @@ export function TripSearch({
         </select>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="from">Pickup</Label>
+        <Label htmlFor="from">{t("search.pickup")}</Label>
         <input
           id="from"
           type="date"
@@ -81,7 +84,7 @@ export function TripSearch({
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="to">Return</Label>
+        <Label htmlFor="to">{t("search.return")}</Label>
         <input
           id="to"
           type="date"
@@ -92,7 +95,7 @@ export function TripSearch({
         />
       </div>
       <Button type="submit" size="lg" className="w-full md:w-auto">
-        Show cars
+        {t("search.showCars")}
       </Button>
     </form>
   );
