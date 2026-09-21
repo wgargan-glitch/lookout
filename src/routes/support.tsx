@@ -52,7 +52,7 @@ function SupportPage() {
       <p className="text-sm font-medium tracking-wide text-sage uppercase">Help desk</p>
       <h1 className="mt-1 font-display text-4xl">Ask the rangers</h1>
       <p className="mt-2 text-muted-foreground">
-        Bookings, listings, pickup pins, protection. Admin watches this queue from the ranger desk.
+        Bookings, listings, pickup pins, protection. We’ll write back on this page.
       </p>
 
       <Card className="mt-8 p-6">

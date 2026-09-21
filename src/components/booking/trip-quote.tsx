@@ -6,11 +6,7 @@ export function TripQuoteLines({ quote }: { quote: TripQuote }) {
     <dl className="space-y-1.5 text-sm">
       <div className="flex justify-between gap-3">
         <dt>Trip · {quote.days} days</dt>
-        <dd className="tabular-nums">{formatMoney(quote.tripCents)}</dd>
-      </div>
-      <div className="flex justify-between gap-3 text-muted-foreground">
-        <dt>Lookout service fee</dt>
-        <dd className="tabular-nums">{formatMoney(quote.serviceCents)}</dd>
+        <dd className="tabular-nums">{formatMoney(quote.tripCents + quote.serviceCents)}</dd>
       </div>
       <div className="flex justify-between gap-3 text-muted-foreground">
         <dt>{TRIP_LIABILITY.name}</dt>

@@ -5,10 +5,6 @@ export const en = {
   langName: "English",
   region: "Region",
   language: "Language",
-  preview: "preview",
-  planningFor: "Planning for",
-  previewBanner:
-    "{name} is in preview — parks are listed, guest trips are not open yet. Switch region anytime to plan.",
   nav: {
     parks: "Parks",
     cars: "Cars",
@@ -23,8 +19,7 @@ export const en = {
     you: "You",
   },
   footer: {
-    blurb:
-      "Peer-to-peer cars from people who live at the park gate. Switch region anytime — US is live; the others are maps you can plan against.",
+    blurb: "Peer-to-peer cars from people who live at the park gate. Switch region anytime.",
     explore: "Explore",
     account: "Account",
     allCars: "All cars",
@@ -64,10 +59,8 @@ export const en = {
     step1t: "Pick a park",
     step1d: "{n} parks, each with a gateway town. Search dates the way you would a campsite.",
     step2t: "Book a neighbor's car",
-    step2open:
+    step2d:
       "Instant book on most listings. You’ll add protection when you reserve. Keys at a porch, lot, or lockbox.",
-    step2closed:
-      "Guest trips here are not open yet. You can still browse parks and, if you live nearby, list a car.",
     step3t: "Drive in before the lot fills",
     step3d: "Return it washed enough. Unlimited miles. The host lives there — they will tell you if the pass is open.",
     hostsKicker: "For hosts",
@@ -92,7 +85,7 @@ export const en = {
     car: "car",
     cars: "cars",
     filterPark: "Filter this park",
-    noListings: "No listings here yet. If you live in {town}, you can list a car while this region opens.",
+    noListings: "No listings here yet. If you live in {town}, you can list a car.",
     acres: "acres",
     ha: "ha",
     est: "est.",
@@ -158,10 +151,6 @@ export const es: typeof en = {
   langName: "Español",
   region: "Región",
   language: "Idioma",
-  preview: "vista previa",
-  planningFor: "Planeando para",
-  previewBanner:
-    "{name} está en vista previa: los parques ya están en el mapa, los viajes de huéspedes aún no. Cambia de región cuando quieras para planear.",
   nav: {
     parks: "Parques",
     cars: "Autos",
@@ -176,8 +165,7 @@ export const es: typeof en = {
     you: "Tú",
   },
   footer: {
-    blurb:
-      "Autos de gente que vive a la puerta del parque. Cambia de región cuando quieras: Estados Unidos ya está abierto; el resto son mapas para planear.",
+    blurb: "Autos de gente que vive a la puerta del parque. Cambia de región cuando quieras.",
     explore: "Explorar",
     account: "Cuenta",
     allCars: "Todos los autos",
@@ -217,10 +205,8 @@ export const es: typeof en = {
     step1t: "Elige un parque",
     step1d: "{n} parques, cada uno con un pueblo de acceso. Busca fechas como si reservaras un camping.",
     step2t: "Reserva el auto de un vecino",
-    step2open:
+    step2d:
       "La mayoría se reserva al instante. Agregas la protección del viaje al confirmar. Llaves en un porche, un lote o un lockbox.",
-    step2closed:
-      "Los viajes de huéspedes aquí todavía no están abiertos. Puedes recorrer parques y, si vives cerca, publicar un auto.",
     step3t: "Entra antes de que se llene el estacionamiento",
     step3d: "Devuélvelo razonablemente limpio. Kilómetros libres. El anfitrión vive ahí: te va a decir si el paso está abierto.",
     hostsKicker: "Para anfitriones",
@@ -245,7 +231,7 @@ export const es: typeof en = {
     car: "auto",
     cars: "autos",
     filterPark: "Filtrar este parque",
-    noListings: "Todavía no hay autos aquí. Si vives en {town}, puedes publicar uno mientras se abre la región.",
+    noListings: "Todavía no hay autos aquí. Si vives en {town}, puedes publicar uno.",
     acres: "acres",
     ha: "ha",
     est: "fundado",

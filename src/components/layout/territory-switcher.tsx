@@ -37,7 +37,6 @@ export function TerritorySwitcher({
           return (
             <option key={item.id} value={item.id}>
               {label.shortLabel}
-              {item.published ? "" : ` · ${t("preview")}`}
             </option>
           );
         })}

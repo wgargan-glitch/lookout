@@ -43,7 +43,7 @@ function AdminPage() {
     return (
       <main className="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 className="font-display text-3xl">Ranger desk is locked.</h1>
-        <p className="mt-2 text-sm text-muted-foreground">This account is not admin. The first Lookout account on a fresh site is the desk.</p>
+        <p className="mt-2 text-sm text-muted-foreground">This page is for Lookout staff.</p>
         <Button asChild className="mt-6">
           <Link to="/account">Back to account</Link>
         </Button>

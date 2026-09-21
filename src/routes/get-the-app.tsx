@@ -1,11 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Share, Smartphone } from "lucide-react";
+import { Share, Smartphone } from "lucide-react";
 import { PhoneDuo } from "@/components/layout/phone-frame";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { OWNER_CHECKLIST, STORE_APP_ID, STORE_LISTING } from "@/lib/store-kit";
 import { useInstallPrompt } from "@/lib/use-install-prompt";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/get-the-app")({
   component: GetTheAppPage,
@@ -56,8 +54,8 @@ function GetTheAppPage() {
             <p className="text-sm font-medium tracking-wide text-sage uppercase">iPhone & Android</p>
             <h1 className="mt-1 font-display text-4xl md:text-5xl">Lookout on your phone.</h1>
             <p className="mt-4 max-w-xl text-muted-foreground">
-              Parks, cars, and trips as a home-screen app today. Store listings are wrapped and waiting
-              on Apple and Google developer accounts — no Mac required to compile the iPhone app.
+              Parks, cars, and trips as a home-screen app. Same account as the website — your bookings
+              and listings come with you.
             </p>
             {installed ? (
               <p className="mt-6 text-sm font-medium text-primary">Lookout is already on this phone.</p>
@@ -71,12 +69,9 @@ function GetTheAppPage() {
                 )}
               </div>
             )}
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4">
               <Button asChild variant="outline">
                 <Link to="/parks">Browse parks</Link>
-              </Button>
-              <Button asChild variant="ghost">
-                <a href="#stores">Store wrap</a>
               </Button>
             </div>
           </div>
@@ -84,10 +79,10 @@ function GetTheAppPage() {
         </div>
       </section>
 
-      <section id="install" className="border-b border-border bg-card">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-14 md:grid-cols-2">
+      <section id="install" className="mx-auto max-w-6xl px-4 py-14">
+        <div className="grid gap-6 md:grid-cols-2">
           <Card className="p-6">
-            <p className="text-sm font-medium tracking-wide text-sage uppercase">iPhone · today</p>
+            <p className="text-sm font-medium tracking-wide text-sage uppercase">iPhone</p>
             <h2 className="mt-1 font-display text-2xl">Safari, then the share sheet</h2>
             <ol className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li>1. Open Lookout in Safari (Chrome on iPhone cannot install it).</li>
@@ -102,11 +97,11 @@ function GetTheAppPage() {
             </Button>
           </Card>
           <Card className="p-6">
-            <p className="text-sm font-medium tracking-wide text-sage uppercase">Android · today</p>
+            <p className="text-sm font-medium tracking-wide text-sage uppercase">Android</p>
             <h2 className="mt-1 font-display text-2xl">Chrome, then Install app</h2>
             <ol className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li>1. Open Lookout in Chrome.</li>
-              <li>2. If you see Install Lookout, tap it — that is the real Android install prompt.</li>
+              <li>2. If you see Install Lookout, tap it.</li>
               <li>3. Otherwise: Chrome menu → Install app, or Add to Home screen.</li>
               <li>4. It installs with the Lookout icon. Same account, same trips.</li>
             </ol>
@@ -116,112 +111,11 @@ function GetTheAppPage() {
               </Button>
             ) : (
               <p className="mt-6 text-sm text-muted-foreground">
-                The Android install button appears in Chrome once Lookout is opened over a secure connection.
+                Open Lookout in Chrome on Android to install it on your home screen.
               </p>
             )}
           </Card>
         </div>
-      </section>
-
-      <section id="stores" className="mx-auto max-w-6xl px-4 py-14">
-        <p className="text-sm font-medium tracking-wide text-sage uppercase">App Store & Play Store</p>
-        <h2 className="mt-1 font-display text-3xl md:text-4xl">The wrap is built. You enroll.</h2>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
-          Apple and Google will not take a website. Lookout now has native shells (bundle id{" "}
-          <span className="font-medium text-foreground">{STORE_APP_ID}</span>
-          ), store icons, screenshots, privacy, terms, and account deletion. iPhone compiles in the
-          cloud — you do not need a Mac. The listings go live after your developer accounts are approved.
-        </p>
-
-        <ul className="mt-8 grid gap-3 md:grid-cols-2">
-          {OWNER_CHECKLIST.map((item) => (
-            <li key={item.id}>
-              <Card className="flex h-full gap-3 p-5">
-                <span
-                  className={cn(
-                    "mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full",
-                    item.done ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground",
-                  )}
-                  aria-hidden
-                >
-                  {item.done ? <Check className="size-3.5" /> : <span className="text-xs font-medium">You</span>}
-                </span>
-                <div>
-                  <p className="font-medium">{item.title}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{item.detail}</p>
-                </div>
-              </Card>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Card className="p-6">
-            <p className="text-sm font-medium tracking-wide text-sage uppercase">iPhone</p>
-            <h3 className="mt-1 font-display text-2xl">Apple Developer Program</h3>
-            <p className="mt-3 text-sm text-muted-foreground">
-              $99 per year. Enroll as an individual at developer.apple.com/programs. After Apple
-              approves, send the Team ID. Cloud Xcode (Xcode 26) archives the wrap; TestFlight is the
-              first install on your phone.
-            </p>
-            <Button asChild className="mt-6" variant="outline">
-              <a href="https://developer.apple.com/programs/" target="_blank" rel="noreferrer">
-                Open Apple enrollment
-              </a>
-            </Button>
-          </Card>
-          <Card className="p-6">
-            <p className="text-sm font-medium tracking-wide text-sage uppercase">Android</p>
-            <h3 className="mt-1 font-display text-2xl">Google Play Console</h3>
-            <p className="mt-3 text-sm text-muted-foreground">
-              $25 one-time. Identity check usually takes a day or two. We upload a signed Android App
-              Bundle ({STORE_APP_ID}) to a testing track, then production.
-            </p>
-            <Button asChild className="mt-6" variant="outline">
-              <a href="https://play.google.com/console" target="_blank" rel="noreferrer">
-                Open Play Console
-              </a>
-            </Button>
-          </Card>
-        </div>
-
-        <Card className="mt-8 p-6">
-          <h3 className="font-display text-2xl">What reviewers will see</h3>
-          <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-            <div>
-              <dt className="text-muted-foreground">Name</dt>
-              <dd className="font-medium">Lookout — {STORE_LISTING.subtitle}</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Category / age</dt>
-              <dd className="font-medium">Travel · {STORE_LISTING.ageRating}</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Privacy</dt>
-              <dd>
-                <Link to="/privacy" className="underline">
-                  Privacy policy
-                </Link>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Terms</dt>
-              <dd>
-                <Link to="/terms" className="underline">
-                  Terms of service
-                </Link>
-              </dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Demo login</dt>
-              <dd className="font-medium">Create with email on Sign in — no special account required.</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">iPhone sign-in</dt>
-              <dd className="font-medium">Email and password only (no Google/X), so Sign in with Apple is not required.</dd>
-            </div>
-          </dl>
-        </Card>
       </section>
     </main>
   );

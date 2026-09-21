@@ -59,15 +59,14 @@ export function OwnInsurancePanel({
 
   function connect() {
     setStatus("unavailable");
-    toast("We can’t verify a personal policy yet. Pick a Lookout plan to finish booking.");
+    toast("We couldn’t confirm a personal policy for this trip. Pick a Lookout plan to finish booking.");
   }
 
   return (
     <div className="rounded-lg border border-border p-3 text-sm">
       <p className="font-medium">Use your own insurance?</p>
       <p className="mt-1 text-xs text-muted-foreground">
-        If we can confirm your policy covers this trip, you may skip a Lookout damage plan. That
-        check isn’t live yet.
+        If we can confirm your policy covers this trip, you may skip a Lookout damage plan.
       </p>
       <Button type="button" variant="outline" size="sm" className="mt-3" onClick={connect}>
         Check my policy

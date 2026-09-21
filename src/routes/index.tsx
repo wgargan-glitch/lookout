@@ -170,7 +170,7 @@ function Home() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-3">
           {[
             { n: "01", t: t("home.step1t"), d: t("home.step1d", { n: parks.length }) },
-            { n: "02", t: t("home.step2t"), d: territory.published ? t("home.step2open") : t("home.step2closed") },
+            { n: "02", t: t("home.step2t"), d: t("home.step2d") },
             { n: "03", t: t("home.step3t"), d: t("home.step3d") },
           ].map((step) => (
             <div key={step.n}>

@@ -9,7 +9,6 @@ export const STORE_LISTING = {
     "Lookout is a peer-to-peer car marketplace for trips to America's national parks. Hosts keep a vehicle in the gateway town. Guests book dates and meet at the gate — not at an airport counter.",
     "Browse all 63 parks, filter overland rigs, vans, trucks, and electric cars, and keep trips on the same account as the website.",
     "When you reserve, you pick trip protection for that booking. Lookout is not affiliated with the National Park Service.",
-    "Card charges are not live yet. Booking confirms the reservation; payment processing ships when Stripe is connected.",
   ].join("\n\n"),
   keywords: "national parks,car rental,Turo,overland,road trip,Yosemite,camping",
   supportUrl: "/support",

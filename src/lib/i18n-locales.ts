@@ -4,10 +4,6 @@ export const pt: Messages = {
   langName: "Português",
   region: "Região",
   language: "Idioma",
-  preview: "prévia",
-  planningFor: "Planejando para",
-  previewBanner:
-    "{name} está em prévia — os parques já estão no mapa, as viagens de hóspedes ainda não. Troque de região quando quiser para planejar.",
   nav: {
     parks: "Parques",
     cars: "Carros",
@@ -22,8 +18,7 @@ export const pt: Messages = {
     you: "Você",
   },
   footer: {
-    blurb:
-      "Carros de quem mora na porta do parque. Troque de região quando quiser: os EUA já estão abertos; o resto é mapa para planejar.",
+    blurb: "Carros de quem mora na porta do parque. Troque de região quando quiser.",
     explore: "Explorar",
     account: "Conta",
     allCars: "Todos os carros",
@@ -63,10 +58,8 @@ export const pt: Messages = {
     step1t: "Escolha um parque",
     step1d: "{n} parques, cada um com um povoado de acesso. Busque datas como se fosse um camping.",
     step2t: "Reserve o carro de um vizinho",
-    step2open:
+    step2d:
       "A maioria confirma na hora. Você adiciona a proteção da viagem ao reservar. Chaves num alpendre, num pátio ou numa caixa.",
-    step2closed:
-      "As viagens de hóspedes aqui ainda não estão abertas. Você pode ver os parques e, se mora perto, anunciar um carro.",
     step3t: "Entre antes de lotar o estacionamento",
     step3d: "Devolva razoavelmente limpo. Quilometragem livre. O anfitrião mora lá — vai dizer se o passo está aberto.",
     hostsKicker: "Para anfitriões",
@@ -91,7 +84,7 @@ export const pt: Messages = {
     car: "carro",
     cars: "carros",
     filterPark: "Filtrar este parque",
-    noListings: "Ainda não há carros aqui. Se você mora em {town}, pode anunciar um enquanto a região abre.",
+    noListings: "Ainda não há carros aqui. Se você mora em {town}, pode anunciar um.",
     acres: "acres",
     ha: "ha",
     est: "criado em",
@@ -157,10 +150,6 @@ export const fr: Messages = {
   langName: "Français",
   region: "Région",
   language: "Langue",
-  preview: "aperçu",
-  planningFor: "Préparer pour",
-  previewBanner:
-    "{name} est en aperçu — les parcs sont sur la carte, les voyages voyageurs pas encore. Changez de région quand vous voulez pour planifier.",
   nav: {
     parks: "Parcs",
     cars: "Voitures",
@@ -175,8 +164,7 @@ export const fr: Messages = {
     you: "Vous",
   },
   footer: {
-    blurb:
-      "Des voitures de gens qui habitent à la porte du parc. Changez de région quand vous voulez : les États-Unis sont ouverts ; le reste sert à planifier.",
+    blurb: "Des voitures de gens qui habitent à la porte du parc. Changez de région quand vous voulez.",
     explore: "Explorer",
     account: "Compte",
     allCars: "Toutes les voitures",
@@ -216,10 +204,8 @@ export const fr: Messages = {
     step1t: "Choisissez un parc",
     step1d: "{n} parcs, chacun avec un village d’accès. Cherchez des dates comme pour un camping.",
     step2t: "Réservez la voiture d’un voisin",
-    step2open:
+    step2d:
       "La plupart se réservent tout de suite. Vous ajoutez la protection du voyage à la réservation. Clés sur un porche, un parking ou dans un coffre.",
-    step2closed:
-      "Les voyages voyageurs ne sont pas encore ouverts ici. Vous pouvez parcourir les parcs et, si vous habitez près, proposer une voiture.",
     step3t: "Arrivez avant que le parking soit plein",
     step3d: "Rendez-la raisonnablement propre. Kilométrage illimité. L’hôte habite là — il vous dira si le col est ouvert.",
     hostsKicker: "Pour les hôtes",
@@ -244,7 +230,7 @@ export const fr: Messages = {
     car: "voiture",
     cars: "voitures",
     filterPark: "Filtrer ce parc",
-    noListings: "Pas encore d’annonces ici. Si vous habitez à {town}, vous pouvez en proposer une le temps que la région ouvre.",
+    noListings: "Pas encore d’annonces ici. Si vous habitez à {town}, vous pouvez en proposer une.",
     acres: "acres",
     ha: "ha",
     est: "créé en",
@@ -310,10 +296,6 @@ export const de: Messages = {
   langName: "Deutsch",
   region: "Region",
   language: "Sprache",
-  preview: "Vorschau",
-  planningFor: "Planen für",
-  previewBanner:
-    "{name} ist in der Vorschau — Parks sind auf der Karte, Gäste-Trips noch nicht. Region jederzeit wechseln zum Planen.",
   nav: {
     parks: "Parks",
     cars: "Autos",
@@ -328,8 +310,7 @@ export const de: Messages = {
     you: "Du",
   },
   footer: {
-    blurb:
-      "Autos von Leuten, die am Parktor wohnen. Region jederzeit wechseln: die USA sind live; der Rest ist zum Planen.",
+    blurb: "Autos von Leuten, die am Parktor wohnen. Region jederzeit wechseln.",
     explore: "Entdecken",
     account: "Konto",
     allCars: "Alle Autos",
@@ -369,10 +350,8 @@ export const de: Messages = {
     step1t: "Park wählen",
     step1d: "{n} Parks, jeder mit einem Zugangsort. Daten suchen wie für einen Campingplatz.",
     step2t: "Das Auto vom Nachbarn buchen",
-    step2open:
+    step2d:
       "Die meisten buchen sofort. Den Trip-Schutz fügst du bei der Reservierung hinzu. Schlüssel an der Veranda, auf dem Platz oder im Schlüsselkasten.",
-    step2closed:
-      "Gäste-Trips sind hier noch nicht offen. Du kannst Parks ansehen und, wenn du in der Nähe wohnst, ein Auto einstellen.",
     step3t: "Rein, bevor der Parkplatz voll ist",
     step3d: "Gib es halbwegs sauber zurück. Freie Kilometer. Der Gastgeber wohnt da — der sagt dir, ob der Pass offen ist.",
     hostsKicker: "Für Gastgeber",
@@ -397,7 +376,7 @@ export const de: Messages = {
     car: "Auto",
     cars: "Autos",
     filterPark: "Diesen Park filtern",
-    noListings: "Hier gibt es noch keine Autos. Wenn du in {town} wohnst, kannst du eins einstellen, während die Region öffnet.",
+    noListings: "Hier gibt es noch keine Autos. Wenn du in {town} wohnst, kannst du eins einstellen.",
     acres: "Acres",
     ha: "ha",
     est: "seit",
@@ -463,10 +442,6 @@ export const it: Messages = {
   langName: "Italiano",
   region: "Regione",
   language: "Lingua",
-  preview: "anteprima",
-  planningFor: "Stai pianificando",
-  previewBanner:
-    "{name} è in anteprima: i parchi sono sulla mappa, i viaggi degli ospiti non ancora. Cambia regione quando vuoi per pianificare.",
   nav: {
     parks: "Parchi",
     cars: "Auto",
@@ -481,8 +456,7 @@ export const it: Messages = {
     you: "Tu",
   },
   footer: {
-    blurb:
-      "Auto di chi vive alla porta del parco. Cambia regione quando vuoi: gli Stati Uniti sono aperti; il resto è una mappa per pianificare.",
+    blurb: "Auto di chi vive alla porta del parco. Cambia regione quando vuoi.",
     explore: "Esplora",
     account: "Account",
     allCars: "Tutte le auto",
@@ -522,10 +496,8 @@ export const it: Messages = {
     step1t: "Scegli un parco",
     step1d: "{n} parchi, ognuno con un paese di accesso. Cerca le date come faresti per un campeggio.",
     step2t: "Prenota l’auto di un vicino",
-    step2open:
+    step2d:
       "La maggior parte si prenota subito. Aggiungi la protezione del viaggio alla prenotazione. Chiavi su un portico, in un lotto o in una cassetta.",
-    step2closed:
-      "I viaggi degli ospiti qui non sono ancora aperti. Puoi scorrere i parchi e, se vivi vicino, mettere un’auto.",
     step3t: "Entra prima che il parcheggio si riempia",
     step3d: "Riconsegnala abbastanza pulita. Chilometri liberi. L’host vive lì: ti dirà se il passo è aperto.",
     hostsKicker: "Per gli host",
@@ -550,7 +522,7 @@ export const it: Messages = {
     car: "auto",
     cars: "auto",
     filterPark: "Filtra questo parco",
-    noListings: "Ancora nessuna auto qui. Se vivi a {town}, puoi metterne una mentre la regione apre.",
+    noListings: "Ancora nessuna auto qui. Se vivi a {town}, puoi metterne una.",
     acres: "acri",
     ha: "ha",
     est: "istituito",
@@ -616,10 +588,6 @@ export const nl: Messages = {
   langName: "Nederlands",
   region: "Regio",
   language: "Taal",
-  preview: "voorvertoning",
-  planningFor: "Plannen voor",
-  previewBanner:
-    "{name} is in voorvertoning — parken staan op de kaart, gasttrips nog niet. Wissel wanneer je wilt van regio om te plannen.",
   nav: {
     parks: "Parken",
     cars: "Auto’s",
@@ -634,8 +602,7 @@ export const nl: Messages = {
     you: "Jij",
   },
   footer: {
-    blurb:
-      "Auto’s van mensen die bij de parkeerplaats wonen. Wissel wanneer je wilt van regio: de VS is live; de rest is om te plannen.",
+    blurb: "Auto’s van mensen die bij de parkeerplaats wonen. Wissel wanneer je wilt van regio.",
     explore: "Ontdekken",
     account: "Account",
     allCars: "Alle auto’s",
@@ -675,10 +642,8 @@ export const nl: Messages = {
     step1t: "Kies een park",
     step1d: "{n} parken, elk met een toegangsdorp. Zoek data zoals je een camping zou boeken.",
     step2t: "Boek de auto van een buur",
-    step2open:
+    step2d:
       "De meeste boek je direct. Je voegt de tripbescherming toe bij de reservering. Sleutels op een stoep, een terrein of in een kluisje.",
-    step2closed:
-      "Gasttrips zijn hier nog niet open. Je kunt parken bekijken en, als je in de buurt woont, een auto online zetten.",
     step3t: "Er in voordat de parkeerplaats vol is",
     step3d: "Breng hem redelijk schoon terug. Vrije kilometers. De host woont er — die zegt of de pas open is.",
     hostsKicker: "Voor hosts",
@@ -703,7 +668,7 @@ export const nl: Messages = {
     car: "auto",
     cars: "auto’s",
     filterPark: "Dit park filteren",
-    noListings: "Nog geen auto’s hier. Als je in {town} woont, kun je er een online zetten terwijl de regio opent.",
+    noListings: "Nog geen auto’s hier. Als je in {town} woont, kun je er een online zetten.",
     acres: "acres",
     ha: "ha",
     est: "opgericht",

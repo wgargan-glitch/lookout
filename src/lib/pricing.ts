@@ -23,7 +23,6 @@ export const PROTECTION_PLANS = [
     details: [
       "Caps what you owe for collision and theft of the host’s car during the booked trip.",
       "$3,000 guest responsibility per incident, $75,000 vehicle cap.",
-      "This is a Lookout contract, not a licensed insurance policy, until a carrier is bound.",
       "Does not replace trip liability. Does not cover the host’s off-trip personal policy.",
     ],
   },
@@ -39,8 +38,7 @@ export const PROTECTION_PLANS = [
     summary: "You’ll owe up to $500 if the car is damaged. Most guests pick this.",
     details: [
       "Same structure as Minimum, with $500 guest responsibility and a $75,000 vehicle cap.",
-      "About 40% of the trip daily rate, with a $19/day floor.",
-      "Still a Lookout-administered waiver until a physical-damage program is bound.",
+      "Park roadside is not included. You’ll see the daily price at checkout.",
     ],
   },
   {
@@ -56,7 +54,6 @@ export const PROTECTION_PLANS = [
     details: [
       "$0 guest responsibility, $150,000 vehicle cap.",
       "Park roadside within 50 miles of the listed park: jump, spare, winch-out on a legal road.",
-      "Still a Lookout-administered waiver — not a licensed insurance policy.",
     ],
   },
 ] as const;
@@ -69,11 +66,10 @@ export const OWN_INSURANCE_PLAN = {
   guestResponsibility: "Your policy",
   vehicleCap: "Your policy",
   roadside: false,
-  summary: "Decline physical-damage cover only after live carrier verification. Trip liability still applies.",
+  summary: "Use your own policy for damage, if we can confirm it covers this trip. Trip liability still applies.",
   details: [
-    "Available only if a verifier (Axle or equivalent) confirms the policy is active, names you, lasts through the trip, meets state minimums, and actually extends to peer-to-peer rentals.",
-    "Photos of insurance cards, declarations pages, and credit-card rental benefits are not accepted.",
-    "Platform trip liability stays on the booking even if physical-damage cover is declined.",
+    "Available if we can confirm the policy is active, names you, lasts through the trip, and covers this kind of rental.",
+    "Trip liability stays on the booking even if you skip a Lookout damage plan.",
   ],
 } as const;
 

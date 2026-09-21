@@ -288,8 +288,8 @@ function CarDetail() {
             ) : (
               <>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  This park is in a region that is still opening. Guest trips are not live yet.
-                  {park ? ` If you live in ${park.pickupTown}, you can list a car.` : ""}
+                  This car isn’t available to book right now.
+                  {park ? ` If you live in ${park.pickupTown}, you can list yours.` : ""}
                 </p>
                 <Button asChild className="mt-4 w-full" size="lg">
                   <Link to="/host">List a car</Link>

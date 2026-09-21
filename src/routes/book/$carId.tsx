@@ -86,9 +86,9 @@ function BookPage() {
   if (!parkBookingsOpen(park)) {
     return (
       <main className="mx-auto max-w-xl px-4 py-16 text-center">
-        <h1 className="font-display text-3xl">This region is still opening.</h1>
+        <h1 className="font-display text-3xl">This car isn’t available to book right now.</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Guest trips are not live yet. You can list a car if you live in the gateway town.
+          If you live in the gateway town, you can list yours.
         </p>
         <Button asChild className="mt-6">
           <Link to="/host">List a car</Link>

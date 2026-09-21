@@ -15,30 +15,27 @@ function PrivacyPage() {
       <h2>What we collect</h2>
       <p>
         When you create an account we store the name and email from Google, X, or the address you
-        type, plus a Lookout user id. You may add a trail name, phone, hometown, and bio. We store
-        listings, bookings, support tickets, claims you submit, including dates, car details,
-        the protection plan you pick, and host insurance carrier names. If live insurer
-        verification (Axle or equivalent) is connected later, we would receive policy status
-        needed to confirm P2P cover — not a photo of your card.
+        type. You may add a trail name, phone, hometown, and bio. We store
+        listings, bookings, support tickets, and claims you submit, including dates, car details,
+        the protection plan you pick, and host insurance carrier names.
       </p>
       <p>
         We do not collect precise GPS, contacts, photos from your camera roll, or payment card
-        numbers. Card charges are not live on Lookout yet. We do not sell personal information.
+        numbers. We do not sell personal information.
       </p>
 
       <h2>How we use it</h2>
       <p>
         Account data runs the marketplace: showing your trips, matching a guest to a host, staffing
-        the ranger desk, and sending you back to the same profile on the website, iPhone app, and
-        Android app. Hosts see the guest name on a confirmed trip. Admins see tickets and claims so
-        they can help.
+        the help desk, and sending you back to the same profile on the website, iPhone app, and
+        Android app. Hosts see the guest name on a confirmed trip. The help desk sees tickets and
+        claims so they can help.
       </p>
 
-      <h2>Sign-in providers</h2>
+      <h2>Sign-in</h2>
       <p>
-        Google and X sign-in is federated through the Grok auth broker. Email and password is stored
-        only in Lookout's own account database (hashed). The iPhone store app uses email and
-        password only, so we do not need Sign in with Apple.
+        You can sign in with Google, X, or an email and password. We do not see your Google or X
+        password. Email passwords are stored so we cannot read them.
       </p>
 
       <h2>Retention and deletion</h2>
@@ -57,8 +54,7 @@ function PrivacyPage() {
 
       <h2>Contact</h2>
       <p>
-        Privacy questions go through the in-app help desk. There is no separate mailing address
-        published until Lookout is a registered business entity.
+        Privacy questions go through the in-app help desk.
       </p>
     </LegalDoc>
   );

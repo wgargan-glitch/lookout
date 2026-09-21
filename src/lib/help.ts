@@ -27,7 +27,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     topic: "guests",
     body: [
       "Check in from Trips when you are standing at the car. Use the camera on this phone — six required angles (front 3/4, rear 3/4, both sides, cabin, odometer) plus fuel or charge, cleanliness, and any existing marks.",
-      "Add a close-up of every scratch, dent, or stain you can see. If the car is clean and unmarked, check “no damage I can see.” That report is what the ranger desk compares to check-out.",
+      "Add a close-up of every scratch, dent, or stain you can see. If the car is clean and unmarked, check “no damage I can see.” That report is what we compare to check-out.",
       "Cleanliness is four stops: trail ready, lived in, dusty, or needs work. Needs work requires a note.",
       "Submit before you drive. After check-in you cannot cancel the trip from the app — file a claim if something goes wrong.",
       "Check out the same way at return, same angles, so the host can match pickup to drop-off. Hosts can open the inspection on the trip but cannot edit it.",
@@ -42,7 +42,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       "You need an account with a phone number. List from List a car — vehicle details, park, pickup notes, insurance, and the photo gallery.",
       "Six photos are required before a listing can go live: front 3/4, rear 3/4, both sides, cabin, and cargo. Suggested shots (tires, odometer, roof, wear, pickup spot) help guests book and keep claims honest.",
       "Hosts must carry their own valid auto insurance for when the car is not on a Lookout trip. You name the carrier and policy number when you list. Trip-period liability is Lookout’s program, paid by the guest. Lookout Protection is a damage waiver for the trip, not a replacement for your personal policy — and your personal policy usually excludes car-sharing.",
-      "You set the daily rate. What Lookout Parks keeps as its platform fee is in the Host agreement — it is not advertised on guest pages. Incomplete listings save as drafts on your account. Publish when the gallery and insurance fields are complete. Admin can pause a listing if a claim is open.",
+      "You set the daily rate. What Lookout Parks keeps is in the Host agreement. Incomplete listings save as drafts on your account. Publish when the gallery and insurance fields are complete.",
     ],
   },
   {
@@ -55,7 +55,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       "Required: front three-quarter (the hero), rear three-quarter, driver side, passenger side, cabin, and cargo or truck bed. Daylight, whole vehicle, no heavy filters.",
       "Suggested: tires and wheels, odometer, roof or rack, existing scratches, the pickup spot without a house number, and anything else a guest should see (camping kit, seats folded).",
       "Shoot the actual car, uncluttered. Replace a photo from Photos & details on your account if you wash it, swap tires, or add a dent you want on record.",
-      "Do not upload another car, screenshots, or dealer inventory. The ranger desk can pause a listing that does not match check-in.",
+      "Do not upload another car, screenshots, or dealer inventory. A listing that does not match check-in can be paused.",
     ],
   },
   {
@@ -66,18 +66,18 @@ export const HELP_ARTICLES: HelpArticle[] = [
     body: [
       "Listing pages are about the car and the park. Protection shows up at checkout, for the dates you picked.",
       "Minimum, Standard, and Premier set what you might owe if the car is damaged. Standard is the usual pick. Premier adds roadside near the park.",
-      "If you have your own auto policy, checkout is where you can try to use it — once we can verify it with your insurer. Until then, pick a Lookout plan to finish the booking.",
+      "If you have your own auto policy, checkout is where you can ask to use it. Until we can confirm it covers the trip, pick a Lookout plan to finish the booking.",
       "Questions after a trip belong on Claims, with your check-in photos.",
     ],
   },
   {
     slug: "claims",
     title: "Filing a claim",
-    blurb: "How the claims desk works after a trip incident.",
+    blurb: "How claims work after a trip incident.",
     topic: "protection",
     body: [
       "Sign in, open Claims, and file against a confirmed booking. Photos from check-in and check-out are already on the trip — add a written description of what changed.",
-      "The ranger desk reviews every claim.",
+      "The help desk reviews every claim.",
       "File within 48 hours of the incident, or before you return the car, whichever is sooner.",
     ],
   },
@@ -88,18 +88,17 @@ export const HELP_ARTICLES: HelpArticle[] = [
     topic: "guests",
     body: [
       "Cancel from Trips. The dates free immediately so another guest can book.",
-      "This demo does not collect card payments, so there is no refund to process. A live payments build would refund according to the host’s cancellation window.",
+      "Refunds follow the host’s cancellation window on the listing.",
       "Hosts can pause a listing from Account if the car will be away.",
     ],
   },
   {
     slug: "accounts",
     title: "Your account",
-    blurb: "Google, X, or email — and the first host on the mountain.",
+    blurb: "Google, X, or email — one login for trips and listings.",
     topic: "account",
     body: [
       "Sign in with Google, X, or an email and password. Your trips, listings, tickets, and claims follow that account across devices.",
-      "The first account on a fresh Lookout is the ranger desk (admin). Later accounts start as guests and can host by listing a car.",
       "Update your trail name, hometown, and phone from Account. We do not sell that information.",
       "To leave Lookout, open Account, type DELETE, and confirm. That cancels open trips, removes listings, tickets, claims, and the profile. Privacy details live on the Privacy policy page.",
     ],
@@ -121,10 +120,10 @@ export const HELP_ARTICLES: HelpArticle[] = [
     blurb: "Add Lookout to your home screen.",
     topic: "account",
     body: [
-      "Lookout is a home-screen app on iPhone and Android today. The App Store and Play Store wrap is built and compiles in the cloud — listings go live after Apple and Google developer accounts are approved.",
-      "On iPhone today: open Lookout in Safari, tap Share, then Add to Home Screen. Chrome on iPhone cannot install it. There is a step-by-step walkthrough on Get the app.",
-      "On Android today: open Lookout in Chrome. Tap Install Lookout if you see it, or use the Chrome menu → Install app.",
-      "After install it opens full-screen with tabs for Home, Parks, Cars, Trips, and You. Your account, trips, and listings are the same as the website.",
+      "Lookout is a home-screen app on iPhone and Android. Parks, cars, and trips sit in tabs at the bottom. Same account as the website.",
+      "On iPhone: open Lookout in Safari, tap Share, then Add to Home Screen. Chrome on iPhone cannot install it. There is a step-by-step walkthrough on Get the app.",
+      "On Android: open Lookout in Chrome. Tap Install Lookout if you see it, or use the Chrome menu → Install app.",
+      "After install it opens full-screen with tabs for Home, Parks, Cars, Trips, and You.",
     ],
   },
   {
@@ -135,7 +134,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     body: [
       "Lookout is a private marketplace. It is not affiliated with the National Park Service.",
       "You still need a park pass, and you still follow park road closures.",
-      "If something feels wrong on a trip, open a support ticket or a claim. Admin watches both queues.",
+      "If something feels wrong on a trip, open a support ticket or a claim. The help desk watches both.",
     ],
   },
 ];

@@ -29,17 +29,15 @@ function HostAgreementPage() {
         penalty, or reimbursement under the protection plan.
       </p>
       <p>
-        Guests see a trip total at checkout. The {FEE_PCT}% rate is disclosed here, in this Host
-        agreement, not on guest marketing pages.
+        Guests see a trip total at checkout. The {FEE_PCT}% above is what Lookout Parks keeps from
+        the trip price.
       </p>
 
       <h2>What guests pay</h2>
       <p>
         Guests pay the trip price, trip liability, and a protection plan (Minimum, Standard, or
-        Premier). Trip liability is meant to be a motor policy issued to Lookout during the sharing
-        period; a licensed carrier is not bound yet. Protection plans are contractual damage
-        waivers unless and until a carrier is on the paper. They are not a substitute for the
-        Host’s personal auto policy.
+        Premier). Protection plans cap what the guest may owe if the car is damaged. They are not a
+        substitute for the Host’s personal auto policy.
       </p>
 
       <h2>Off-trip insurance</h2>

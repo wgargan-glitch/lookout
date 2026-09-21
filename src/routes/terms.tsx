@@ -30,45 +30,29 @@ function TermsPage() {
       <h2>Money</h2>
       <p>
         Trip totals at checkout show the host's daily rate, trip liability, and a guest protection
-        plan (Minimum, Standard, or Premier), plus any platform fees that apply to that booking.
-        Card charges are not collected yet — a booking confirms the reservation, the liability
-        line, and the waiver only. When payments go live, refunds follow the host's cancellation
-        window. Host reimbursement for a covered incident is funded from the renter-paid
-        protection line. The fee Lookout Parks charges hosts is set out only in the{" "}
+        plan (Minimum, Standard, or Premier). A booking holds the car for those dates. Host
+        reimbursement for a covered incident is funded from the protection the guest picks. What
+        Lookout Parks charges hosts is set out in the{" "}
         <Link to="/host-agreement">Host agreement</Link>.
       </p>
 
       <h2>Trip cover</h2>
       <p>
-        Every booked trip includes trip liability, meant to be a motor liability policy issued to
-        Lookout that meets the trip state's financial-responsibility and P2P car-sharing rules. A
-        licensed carrier is not bound yet. In states that require it (including New York and
-        Maryland), that cover is primary during the sharing period. If a host or renter policy
-        lapses or excludes P2P use, platform cover is intended to respond from the first dollar
-        where the statute requires that.
+        Every booked trip includes trip liability for other people and their cars while you drive.
+        Minimum, Standard, and Premier cap what you may owe if the host’s car is damaged or stolen
+        during the trip. They are not a substitute for a personal auto policy. Hosts keep insurance
+        for when the car is not on a trip.
       </p>
       <p>
-        Minimum, Standard, and Premier are contractual damage waivers that cap what the renter owes
-        for physical damage and theft of the host vehicle. They are not insurance policies. Do not
-        treat a plan as “fully insured.” Hosts keep personal or commercial auto insurance for
-        periods when the car is not on a trip; personal policies usually exclude car-sharing. Ordinary
-        hosts cannot opt out of trip cover. Only a licensed commercial rental operator with a
-        commercial rental policy that covers guest use, meets minimum limits, and names Lookout as
-        additional insured may request a waiver of platform cover.
-      </p>
-      <p>
-        A renter may take a cheaper physical-damage plan or decline it only after live carrier
-        verification (Axle or equivalent) confirms the policy is active through trip end, names the
-        driver, meets state minimums, and actually extends to peer-to-peer rentals. Photos of
-        insurance cards, declarations pages, and credit-card rental benefits are not proof. Trip
-        liability stays on the booking either way. Read{" "}
+        If you want to use your own policy instead of a Lookout damage plan, checkout is where you
+        ask. Trip liability stays on the booking either way. Read{" "}
         <Link to="/protection">Protection</Link> before you book. File incidents from{" "}
         <Link to="/claims">Claims</Link>.
       </p>
       <p>
-        Claims gaps include interior damage, mechanical wear, late return, lost keys, the pickup
-        window before check-in is complete, closed park roads, racing, DUI, and commercial use,
-        unless a plan rider says otherwise.
+        Claims do not cover interior damage, mechanical wear, late return, lost keys, the pickup
+        window before check-in is complete, closed park roads, racing, DUI, or commercial use,
+        unless a plan says otherwise.
       </p>
 
       <h2>Your responsibilities</h2>

@@ -17,7 +17,7 @@ function HelpIndex() {
       <p className="text-sm font-medium tracking-wide text-sage uppercase">Help</p>
       <h1 className="mt-1 font-display text-4xl md:text-5xl">How the mountain works</h1>
       <p className="mt-3 max-w-xl text-muted-foreground">
-        Booking, hosting, trip cover, and the ranger desk. Need a person? Open a ticket.
+        Booking, hosting, trip cover, and the help desk. Need a person? Open a ticket.
       </p>
       {TOPICS.map((topic) => (
         <section key={topic.id} className="mt-10">
