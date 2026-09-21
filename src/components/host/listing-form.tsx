@@ -1,4 +1,5 @@
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, useMemo, useRef, useState } from "react";
+import { Camera, ImageIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import {
@@ -12,6 +13,7 @@ import {
   type Profile,
 } from "@/lib/api";
 import { groupedParks } from "@/lib/catalog";
+import { compressListingPhoto } from "@/lib/compress-image";
 import { listingLiveGaps, REQUIRED_PHOTO_IDS } from "@/lib/listing-photos";
 import { FUELS, OPTIONAL_BUILD_TAGS, type DrivetrainId, type FuelId } from "@/lib/us-vehicles";
 import { useTerritoryCatalog } from "@/lib/use-territory-catalog";
@@ -57,19 +59,19 @@ export function ListingForm({
     drivetrain?: string;
     fuel?: string;
   } | null>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const libraryRef = useRef<HTMLInputElement>(null);
 
   const filledRequired = REQUIRED_PHOTO_IDS.filter((id) => photos[id]).length;
 
-  async function fillFromFactory() {
+  async function fillFromFactory(photo?: string) {
+    if (!photo && lookup.trim().length < 2) return;
     setLookupPending(true);
     try {
-      const result = await decodeHostVehicle({ data: { query: lookup } });
-      if (result.kind === "plate") {
-        setPlate(result.plate);
-        setLookupNote(result.note);
-        toast("Plate saved. Add the VIN to fill year, make, and model.");
-        return;
-      }
+      const result = await decodeHostVehicle({
+        data: { query: lookup.trim() || undefined, photo },
+      });
+      if (result.plate) setPlate(result.plate);
       if (result.spec) {
         const spec = result.spec;
         setVin(spec.vin);
@@ -87,11 +89,29 @@ export function ListingForm({
         setSpecKey((n) => n + 1);
         setLookupNote(result.note);
         toast(result.note);
+        return;
       }
+      setLookupNote(result.note);
+      toast("Plate saved. Snap the VIN on the dash or registration to fill year, make, and model.");
     } catch (err) {
       toast(err instanceof Error ? err.message : "Could not look that up.");
     } finally {
       setLookupPending(false);
+    }
+  }
+
+  async function onVinPhoto(file: File | undefined) {
+    if (!file) return;
+    setLookupPending(true);
+    try {
+      const compressed = await compressListingPhoto(file);
+      await fillFromFactory(compressed);
+    } catch (err) {
+      toast(err instanceof Error ? err.message : "Could not read that photo.");
+      setLookupPending(false);
+    } finally {
+      if (cameraRef.current) cameraRef.current.value = "";
+      if (libraryRef.current) libraryRef.current.value = "";
     }
   }
 
@@ -233,7 +253,7 @@ export function ListingForm({
       <form className="grid gap-4 sm:grid-cols-2" onSubmit={(e) => void onSubmit(e, intentFrom(e))}>
         <Section title="01 · Vehicle" />
         <div className="sm:col-span-2 space-y-2">
-          <Label htmlFor="vehicleLookup">VIN or license plate</Label>
+          <Label htmlFor="vehicleLookup">VIN, plate, or a photo of the dash</Label>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Input
               id="vehicleLookup"
@@ -245,7 +265,7 @@ export function ListingForm({
                   if (lookup.trim().length >= 2 && !lookupPending) void fillFromFactory();
                 }
               }}
-              placeholder="VIN from the dash, or the plate"
+              placeholder="17-character VIN, or the plate"
               className="sm:flex-1"
               autoComplete="off"
               spellCheck={false}
@@ -260,9 +280,49 @@ export function ListingForm({
               {lookupPending ? "Looking up…" : "Fill from factory"}
             </Button>
           </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <input
+              ref={cameraRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+              disabled={lookupPending}
+              onChange={(e) => void onVinPhoto(e.target.files?.[0])}
+            />
+            <input
+              ref={libraryRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              disabled={lookupPending}
+              onChange={(e) => void onVinPhoto(e.target.files?.[0])}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="sm:w-auto"
+              disabled={lookupPending}
+              onClick={() => cameraRef.current?.click()}
+            >
+              <Camera />
+              Snap dash or registration
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="sm:w-auto"
+              disabled={lookupPending}
+              onClick={() => libraryRef.current?.click()}
+            >
+              <ImageIcon />
+              Upload photo
+            </Button>
+          </div>
           <p className="text-xs text-muted-foreground">
-            A VIN fills year, make, model, drivetrain, fuel, and doors. The plate still belongs on the listing so
-            guests know the car.
+            Paste the VIN, or photograph the plate on the dash, the sticker in the driver's door jamb, or the
+            registration. We'll fill year, make, model, drivetrain, fuel, and doors. The license plate still belongs
+            on the listing so guests know the car.
           </p>
           {lookupNote ? <p className="text-sm font-medium">{lookupNote}</p> : null}
         </div>
@@ -302,7 +362,7 @@ export function ListingForm({
             id="vin"
             name="vin"
             maxLength={17}
-            placeholder="Optional, 17 characters"
+            placeholder="Filled from the dash or registration"
             value={vin}
             onChange={(e) => setVin(e.target.value)}
           />

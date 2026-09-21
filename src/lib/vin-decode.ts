@@ -31,6 +31,15 @@ export type VehicleQuery =
   | { kind: "vin"; value: string }
   | { kind: "plate"; value: string };
 
+export type RegistrationRead = {
+  vin: string | null;
+  plate: string | null;
+  year: number | null;
+  make: string | null;
+  model: string | null;
+  trim: string | null;
+};
+
 const VIN_RE = /^[A-HJ-NPR-Z0-9]{17}$/;
 const PLATE_RE = /^[A-Z0-9][A-Z0-9 -]{1,9}$/;
 
@@ -41,6 +50,25 @@ export function classifyVehicleQuery(raw: string): VehicleQuery | null {
   const plate = raw.toUpperCase().trim().replace(/\s+/g, " ");
   if (PLATE_RE.test(plate) && compact.length < 17) return { kind: "plate", value: plate };
   return null;
+}
+
+export function findVinInText(raw: string): string | null {
+  const mapped = raw.toUpperCase().replace(/I/g, "1").replace(/[OQ]/g, "0");
+  const chars = mapped.replace(/[^A-HJ-NPR-Z0-9]/g, "");
+  for (let i = 0; i + 17 <= chars.length; i++) {
+    const slice = chars.slice(i, i + 17);
+    if (VIN_RE.test(slice)) return slice;
+  }
+  return null;
+}
+
+export function asListingPlate(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const plate = raw.toUpperCase().trim().replace(/\s+/g, " ");
+  if (!PLATE_RE.test(plate)) return null;
+  const compact = plate.replace(/\s+/g, "");
+  if (compact.length >= 17) return null;
+  return plate;
 }
 
 type NhtsaRow = Record<string, string | undefined>;
@@ -86,12 +114,73 @@ export function specFromNhtsa(row: NhtsaRow, vin: string): VehicleSpec | null {
   };
 }
 
+export function specFromLabels(input: {
+  year: number;
+  make: string;
+  model: string;
+  trim?: string;
+  vin?: string;
+}): VehicleSpec | null {
+  return specFromNhtsa(
+    {
+      ModelYear: String(input.year),
+      Make: input.make,
+      Model: input.model,
+      Trim: input.trim ?? "",
+      ErrorCode: "0",
+    },
+    input.vin ?? "",
+  );
+}
+
 export function nhtsaDecodeOk(row: NhtsaRow): boolean {
   const code = String(row.ErrorCode ?? "");
   const first = code.split(",")[0]?.trim() ?? "";
   // 0 = clean. 1 = check digit — still usable when make/model/year are present.
   if (first === "0" || first === "1") return Boolean(row.Make && row.Model && row.ModelYear);
   return Boolean(row.Make && row.Model && row.ModelYear) && !/invalid vin|incomplete vin/i.test(row.ErrorText ?? "");
+}
+
+export async function fetchNhtsaSpec(vin: string): Promise<VehicleSpec> {
+  let json: { Results?: Array<Record<string, string | undefined>> };
+  try {
+    const res = await fetch(
+      `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${encodeURIComponent(vin)}?format=json`,
+      { signal: AbortSignal.timeout(12_000), headers: { Accept: "application/json" } },
+    );
+    if (!res.ok) throw new Error("lookup failed");
+    json = (await res.json()) as { Results?: Array<Record<string, string | undefined>> };
+  } catch {
+    throw new Error("Could not read that VIN. Check the characters and try again.");
+  }
+  const row = json.Results?.[0];
+  if (!row || !nhtsaDecodeOk(row)) {
+    throw new Error("That VIN did not return a vehicle. Check it against the dash or the registration.");
+  }
+  const spec = specFromNhtsa(row, vin);
+  if (!spec) {
+    throw new Error("Lookout lists 2000 and newer. Check the year on that VIN.");
+  }
+  return spec;
+}
+
+export function parseRegistrationRead(raw: unknown): RegistrationRead {
+  const obj = asObject(raw);
+  const blob = obj ? JSON.stringify(obj) : typeof raw === "string" ? raw : "";
+  const vin =
+    findVinInText(str(obj?.vin) || "") ??
+    findVinInText(blob) ??
+    null;
+  const yearNum = Number.parseInt(String(obj?.year ?? ""), 10);
+  const year = Number.isFinite(yearNum) && yearNum >= VEHICLE_MIN_YEAR && yearNum <= VEHICLE_MAX_YEAR ? yearNum : null;
+  return {
+    vin,
+    plate: asListingPlate(str(obj?.plate)),
+    year,
+    make: nonempty(str(obj?.make)),
+    model: nonempty(str(obj?.model)),
+    trim: nonempty(str(obj?.trim)),
+  };
 }
 
 function fuelFromNhtsa(row: NhtsaRow): FuelId {
@@ -151,4 +240,34 @@ function titleVehicle(value: string) {
     .split(/([\s/-]+)/)
     .map((part) => (/^[\s/-]+$/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1)))
     .join("");
+}
+
+function asObject(raw: unknown): Record<string, unknown> | null {
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) return raw as Record<string, unknown>;
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  try {
+    const parsed = JSON.parse(trimmed) as unknown;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return parsed as Record<string, unknown>;
+  } catch {
+    /* not JSON */
+  }
+  const start = trimmed.indexOf("{");
+  const end = trimmed.lastIndexOf("}");
+  if (start < 0 || end <= start) return null;
+  try {
+    const parsed = JSON.parse(trimmed.slice(start, end + 1)) as unknown;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return parsed as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function str(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function nonempty(value: string) {
+  return value ? value : null;
 }

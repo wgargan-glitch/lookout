@@ -68,10 +68,11 @@ function HostPage() {
         <ListingForm key={edit ?? "new"} profile={profile} existing={existing ?? undefined} />
         <aside className="space-y-4 text-sm text-muted-foreground">
           <p>
-            Start with the VIN from the dash or registration. We fill year, make, model, drivetrain, fuel, and doors
-            from the factory record. A plate still goes on the listing so guests know the car — it does not carry the
-            spec sheet. You can correct anything the lookup fills. Type is set from year and model. Overland is an
-            optional tag. Pick 2WD, 4x4 or AWD if the factory line is wrong.
+            Start with the VIN from the dash or registration — paste it, or photograph the dash plate, the sticker in
+            the driver's door, or the paper itself. We fill year, make, model, drivetrain, fuel, and doors from the
+            factory record. A plate still goes on the listing so guests know the car. You can correct anything the
+            lookup fills. Type is set from year and model. Overland is an optional tag. Pick 2WD, 4x4 or AWD if the
+            factory line is wrong.
           </p>
           <p>
             Guests pay trip liability and a protection plan — that is the trip cover, not your personal policy. The fee between you and Lookout Parks is in the{" "}

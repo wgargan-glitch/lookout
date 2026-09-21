@@ -5,6 +5,7 @@ import { BOOKING_SEEDS, CARS, CATALOG_BOOKED_RANGE, HOSTS, PARKS, isCatalogListi
 import { getSql } from "@/lib/db";
 import { listingLiveGaps, orderedGallerySrcs, parseGallery, PHOTO_ANGLE_IDS, type GalleryShot } from "@/lib/listing-photos";
 import { parkThemePrompt, themeKindFor } from "@/lib/park-theme";
+import { readRegistrationFromPhoto } from "@/lib/vin-photo";
 import {
   inspectionLiveGaps,
   parseDamage,
@@ -14,7 +15,7 @@ import {
 } from "@/lib/inspection";
 import { quoteTrip, rangesOverlap, parseProtection, type ProtectionId } from "@/lib/pricing";
 import { BODY_TYPES, FUELS, isListedVehicle, makesForYear, parseFuel, resolvedBodyType, type BodyTypeId, type FuelId } from "@/lib/us-vehicles";
-import { classifyVehicleQuery, nhtsaDecodeOk, specFromNhtsa } from "@/lib/vin-decode";
+import { classifyVehicleQuery, fetchNhtsaSpec, specFromLabels } from "@/lib/vin-decode";
 
 export type Profile = {
   userId: string;
@@ -929,6 +930,7 @@ export const removeListingPhoto = createServerFn({ method: "POST" })
 
 const enhanceHits = new Map<string, { n: number; reset: number }>();
 const decodeHits = new Map<string, { n: number; reset: number }>();
+const photoHits = new Map<string, { n: number; reset: number }>();
 
 function allowHourly(map: Map<string, { n: number; reset: number }>, userId: string, cap: number) {
   const now = Date.now();
@@ -946,44 +948,81 @@ function allowParkTheme(userId: string) {
   return allowHourly(enhanceHits, userId, 12);
 }
 
+const decodeInput = z
+  .object({
+    query: z.string().max(24).optional(),
+    photo: z.string().min(20).max(500_000).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if ((data.query?.trim().length ?? 0) < 2 && !data.photo) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Use a 17-character VIN, a license plate, or a photo of the dash or registration.",
+      });
+    }
+  });
+
 export const decodeHostVehicle = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
-  .validator(z.object({ query: z.string().min(2).max(24) }))
+  .validator(decodeInput)
   .handler(async ({ context, data }) => {
-    const parsed = classifyVehicleQuery(data.query);
-    if (!parsed) {
-      throw new Error("Use a 17-character VIN, or a license plate.");
+    const typed = data.query?.trim() ? classifyVehicleQuery(data.query) : null;
+    if (data.photo) {
+      assertPhotoDataUrl(data.photo);
+      if (!allowHourly(photoHits, context.userId, 8)) {
+        throw new Error("Give the lookup a rest — try again in a bit.");
+      }
+      const apiKey = process.env.XAI_API_KEY?.trim();
+      if (!apiKey) {
+        throw new Error("Could not read that photo right now. Paste the VIN from the dash instead.");
+      }
+      let read;
+      try {
+        read = await readRegistrationFromPhoto(data.photo, apiKey);
+      } catch (err) {
+        throw err instanceof Error ? err : new Error("Could not read that photo right now. Paste the VIN from the dash instead.");
+      }
+      const vin = read.vin ?? (typed?.kind === "vin" ? typed.value : null);
+      const plate = typed?.kind === "plate" ? typed.value : read.plate;
+      if (vin) {
+        const spec = await fetchNhtsaSpec(vin);
+        return { kind: "photo" as const, plate, spec, note: spec.summary };
+      }
+      if (read.year && read.make && read.model) {
+        const spec = specFromLabels({
+          year: read.year,
+          make: read.make,
+          model: read.model,
+          trim: read.trim ?? undefined,
+        });
+        if (spec) {
+          return {
+            kind: "photo" as const,
+            plate,
+            spec,
+            note: `${spec.summary}. Confirm year, make, and model — the VIN was not readable.`,
+          };
+        }
+      }
+      throw new Error(
+        "Could not read a VIN in that photo. Try the dash plate, the sticker in the driver's door jamb, or the registration.",
+      );
     }
-    if (parsed.kind === "plate") {
+    if (!typed) {
+      throw new Error("Use a 17-character VIN, a license plate, or a photo of the dash or registration.");
+    }
+    if (typed.kind === "plate") {
       return {
         kind: "plate" as const,
-        plate: parsed.value,
+        plate: typed.value,
         spec: null,
-        note: "Plate is on the listing so guests know the car. Paste the VIN from the dash or registration to fill year, make, model, drivetrain, and fuel.",
+        note: "Plate is on the listing so guests know the car. Photograph the VIN on the dash, the sticker in the driver's door, or the registration to fill year, make, model, drivetrain, and fuel.",
       };
     }
     if (!allowHourly(decodeHits, context.userId, 20)) {
       throw new Error("Give the lookup a rest — try again in a bit.");
     }
-    let json: { Results?: Array<Record<string, string | undefined>> };
-    try {
-      const res = await fetch(
-        `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${encodeURIComponent(parsed.value)}?format=json`,
-        { signal: AbortSignal.timeout(12_000), headers: { Accept: "application/json" } },
-      );
-      if (!res.ok) throw new Error("lookup failed");
-      json = (await res.json()) as { Results?: Array<Record<string, string | undefined>> };
-    } catch {
-      throw new Error("Could not read that VIN. Check the characters and try again.");
-    }
-    const row = json.Results?.[0];
-    if (!row || !nhtsaDecodeOk(row)) {
-      throw new Error("That VIN did not return a vehicle. Check it against the dash or the registration.");
-    }
-    const spec = specFromNhtsa(row, parsed.value);
-    if (!spec) {
-      throw new Error("Lookout lists 2000 and newer. Check the year on that VIN.");
-    }
+    const spec = await fetchNhtsaSpec(typed.value);
     return { kind: "vin" as const, plate: null, spec, note: spec.summary };
   });
 
