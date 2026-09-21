@@ -67,7 +67,12 @@ function HostPage() {
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[1fr_280px]">
         <ListingForm key={edit ?? "new"} profile={profile} existing={existing ?? undefined} />
         <aside className="space-y-4 text-sm text-muted-foreground">
-          <p>Year first, then make and model from the US-market list (2000 on). Type is set from that year and model — a 4Runner is an SUV, a Tacoma is a truck. Overland is an optional tag for the rare rigs that actually carry it. Trim is not required. Pick 2WD, 4x4 or AWD, fuel, and automatic or manual.</p>
+          <p>
+            Start with the VIN from the dash or registration. We fill year, make, model, drivetrain, fuel, and doors
+            from the factory record. A plate still goes on the listing so guests know the car — it does not carry the
+            spec sheet. You can correct anything the lookup fills. Type is set from year and model. Overland is an
+            optional tag. Pick 2WD, 4x4 or AWD if the factory line is wrong.
+          </p>
           <p>
             Guests pay trip liability and a protection plan — that is the trip cover, not your personal policy. The fee between you and Lookout Parks is in the{" "}
             <Link to="/host-agreement" className="underline">

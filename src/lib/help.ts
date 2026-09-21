@@ -39,7 +39,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     blurb: "Photos, insurance, pickup notes, and going live.",
     topic: "hosts",
     body: [
-      "You need an account with a phone number. List from List a car — vehicle details, park, pickup notes, insurance, and the photo gallery.",
+      "You need an account with a phone number. List from List a car — paste the VIN to fill year, make, model, drivetrain, fuel, and doors from the factory record. A license plate still goes on the listing; it does not carry the spec sheet. Then park, pickup notes, insurance, and the photo gallery.",
       "Six photos are required before a listing can go live: front 3/4, rear 3/4, both sides, cabin, and cargo. Suggested shots (tires, odometer, roof, wear, pickup spot) help guests book and keep claims honest.",
       "Hosts must carry their own valid auto insurance for when the car is not on a Lookout trip. You name the carrier and policy number when you list. Trip-period liability is Lookout’s program, paid by the guest. Lookout Protection is a damage waiver for the trip, not a replacement for your personal policy — and your personal policy usually excludes car-sharing.",
       "You set the daily rate. What Lookout Parks keeps is in the Host agreement. Incomplete listings save as drafts on your account. Publish when the gallery and insurance fields are complete.",

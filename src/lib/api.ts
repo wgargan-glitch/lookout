@@ -13,7 +13,8 @@ import {
   type DamageItem,
 } from "@/lib/inspection";
 import { quoteTrip, rangesOverlap, parseProtection, type ProtectionId } from "@/lib/pricing";
-import { BODY_TYPES, FUELS, isListedVehicle, parseFuel, resolvedBodyType, type BodyTypeId, type FuelId } from "@/lib/us-vehicles";
+import { BODY_TYPES, FUELS, isListedVehicle, makesForYear, parseFuel, resolvedBodyType, type BodyTypeId, type FuelId } from "@/lib/us-vehicles";
+import { classifyVehicleQuery, nhtsaDecodeOk, specFromNhtsa } from "@/lib/vin-decode";
 
 export type Profile = {
   userId: string;
@@ -750,13 +751,13 @@ const listingFields = z.object({
   phone: z.string().min(7).max(40),
   hometown: z.string().max(80).optional(),
 }).superRefine((data, ctx) => {
-  if (!isListedVehicle(data.year, data.make, data.model)) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Choose a year, make, and model from the list.",
-      path: ["model"],
-    });
-  }
+  if (isListedVehicle(data.year, data.make, data.model)) return;
+  if (makesForYear(data.year).includes(data.make) && data.model.trim().length > 0) return;
+  ctx.addIssue({
+    code: "custom",
+    message: "Choose a year, make, and model from the list.",
+    path: ["model"],
+  });
 });
 
 function mapHostListing(row: ListingRow, phone: string): HostListing {
@@ -927,18 +928,65 @@ export const removeListingPhoto = createServerFn({ method: "POST" })
   });
 
 const enhanceHits = new Map<string, { n: number; reset: number }>();
+const decodeHits = new Map<string, { n: number; reset: number }>();
 
-function allowParkTheme(userId: string) {
+function allowHourly(map: Map<string, { n: number; reset: number }>, userId: string, cap: number) {
   const now = Date.now();
-  const row = enhanceHits.get(userId);
+  const row = map.get(userId);
   if (!row || now > row.reset) {
-    enhanceHits.set(userId, { n: 1, reset: now + 60 * 60 * 1000 });
+    map.set(userId, { n: 1, reset: now + 60 * 60 * 1000 });
     return true;
   }
-  if (row.n >= 12) return false;
+  if (row.n >= cap) return false;
   row.n += 1;
   return true;
 }
+
+function allowParkTheme(userId: string) {
+  return allowHourly(enhanceHits, userId, 12);
+}
+
+export const decodeHostVehicle = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(z.object({ query: z.string().min(2).max(24) }))
+  .handler(async ({ context, data }) => {
+    const parsed = classifyVehicleQuery(data.query);
+    if (!parsed) {
+      throw new Error("Use a 17-character VIN, or a license plate.");
+    }
+    if (parsed.kind === "plate") {
+      return {
+        kind: "plate" as const,
+        plate: parsed.value,
+        spec: null,
+        note: "Plate is on the listing so guests know the car. Paste the VIN from the dash or registration to fill year, make, model, drivetrain, and fuel.",
+      };
+    }
+    if (!allowHourly(decodeHits, context.userId, 20)) {
+      throw new Error("Give the lookup a rest — try again in a bit.");
+    }
+    let json: { Results?: Array<Record<string, string | undefined>> };
+    try {
+      const res = await fetch(
+        `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${encodeURIComponent(parsed.value)}?format=json`,
+        { signal: AbortSignal.timeout(12_000), headers: { Accept: "application/json" } },
+      );
+      if (!res.ok) throw new Error("lookup failed");
+      json = (await res.json()) as { Results?: Array<Record<string, string | undefined>> };
+    } catch {
+      throw new Error("Could not read that VIN. Check the characters and try again.");
+    }
+    const row = json.Results?.[0];
+    if (!row || !nhtsaDecodeOk(row)) {
+      throw new Error("That VIN did not return a vehicle. Check it against the dash or the registration.");
+    }
+    const spec = specFromNhtsa(row, parsed.value);
+    if (!spec) {
+      throw new Error("Lookout lists 2000 and newer. Check the year on that VIN.");
+    }
+    return { kind: "vin" as const, plate: null, spec, note: spec.summary };
+  });
+
 
 export const enhanceListingPhoto = createServerFn({ method: "POST" })
   .middleware([authMiddleware])

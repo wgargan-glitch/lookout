@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import {
   createListing,
+  decodeHostVehicle,
   publishListing,
   removeListingPhoto,
   updateListing,
@@ -39,8 +40,60 @@ export function ListingForm({
   const [photos, setPhotos] = useState<Record<string, string>>(() =>
     Object.fromEntries((existing?.shots ?? []).map((s) => [s.id, s.src])),
   );
+  const [specKey, setSpecKey] = useState(0);
+  const [lookup, setLookup] = useState(existing?.vin || existing?.plate || "");
+  const [lookupPending, setLookupPending] = useState(false);
+  const [lookupNote, setLookupNote] = useState<string | null>(null);
+  const [vin, setVin] = useState(existing?.vin ?? "");
+  const [plate, setPlate] = useState(existing?.plate ?? "");
+  const [trim, setTrim] = useState("");
+  const [doors, setDoors] = useState(existing?.car.doors ?? 4);
+  const [seats, setSeats] = useState(existing?.car.seats ?? 5);
+  const [lookedUp, setLookedUp] = useState<{
+    year?: number;
+    make?: string;
+    model?: string;
+    transmission?: string;
+    drivetrain?: string;
+    fuel?: string;
+  } | null>(null);
 
   const filledRequired = REQUIRED_PHOTO_IDS.filter((id) => photos[id]).length;
+
+  async function fillFromFactory() {
+    setLookupPending(true);
+    try {
+      const result = await decodeHostVehicle({ data: { query: lookup } });
+      if (result.kind === "plate") {
+        setPlate(result.plate);
+        setLookupNote(result.note);
+        toast("Plate saved. Add the VIN to fill year, make, and model.");
+        return;
+      }
+      if (result.spec) {
+        const spec = result.spec;
+        setVin(spec.vin);
+        setTrim(spec.trim);
+        setDoors(spec.doors);
+        setSeats(spec.seats);
+        setLookedUp({
+          year: spec.year,
+          make: spec.make,
+          model: spec.model,
+          transmission: spec.transmission,
+          drivetrain: spec.drivetrain,
+          fuel: spec.fuel,
+        });
+        setSpecKey((n) => n + 1);
+        setLookupNote(result.note);
+        toast(result.note);
+      }
+    } catch (err) {
+      toast(err instanceof Error ? err.message : "Could not look that up.");
+    } finally {
+      setLookupPending(false);
+    }
+  }
 
   function intentFrom(e: FormEvent<HTMLFormElement>): "draft" | "live" {
     const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
@@ -100,6 +153,7 @@ export function ListingForm({
       insuranceAttested: true as const,
       plate: String(data.get("plate") ?? ""),
       vin: String(data.get("vin") ?? "") || undefined,
+      trim: String(data.get("trim") ?? "") || undefined,
       mileage: Number(data.get("mileage")),
       pickupNotes: String(data.get("pickupNotes") ?? ""),
       insurer: String(data.get("insurer") ?? ""),
@@ -178,7 +232,45 @@ export function ListingForm({
     <Card className="p-6">
       <form className="grid gap-4 sm:grid-cols-2" onSubmit={(e) => void onSubmit(e, intentFrom(e))}>
         <Section title="01 · Vehicle" />
-        <VehicleIdentityFields car={{ ...car, fuel: existing?.fuel }} />
+        <div className="sm:col-span-2 space-y-2">
+          <Label htmlFor="vehicleLookup">VIN or license plate</Label>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Input
+              id="vehicleLookup"
+              value={lookup}
+              onChange={(e) => setLookup(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  if (lookup.trim().length >= 2 && !lookupPending) void fillFromFactory();
+                }
+              }}
+              placeholder="VIN from the dash, or the plate"
+              className="sm:flex-1"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="sm:w-auto"
+              disabled={lookupPending || lookup.trim().length < 2}
+              onClick={() => void fillFromFactory()}
+            >
+              {lookupPending ? "Looking up…" : "Fill from factory"}
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            A VIN fills year, make, model, drivetrain, fuel, and doors. The plate still belongs on the listing so
+            guests know the car.
+          </p>
+          {lookupNote ? <p className="text-sm font-medium">{lookupNote}</p> : null}
+        </div>
+        <input type="hidden" name="trim" value={trim} />
+        <VehicleIdentityFields
+          key={specKey}
+          car={{ ...(lookedUp ?? car), fuel: lookedUp?.fuel ?? existing?.fuel }}
+        />
         {OPTIONAL_BUILD_TAGS.map((tag) => (
           <label key={tag.id} className="flex min-h-11 items-start gap-2 text-sm sm:col-span-2">
             <input
@@ -195,11 +287,25 @@ export function ListingForm({
         ))}
         <div className="space-y-1.5">
           <Label htmlFor="plate">License plate</Label>
-          <Input id="plate" name="plate" required placeholder="NPS 4X4" defaultValue={existing?.plate} />
+          <Input
+            id="plate"
+            name="plate"
+            required
+            placeholder="NPS 4X4"
+            value={plate}
+            onChange={(e) => setPlate(e.target.value)}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="vin">VIN</Label>
-          <Input id="vin" name="vin" maxLength={17} placeholder="Optional, 17 characters" defaultValue={existing?.vin} />
+          <Input
+            id="vin"
+            name="vin"
+            maxLength={17}
+            placeholder="Optional, 17 characters"
+            value={vin}
+            onChange={(e) => setVin(e.target.value)}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="mileage">Current mileage</Label>
@@ -207,11 +313,29 @@ export function ListingForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="seats">Seats</Label>
-          <Input id="seats" name="seats" type="number" required min={2} max={12} defaultValue={car?.seats ?? 5} />
+          <Input
+            id="seats"
+            name="seats"
+            type="number"
+            required
+            min={2}
+            max={12}
+            value={seats}
+            onChange={(e) => setSeats(Number(e.target.value) || 5)}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="doors">Doors</Label>
-          <Input id="doors" name="doors" type="number" required min={2} max={5} defaultValue={car?.doors ?? 4} />
+          <Input
+            id="doors"
+            name="doors"
+            type="number"
+            required
+            min={2}
+            max={5}
+            value={doors}
+            onChange={(e) => setDoors(Number(e.target.value) || 4)}
+          />
         </div>
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="description">About this car</Label>
