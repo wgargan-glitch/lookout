@@ -124,6 +124,7 @@ export const pt: Messages = {
     car: "Carros",
     sports: "Esportivos",
     overland: "Overland",
+    bookedOut: "Este carro está reservado. Outros anúncios por perto ainda podem ter datas.",
   },
   how: {
     kicker: "A trilha",
@@ -276,6 +277,7 @@ export const fr: Messages = {
     car: "Voitures",
     sports: "Sportives",
     overland: "Overland",
+    bookedOut: "Cette voiture est déjà réservée. D’autres annonces près d’ici ont peut-être encore des dates.",
   },
   how: {
     kicker: "Le sentier",
@@ -428,6 +430,7 @@ export const de: Messages = {
     car: "Autos",
     sports: "Sportwagen",
     overland: "Overland",
+    bookedOut: "Dieses Auto ist ausgebucht. In der Nähe gibt es vielleicht noch freie Termine.",
   },
   how: {
     kicker: "Der Weg",
@@ -580,6 +583,7 @@ export const it: Messages = {
     car: "Auto",
     sports: "Sportive",
     overland: "Overland",
+    bookedOut: "Questa auto è già prenotata. Vicino magari ci sono ancora date libere.",
   },
   how: {
     kicker: "Il sentiero",
@@ -732,6 +736,7 @@ export const nl: Messages = {
     car: "Auto’s",
     sports: "Sportwagens",
     overland: "Overland",
+    bookedOut: "Deze auto is volgeboekt. Dichtbij staan misschien nog auto’s met vrije data.",
   },
   how: {
     kicker: "Het pad",

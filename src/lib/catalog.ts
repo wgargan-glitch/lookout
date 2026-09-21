@@ -960,6 +960,16 @@ export const CARS: Car[] = [
   ...FEDERAL_CARS,
 ];
 
+const CATALOG_CAR_IDS = new Set(CARS.map((c) => c.id));
+
+/** Sample cars stay listed so the lot looks full. They cannot be reserved. */
+export function isCatalogListing(carId: string) {
+  return CATALOG_CAR_IDS.has(carId);
+}
+
+/** One span covering any date a guest could pick. Exclusive end, same as other bookings. */
+export const CATALOG_BOOKED_RANGE = { startDate: "2000-01-01", endDate: "9999-12-31" } as const;
+
 export const REVIEWS: Review[] = [
   {
     carId: "bronco-yosemite",

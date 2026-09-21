@@ -4,8 +4,10 @@ import {
   ALL_PARKS,
   BOOKING_SEEDS,
   CARS,
+  CATALOG_BOOKED_RANGE,
   HOSTS,
   REVIEWS,
+  isCatalogListing,
   parkBySlug,
   type Car,
   type Host,
@@ -101,6 +103,9 @@ export function parkBundle(slug: string, extraCars: Car[] = []) {
 }
 
 export function blockedRanges(carId: string, trips: Trip[]) {
+  if (isCatalogListing(carId)) {
+    return [{ startDate: CATALOG_BOOKED_RANGE.startDate, endDate: CATALOG_BOOKED_RANGE.endDate }];
+  }
   const seeds = BOOKING_SEEDS.filter((b) => b.carId === carId).map((b) => ({
     startDate: b.startDate,
     endDate: b.endDate,
@@ -120,6 +125,9 @@ export function placeBooking(input: {
 }) {
   if (input.endDate <= input.startDate) {
     throw new Error("Return date must be after pickup.");
+  }
+  if (isCatalogListing(input.car.id)) {
+    throw new Error("Those dates are already spoken for.");
   }
   const blocked = blockedRanges(input.car.id, input.trips);
   const clash = blocked.some((b) =>

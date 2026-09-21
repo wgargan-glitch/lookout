@@ -11,12 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { listBookedRanges } from "@/lib/api";
-import { carTitle, isOverlandCar, parkBookingsOpen } from "@/lib/catalog";
+import { carTitle, isCatalogListing, isOverlandCar, parkBookingsOpen } from "@/lib/catalog";
 import { bodyTypeLabel } from "@/lib/us-vehicles";
 import { formatDate, formatMoney, parseISODate, toISODate } from "@/lib/format";
 import { blockedRanges, carBundle } from "@/lib/lookout-store";
 import { DEFAULT_PROTECTION, quoteTrip, type GuestPlanId } from "@/lib/pricing";
 import { useFleet } from "@/lib/use-fleet";
+import { useT } from "@/lib/use-locale";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/cars/$carId")({
@@ -29,6 +30,7 @@ function CarDetail() {
   const { extraCars, extraHosts } = useFleet();
   const bundle = carBundle(carId, extraCars, extraHosts);
   const navigate = useNavigate();
+  const t = useT();
   const [photo, setPhoto] = useState(0);
   const [range, setRange] = useState<DateRange | undefined>();
   const [protection, setProtection] = useState<GuestPlanId>(DEFAULT_PROTECTION);
@@ -57,7 +59,12 @@ function CarDetail() {
 
   const { car, park, host, reviews, nearby } = bundle;
   const bookingsOpen = parkBookingsOpen(park);
-  const booked = remoteBlocked.length ? remoteBlocked : blockedRanges(car.id, []);
+  const catalogBooked = isCatalogListing(car.id);
+  const booked = catalogBooked
+    ? blockedRanges(car.id, [])
+    : remoteBlocked.length
+      ? remoteBlocked
+      : blockedRanges(car.id, []);
 
   const bookedMatchers = useMemo(
     () =>
@@ -76,6 +83,10 @@ function CarDetail() {
       : null;
 
   function book() {
+    if (catalogBooked) {
+      toast(t("carsPage.bookedOut"));
+      return;
+    }
     if (!fromISO || !toISO || !quote) {
       toast("Choose pickup and return dates first.");
       return;
@@ -237,13 +248,15 @@ function CarDetail() {
             <div className="rdp-root mt-4">
               <DayPicker
                 mode="range"
-                selected={range}
-                onSelect={setRange}
-                disabled={[{ before: new Date() }, ...bookedMatchers]}
+                selected={catalogBooked ? undefined : range}
+                onSelect={catalogBooked ? undefined : setRange}
+                disabled={catalogBooked ? true : [{ before: new Date() }, ...bookedMatchers]}
                 numberOfMonths={1}
               />
             </div>
-            {fromISO && toISO ? (
+            {catalogBooked ? (
+              <p className="mt-3 text-sm text-muted-foreground">{t("carsPage.bookedOut")}</p>
+            ) : fromISO && toISO ? (
               <p className="mt-2 text-sm text-muted-foreground">
                 {formatDate(fromISO)} → {formatDate(toISO)}
               </p>
@@ -251,6 +264,8 @@ function CarDetail() {
               <p className="mt-2 text-sm text-muted-foreground">Choose pickup and return.</p>
             )}
 
+            {!catalogBooked ? (
+              <>
             <div className="mt-4">
               <ProtectionPicker value={protection} onChange={setProtection} tripDailyCents={car.dailyCents} />
             </div>
@@ -263,6 +278,12 @@ function CarDetail() {
             <p className="mt-3 text-xs text-muted-foreground">
               Sign in is required at checkout.
             </p>
+              </>
+            ) : (
+              <Button className="mt-4 w-full" size="lg" disabled>
+                Booked out
+              </Button>
+            )}
               </>
             ) : (
               <>

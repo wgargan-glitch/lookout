@@ -125,6 +125,7 @@ export const en = {
     car: "Cars",
     sports: "Sports",
     overland: "Overland",
+    bookedOut: "This car is booked out. Nearby listings may still have dates.",
   },
   how: {
     kicker: "The trail",
@@ -277,6 +278,7 @@ export const es: typeof en = {
     car: "Autos",
     sports: "Deportivos",
     overland: "Overland",
+    bookedOut: "Este auto está reservado. Puede que otros anuncios cerca todavía tengan fechas.",
   },
   how: {
     kicker: "El sendero",

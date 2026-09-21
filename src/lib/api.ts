@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
-import { BOOKING_SEEDS, CARS, HOSTS, PARKS, type Car, type Host } from "@/lib/catalog";
+import { BOOKING_SEEDS, CARS, CATALOG_BOOKED_RANGE, HOSTS, PARKS, isCatalogListing, type Car, type Host } from "@/lib/catalog";
 import { getSql } from "@/lib/db";
 import { listingLiveGaps, orderedGallerySrcs, parseGallery, PHOTO_ANGLE_IDS, type GalleryShot } from "@/lib/listing-photos";
 import {
@@ -316,6 +316,9 @@ export const listBookedRanges = createServerFn({ method: "GET" })
       where car_id = ${data.carId} and status = 'confirmed'
     `;
     const live = rows.map((r) => ({ startDate: asDate(r.start_date), endDate: asDate(r.end_date) }));
+    if (isCatalogListing(data.carId)) {
+      return [{ startDate: CATALOG_BOOKED_RANGE.startDate, endDate: CATALOG_BOOKED_RANGE.endDate }, ...live];
+    }
     const seeds = BOOKING_SEEDS.filter((b) => b.carId === data.carId).map((b) => ({
       startDate: b.startDate,
       endDate: b.endDate,
@@ -391,6 +394,9 @@ export const createBooking = createServerFn({ method: "POST" })
     const catalogCar = CARS.find((c) => c.id === data.carId);
     const car = extra[0] ? listingToCar(extra[0]) : catalogCar;
     if (!car) throw new Error("That car is no longer listed.");
+    if (!extra[0] && isCatalogListing(data.carId)) {
+      throw new Error("Those dates are already spoken for.");
+    }
     const hostUserId = extra[0]?.user_id ?? HOSTS.find((h) => h.id === car.hostId)?.id ?? null;
     const existing = await sql<{ start_date: unknown; end_date: unknown }>`
       select start_date, end_date from bookings

@@ -8,7 +8,7 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { createBooking } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { carTitle, parkBookingsOpen } from "@/lib/catalog";
+import { carTitle, isCatalogListing, parkBookingsOpen } from "@/lib/catalog";
 import { formatDateRange, formatMoney } from "@/lib/format";
 import { carBundle } from "@/lib/lookout-store";
 import {
@@ -51,11 +51,6 @@ function BookPage() {
 
   const { from, to } = search;
 
-  if (isPending) {
-    return <main className="mx-auto max-w-xl px-4 py-16 text-sm text-muted-foreground">Checking your account…</main>;
-  }
-  if (!user) return <RedirectToSignIn />;
-
   if (!bundle) {
     return (
       <main className="mx-auto max-w-xl px-4 py-16 text-center">
@@ -68,6 +63,26 @@ function BookPage() {
   }
 
   const { car, park } = bundle;
+  if (isCatalogListing(car.id)) {
+    return (
+      <main className="mx-auto max-w-xl px-4 py-16 text-center">
+        <h1 className="font-display text-3xl">Those dates are already spoken for.</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This car is booked out. Nearby listings may still have dates.
+        </p>
+        <Button asChild className="mt-6">
+          <Link to="/cars/$carId" params={{ carId: car.id }}>
+            Back to the car
+          </Link>
+        </Button>
+      </main>
+    );
+  }
+
+  if (isPending) {
+    return <main className="mx-auto max-w-xl px-4 py-16 text-sm text-muted-foreground">Checking your account…</main>;
+  }
+  if (!user) return <RedirectToSignIn />;
   if (!parkBookingsOpen(park)) {
     return (
       <main className="mx-auto max-w-xl px-4 py-16 text-center">
