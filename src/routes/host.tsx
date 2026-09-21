@@ -77,6 +77,10 @@ function HostPage() {
           </p>
           <p>Your personal auto policy is for when the car is not rented. Personal policies usually exclude car-sharing. Ordinary hosts cannot opt out of trip cover.</p>
           <p>
+            After the gallery is up, you can place the car at the park so the listing already looks like it lives at the
+            gate. Wear, odometer, and the pickup spot stay as you shot them.
+          </p>
+          <p>
             Drafts stay on{" "}
             <Link to="/account" className="underline">
               your account

@@ -34,6 +34,8 @@ export function ListingForm({
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
+  const [parkSlug, setParkSlug] = useState(existing?.car.parkSlug ?? "yosemite");
+  const park = parks.find((p) => p.slug === parkSlug) ?? parks[0];
   const [photos, setPhotos] = useState<Record<string, string>>(() =>
     Object.fromEntries((existing?.shots ?? []).map((s) => [s.id, s.src])),
   );
@@ -232,7 +234,8 @@ export function ListingForm({
             name="parkSlug"
             required
             className="flex h-11 w-full rounded-md border border-input bg-card px-3 text-sm"
-            defaultValue={car?.parkSlug ?? "yosemite"}
+            value={parkSlug}
+            onChange={(e) => setParkSlug(e.target.value)}
           >
             {parkGroups.map((group) => (
               <optgroup key={group.region} label={group.region}>
@@ -267,7 +270,14 @@ export function ListingForm({
         </div>
 
         <Section title="03 · Photos" />
-        <VehicleGallery photos={photos} onChange={setPhotos} disabled={pending} />
+        <VehicleGallery
+          photos={photos}
+          onChange={setPhotos}
+          disabled={pending}
+          parkSlug={park?.slug}
+          parkName={park?.name}
+          parkImage={park?.image}
+        />
 
         <Section title="04 · Rate & kit" />
         <div className="space-y-1.5">

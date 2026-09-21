@@ -30,6 +30,14 @@ export async function compressListingPhoto(file: File): Promise<string> {
   return data;
 }
 
+export async function compressDataUrl(dataUrl: string): Promise<string> {
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  const type = blob.type.startsWith("image/") ? blob.type : "image/jpeg";
+  const file = new File([blob], "photo.jpg", { type });
+  return compressListingPhoto(file);
+}
+
 async function decodeImage(file: File): Promise<ImageBitmap | HTMLImageElement> {
   if (typeof createImageBitmap === "function") {
     try {

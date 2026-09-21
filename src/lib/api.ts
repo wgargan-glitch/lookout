@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
-import { BOOKING_SEEDS, CARS, CATALOG_BOOKED_RANGE, HOSTS, PARKS, isCatalogListing, type Car, type Host } from "@/lib/catalog";
+import { BOOKING_SEEDS, CARS, CATALOG_BOOKED_RANGE, HOSTS, PARKS, isCatalogListing, parkBySlug, type Car, type Host } from "@/lib/catalog";
 import { getSql } from "@/lib/db";
 import { listingLiveGaps, orderedGallerySrcs, parseGallery, PHOTO_ANGLE_IDS, type GalleryShot } from "@/lib/listing-photos";
+import { parkThemePrompt, themeKindFor } from "@/lib/park-theme";
 import {
   inspectionLiveGaps,
   parseDamage,
@@ -924,6 +925,188 @@ export const removeListingPhoto = createServerFn({ method: "POST" })
     `;
     return { ok: true as const, count: shots.length };
   });
+
+const enhanceHits = new Map<string, { n: number; reset: number }>();
+
+function allowParkTheme(userId: string) {
+  const now = Date.now();
+  const row = enhanceHits.get(userId);
+  if (!row || now > row.reset) {
+    enhanceHits.set(userId, { n: 1, reset: now + 60 * 60 * 1000 });
+    return true;
+  }
+  if (row.n >= 12) return false;
+  row.n += 1;
+  return true;
+}
+
+export const enhanceListingPhoto = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(
+    z.object({
+      parkSlug: z.string().min(1),
+      angleId: z.string().min(1),
+      photo: z.string().min(20).max(500_000),
+    }),
+  )
+  .handler(async ({ context, data }) => {
+    if (!themeKindFor(data.angleId)) {
+      throw new Error("That angle is kept as shot — claims need the real photo.");
+    }
+    assertPhotoDataUrl(data.photo);
+    const park = parkBySlug(data.parkSlug);
+    if (!park) throw new Error("Choose a park first.");
+    if (!allowParkTheme(context.userId)) {
+      throw new Error("Give the park backdrop a rest — try again in a bit.");
+    }
+    const apiKey = process.env.XAI_API_KEY?.trim();
+    if (!apiKey) throw new Error("Park backdrops are not available right now.");
+
+    const backdrop = await parkBackdropDataUri(park.image);
+    const prompt = parkThemePrompt(park, data.angleId);
+    const body: Record<string, unknown> = {
+      model: "grok-imagine-image-2.0",
+      prompt,
+      aspect_ratio: "4:3",
+      resolution: "1k",
+      response_format: "b64_json",
+    };
+    if (backdrop) {
+      body.images = [
+        { type: "image_url", url: data.photo },
+        { type: "image_url", url: backdrop },
+      ];
+    } else {
+      body.image = { type: "image_url", url: data.photo };
+    }
+
+    const postEdit = (payload: Record<string, unknown>) =>
+      fetch("https://api.x.ai/v1/images/edits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(90_000),
+      });
+
+    let res: Response;
+    try {
+      res = await postEdit(body);
+      if (!res.ok && res.status >= 400 && res.status < 500 && res.status !== 429 && body.images) {
+        delete body.images;
+        body.image = { type: "image_url", url: data.photo };
+        res = await postEdit(body);
+      }
+    } catch (err) {
+      if (err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError")) {
+        throw new Error("That took too long. Try one photo at a time.");
+      }
+      throw new Error(`Could not place the car at ${park.name}.`);
+    }
+    if (!res.ok) {
+      if (res.status === 429) throw new Error("The backdrop studio is busy. Try that photo again in a minute.");
+      if (res.status === 401 || res.status === 403) {
+        throw new Error("Park backdrops are not available right now.");
+      }
+      throw new Error(`Could not place the car at ${park.name}.`);
+    }
+    const json = (await res.json()) as {
+      data?: { url?: string; b64_json?: string; mime_type?: string }[];
+      url?: string;
+    };
+    const shot = json.data?.[0];
+    let src = "";
+    if (shot?.b64_json) {
+      const mime = shot.mime_type?.startsWith("image/") ? shot.mime_type : "image/jpeg";
+      src = `data:${mime};base64,${shot.b64_json}`;
+    } else {
+      const url = shot?.url ?? json.url;
+      if (!url) throw new Error(`Could not place the car at ${park.name}.`);
+      src = await fetchImageAsJpegDataUrl(url);
+    }
+    if (src.length > 500_000) {
+      src = await shrinkDataUrl(src, 420_000);
+    }
+    return { src, parkName: park.name };
+  });
+
+async function parkBackdropDataUri(imagePath: string): Promise<string | null> {
+  if (!imagePath.startsWith("/images/") || imagePath.includes("..")) return null;
+  const path = await import("node:path");
+  const abs = path.join(process.cwd(), "public", imagePath.replace(/^\//, ""));
+  const py = `
+from PIL import Image
+import io, sys
+im = Image.open(sys.argv[1]).convert("RGB")
+im.thumbnail((960, 720))
+buf = io.BytesIO()
+im.save(buf, format="JPEG", quality=68, optimize=True)
+sys.stdout.buffer.write(buf.getvalue())
+`;
+  try {
+    const stdout = await runPython(py, [abs]);
+    if (!stdout.length) return null;
+    return `data:image/jpeg;base64,${stdout.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchImageAsJpegDataUrl(url: string): Promise<string> {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Could not download the park photo.");
+  const buf = Buffer.from(await res.arrayBuffer());
+  return `data:image/jpeg;base64,${buf.toString("base64")}`;
+}
+
+async function shrinkDataUrl(dataUrl: string, maxChars: number): Promise<string> {
+  const comma = dataUrl.indexOf(",");
+  if (comma < 0) return dataUrl;
+  const raw = Buffer.from(dataUrl.slice(comma + 1), "base64");
+  const py = `
+from PIL import Image
+import io, sys
+im = Image.open(io.BytesIO(sys.stdin.buffer.read())).convert("RGB")
+im.thumbnail((1280, 960))
+q = 72
+out = io.BytesIO()
+limit = int(sys.argv[1])
+while True:
+    out.seek(0); out.truncate(0)
+    im.save(out, format="JPEG", quality=q, optimize=True)
+    if out.tell() <= limit or q <= 42:
+        break
+    q -= 8
+sys.stdout.buffer.write(out.getvalue())
+`;
+  try {
+    const stdout = await runPython(py, [String(Math.floor(maxChars * 0.72))], raw);
+    if (!stdout.length) return dataUrl;
+    return `data:image/jpeg;base64,${stdout.toString("base64")}`;
+  } catch {
+    return dataUrl.slice(0, maxChars);
+  }
+}
+
+function runPython(script: string, args: string[], stdin?: Buffer): Promise<Buffer> {
+  return import("node:child_process").then(
+    ({ spawn }) =>
+      new Promise<Buffer>((resolve, reject) => {
+        const child = spawn("python3", ["-c", script, ...args], { stdio: ["pipe", "pipe", "pipe"] });
+        const chunks: Buffer[] = [];
+        child.stdout.on("data", (c: Buffer) => chunks.push(c));
+        child.on("error", reject);
+        child.on("close", (code) => {
+          if (code === 0) resolve(Buffer.concat(chunks));
+          else reject(new Error("Could not process that photo."));
+        });
+        if (stdin) child.stdin.write(stdin);
+        child.stdin.end();
+      }),
+  );
+}
 
 export const getMyListing = createServerFn({ method: "GET" })
   .middleware([authMiddleware])

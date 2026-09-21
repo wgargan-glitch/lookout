@@ -12,7 +12,7 @@ export const PHOTO_ANGLES: PhotoAngle[] = [
     id: "front-quarter",
     kind: "required",
     label: "Front 3/4",
-    hint: "The hero. Whole car, daylight, three-quarter, no filter.",
+    hint: "The hero. Whole car, daylight, three-quarter — then place it at the park.",
   },
   {
     id: "rear-quarter",
