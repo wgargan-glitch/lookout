@@ -23,6 +23,9 @@ export function SiteFooter() {
             <Link to="/parks" className="hover:underline">
               {t("nav.parks")}
             </Link>
+            <Link to="/rove" className="hover:underline">
+              Rove
+            </Link>
             <Link to="/cars" className="hover:underline">
               {t("footer.allCars")}
             </Link>

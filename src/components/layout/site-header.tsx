@@ -17,6 +17,7 @@ export function SiteHeader() {
   const t = useT();
   const nav = [
     { to: "/parks", label: t("nav.parks") },
+    { to: "/rove", label: "Rove" },
     { to: "/cars", label: t("nav.cars") },
     { to: "/how-it-works", label: t("nav.how") },
     { to: "/get-the-app", label: t("nav.app") },
@@ -33,7 +34,7 @@ export function SiteHeader() {
               to={item.to}
               className={cn(
                 "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-                pathname === item.to && "text-foreground",
+                (pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to))) && "text-foreground",
               )}
             >
               {item.label}
