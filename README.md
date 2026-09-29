@@ -30,6 +30,7 @@ npm run typecheck
 |---|---|
 | `/` | Homepage — park search, featured cars |
 | `/parks` | All 63 parks, region filters |
+| `/rove` | OpenStreetMap driving map + turn-by-turn |
 | `/parks/:parkSlug` | Park page + local fleet |
 | `/cars` | Fleet with filters |
 | `/cars/:carId` | Detail, calendar, protection, book |

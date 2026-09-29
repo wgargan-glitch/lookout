@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ParkCard } from "@/components/parks/park-card";
 import { Input } from "@/components/ui/input";
@@ -64,6 +64,11 @@ function ParksPage() {
       </h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
         {territory.parksIntro}
+      </p>
+      <p className="mt-4">
+        <Link to="/rove" className="text-sm font-medium text-sage underline-offset-4 hover:underline">
+          Open Rove map and driving directions
+        </Link>
       </p>
 
       <div className="mt-8 space-y-4">

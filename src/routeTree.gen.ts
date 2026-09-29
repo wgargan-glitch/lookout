@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RoveRouteImport } from './routes/rove'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ClaimsRouteImport } from './routes/claims'
@@ -35,6 +36,11 @@ import { Route as TripsIndexRouteImport } from './routes/trips/index'
 import { Route as TripsTripIdRouteImport } from './routes/trips/$tripId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const RoveRoute = RoveRouteImport.update({
+  id: '/rove',
+  path: '/rove',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -163,6 +169,7 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/rove': typeof RoveRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/claims': typeof ClaimsRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/rove': typeof RoveRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/claims': typeof ClaimsRoute
@@ -218,6 +226,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/rove': typeof RoveRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/claims': typeof ClaimsRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/rove'
     | '/account'
     | '/admin'
     | '/claims'
@@ -274,6 +284,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/rove'
     | '/account'
     | '/admin'
     | '/claims'
@@ -301,6 +312,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/rove'
+    | '/rove'
     | '/account'
     | '/admin'
     | '/claims'
@@ -329,6 +342,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RoveRoute: typeof RoveRoute
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
   ClaimsRoute: typeof ClaimsRoute
@@ -357,6 +371,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rove': {
+      id: '/rove'
+      path: '/rove'
+      fullPath: '/rove'
+      preLoaderRoute: typeof RoveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -537,6 +558,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RoveRoute: RoveRoute,
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
   ClaimsRoute: ClaimsRoute,
